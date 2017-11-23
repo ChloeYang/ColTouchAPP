@@ -1,10 +1,14 @@
 package com.example.yangjiyu.myapplication;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -63,6 +67,27 @@ public class MainActivity extends AppCompatActivity {
         mData = new ArrayList<>(Arrays.asList(R.drawable.a,
                 R.drawable.b, R.drawable.c, R.drawable.d, R.drawable.e,
                 R.drawable.f, R.drawable.g, R.drawable.h, R.drawable.l));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate( R.menu.menu_item, menu );
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        Intent intent = null;
+
+        if( id == R.id.menu_item_settings ){
+            intent = new Intent(getApplicationContext(),SettingPreference.class);
+            startActivity(intent);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
 

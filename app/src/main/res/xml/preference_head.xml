@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <header
+        android:fragment="com.example.yangjiyu.myapplication.SettingPreference$GenerationFragment"
+        android:title="@string/prf_generation"
+        android:icon="@drawable/ic_info_black_24dp"
+        android:summary="@string/prf_generation">
+    </header>
+
+    <header
+        android:fragment="com.example.yangjiyu.myapplication.SettingPreference$DataFragment"
+        android:title="@string/prf_data"
+        android:icon="@drawable/ic_sync_black_24dp"
+        android:summary="@string/prf_data">
+    </header>
+</preference-headers>

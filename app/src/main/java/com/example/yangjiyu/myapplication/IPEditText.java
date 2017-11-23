@@ -24,10 +24,10 @@ public class IPEditText extends LinearLayout {
     private EditText Edit4;
     //文本
     private String text;
-    private String text1;
-    private String text2;
-    private String text3;
-    private String text4;
+    private String text1="172";
+    private String text2="16";
+    private String text3="129";
+    private String text4="152";
 
     public IPEditText(final Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -38,6 +38,10 @@ public class IPEditText extends LinearLayout {
         Edit2=(EditText)findViewById(R.id.edit2);
         Edit3=(EditText)findViewById(R.id.edit3);
         Edit4=(EditText)findViewById(R.id.edit4);
+//         text1  = Edit1.getText().toString();
+//         text2 = Edit2.getText().toString();
+//         text3 = Edit3.getText().toString();
+//         text4 = Edit4.getText().toString();
         //初始化函数
         init(context);
     }

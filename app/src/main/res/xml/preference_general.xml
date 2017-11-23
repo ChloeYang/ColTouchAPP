@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:enabled="false"
+        android:capitalize="words"
+        android:defaultValue="@string/pref_gen_default_display_name"
+        android:inputType="textEmailAddress"
+        android:key="prf_gen_usr"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_gen_display_name"
+        android:summary="@string/pref_gen_default_display_name"/>
+</PreferenceScreen>

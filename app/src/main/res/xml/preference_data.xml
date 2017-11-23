@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:enabled="false"
+        android:capitalize="words"
+        android:defaultValue="@string/pref_data_default_vclordip"
+        android:inputType="textCapWords"
+        android:key="prf_data_ip"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_data_vclordip"
+        android:summary="@string/pref_data_default_vclordip"/>
+    <EditTextPreference
+        android:enabled="false"
+        android:capitalize="words"
+        android:defaultValue="@string/pref_data_default_sid"
+        android:inputType="textCapWords"
+        android:key="prf_data_sid"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_data_sid"
+        android:summary="@string/pref_data_default_sid"/>
+    <EditTextPreference
+        android:enabled="false"
+        android:capitalize="words"
+        android:defaultValue="@string/pref_data_default_row"
+        android:inputType="textCapWords"
+        android:key="prf_data_row"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_data_row"
+        android:summary="@string/pref_data_default_row"/>
+    <EditTextPreference
+        android:enabled="false"
+        android:capitalize="words"
+        android:defaultValue="@string/pref_data_default_col"
+        android:inputType="textCapWords"
+        android:key="prf_data_col"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_data_col"
+        android:summary="@string/pref_data_default_col"/>
+
+</PreferenceScreen>

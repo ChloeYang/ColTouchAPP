@@ -1,6 +1,8 @@
 package com.example.yangjiyu.myapplication;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -27,9 +29,9 @@ public class VclordActivity extends AppCompatActivity {
     private Button mButton;
     private IPEditText mIpText;
     private Spinner mSpinner;
-    private String mVclordIp;
+    private String mVclordIp="172.16.129.4";
     private int mPort=5800;
-    private SYS_INFO mCurSysInfo;
+    private SYS_INFO mCurSysInfo = new SYS_INFO();
     ArrayAdapter<String> adapter;
 
     @Override
@@ -37,7 +39,7 @@ public class VclordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_vclord);
-
+        mIpText=(IPEditText)findViewById(R.id.iptext);
         mSpinner = (Spinner)findViewById(R.id.vclord_ip);
         adapter = new ArrayAdapter<String>(
                 this,android.R.layout.simple_spinner_dropdown_item,intData()
@@ -47,8 +49,9 @@ public class VclordActivity extends AppCompatActivity {
             @Override
             //Todo spinner selectedListener
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mVclordIp =mIpText.getText().toString();
-                Toast.makeText(getApplicationContext(),""+mVclordIp+":"+mPort,Toast.LENGTH_SHORT).show();
+
+                mVclordIp =mIpText.getText().toString().trim();
+                //Toast.makeText(getApplicationContext(),""+mVclordIp+":"+mPort,Toast.LENGTH_SHORT).show();
 
                 VCL3CommProcess vcl3CommProcess=new VCL3CommProcess(mVclordIp,mPort );
                 Vector<SYS_INFO> vecSys=new Vector<SYS_INFO>();
@@ -57,14 +60,23 @@ public class VclordActivity extends AppCompatActivity {
                     vcl3CommProcess.ProcessCancel();
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(),""+e,Toast.LENGTH_SHORT).show();
                 }
+
+                //// TODO: 2017/11/22 test vecSys
+                SYS_INFO testSys = new SYS_INFO();
+                testSys.sysID=2;
+                testSys.uiRow=2;
+                testSys.uiCol=2;
+                vecSys.add(testSys);
+                //end test
 
                 if (vecSys.isEmpty()) {
                     Toast.makeText(getApplicationContext(),R.string.error_no_system,Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    adapter.remove("    ");
+                    adapter.clear();
+                    adapter.add("");
                     Iterator<SYS_INFO> iterator= vecSys.iterator();
                     SYS_INFO sys_info;
                     while (iterator.hasNext()) {
@@ -73,16 +85,33 @@ public class VclordActivity extends AppCompatActivity {
                     }
                 }
 
-//                String[] languages=getResources().getStringArray(R.array.languages);
-//                Toast.makeText(getApplicationContext(),"selected :"+languages[position],Toast.LENGTH_SHORT).show();
-                Toast.makeText(getApplicationContext(),""+mSpinner.getSelectedItem(),Toast.LENGTH_SHORT).show();
-                int index=position;
-                Iterator<SYS_INFO> iterator= vecSys.iterator();
-                while (index>0 && iterator.hasNext())
-                {
-                    iterator.next();
+                String strItem=(String)mSpinner.getSelectedItem();
+                if (strItem!="") {
+                    Toast.makeText(getApplicationContext(), "" +strItem, Toast.LENGTH_SHORT).show();
+                    int index = position;
+                    Iterator<SYS_INFO> iterator = vecSys.iterator();
+                    while (index > 1 && iterator.hasNext()) {
+                        iterator.next();
+                    }
+                    if (iterator.hasNext()) {
+                        mCurSysInfo = iterator.next();
+                    }
                 }
-                mCurSysInfo=iterator.next();
+                else {
+                    Toast.makeText(getApplicationContext(), R.string.error_no_system, Toast.LENGTH_SHORT).show();
+                    mCurSysInfo.sysID=-1;
+                    mCurSysInfo.uiRow=0;
+                    mCurSysInfo.uiCol=0;
+                }
+
+                SharedPreferences sharedPref = getSharedPreferences("setting",Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString(getString(R.string.pref_data_vclordip), mVclordIp);
+                editor.putInt(getString(R.string.pref_data_sid),mCurSysInfo.sysID);
+                editor.putInt(getString(R.string.pref_data_row),mCurSysInfo.uiRow);
+                editor.putInt(getString(R.string.pref_data_col),mCurSysInfo.uiCol);
+                editor.commit();
+
 //                String strSysInfo=(String)mSpinner.getSelectedItem();
 //                String[] str=strSysInfo.split(":");
 //                mSid=Integer.parseInt(str[0]);
@@ -98,10 +127,12 @@ public class VclordActivity extends AppCompatActivity {
             }
         });
 
+
         mButton = (Button)findViewById(R.id.connect_button);
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //// TODO: 2017/11/22 if unknown
                 Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                 startActivity(intent);
             }
@@ -112,7 +143,7 @@ public class VclordActivity extends AppCompatActivity {
     {
         // TODO Auto-generated method stub
         List<String> datalist=new ArrayList<String>();
-        datalist.add("  ");
+        datalist.add("");
         return datalist;
     }
 
