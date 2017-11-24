@@ -1,73 +1,47 @@
 package com.example.yangjiyu.myapplication;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
-    private RecyclerView mRecyclerView;
-    private GalleryAdapter mAdapter;
-    private List<Integer> mData;
-    private ImageView mImg;
 
+    private Fragment sourceList;
+    private Fragment sourceItem;
+    private Fragment video;
+    private FragmentManager mFragmentManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
-        ///mImg=(ImageView)findViewById(R.id.id_content);
 
-        initData();
-        //得到控件
-        mRecyclerView = (RecyclerView) findViewById(R.id.id_recyclerview);
-        //设置布局管理器
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        //--GridLayoutManager gridLayoutManager = new GridLayoutManager(this,9);
+        mFragmentManager=getSupportFragmentManager();
 
-        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        sourceList =mFragmentManager.findFragmentById(R.id.fragment_source_list);
+        sourceList =new SourceItemListFragment();
+        mFragmentManager.beginTransaction().add(R.id.fragment_source_list,sourceList).commit();
 
-        mRecyclerView.setLayoutManager(linearLayoutManager);//--gridLayoutManager
-        //设置适配器
-        mAdapter = new GalleryAdapter(this, mData);
-        mAdapter.setOnItemClickListener(new GalleryAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Toast.makeText(MainActivity.this,position+"",Toast.LENGTH_SHORT).show();
-            }
-        });
+        sourceItem=mFragmentManager.findFragmentById(R.id.fragment_source_item);
+        sourceItem=new SourceItemFragment();
+        mFragmentManager.beginTransaction().add(R.id.fragment_source_item,sourceItem).commit();
 
-        mRecyclerView.setAdapter(mAdapter);
-/*        mRecyclerView.setOnScrollChangeListener(new setOnItemScrollChangeListener()
-        {
-            @Override
-            public void onChange(View view, int position)
-            {
-                mImg.setImageResource(mData.get(position));
-            };
-        });*/
+        video=mFragmentManager.findFragmentById(R.id.fragment_video_wall);
+        video=new VideoWallFragment();
+        mFragmentManager.beginTransaction().add(R.id.fragment_video_wall,video).commit();
+
+
+
     }
-    private void initData()
-    {
-        mData = new ArrayList<>(Arrays.asList(R.drawable.a,
-                R.drawable.b, R.drawable.c, R.drawable.d, R.drawable.e,
-                R.drawable.f, R.drawable.g, R.drawable.h, R.drawable.l));
-    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
