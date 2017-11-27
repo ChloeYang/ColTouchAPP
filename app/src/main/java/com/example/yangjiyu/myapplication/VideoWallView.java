@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -36,6 +37,9 @@ public class VideoWallView extends View {
     private int CellState = CELL_STATE_UNKNOWN;
 
     private VideoWall mVideoWall;
+
+    private int m_cellRow=3;
+    private int m_cellCol=4;
 
     public int getCellState() {
         return CellState;
@@ -73,14 +77,18 @@ public class VideoWallView extends View {
 
     private void initCell(){
 
+//        SharedPreferences preferences = getContext().getSharedPreferences("setting",Context.MODE_PRIVATE);
+//        m_cellRow=preferences.getInt("ROW",0);
+//        m_cellCol=preferences.getInt("COL",0);
+
         CellBitmap = Bitmap.createBitmap(CellWidth, CellHeight, Bitmap.Config.ARGB_8888);
         CellBitmap.eraseColor(getResources().getColor(R.color.colorCellUnknown));
         CellCanvas = new Canvas(CellBitmap);
         CellPaint = new Paint(Paint.DITHER_FLAG);
 
         VideoWall videoWall = VideoWall.newInstance(CellWidth,CellHeight);
-        videoWall.layoutVideoCells(3,4);
-        ArrayList<VideoCell> videoCells = VideoWall.getmVideoCellCollections(3,4);
+        videoWall.layoutVideoCells(m_cellRow,m_cellCol);
+        ArrayList<VideoCell> videoCells = VideoWall.getmVideoCellCollections(m_cellRow,m_cellCol);
         int i = 0;
         for (VideoCell cell :
                 videoCells) {

@@ -8,21 +8,47 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SourceItemFragment extends Fragment {
+public class SourceItemFragment extends Fragment /*implements SourceItemListFragment.OnSourceListSelectedListener*/{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
     private RecyclerView mRecyclerView;
     private GalleryAdapter mAdapter;
-    private List<Integer> mData;
+    public List<Integer> mData;
+    private TextView textView;
+    private View view;
 
-    String[] StringSource = {"Whole","H-2Parts","V-2Parts", "Single"};
+    int  nowIndex=0;
+
+    //String[] StringSource = {"Whole","H-2Parts","V-2Parts", "Single"};
+
+
+    public void onShow(int pos) {
+        nowIndex= pos;
+        //Toast.makeText(getActivity(),"pos="+pos,Toast.LENGTH_SHORT).show();
+        getNewData(pos);
+        mAdapter.notifyDataSetChanged();
+
+    }
+    void getNewData(int pos){
+        if (pos==0)
+        {
+            sceneData();
+            textView.setText("SceneList");
+        }
+        else {
+            signalData();
+            textView.setText("SignalList");
+        }
+    }
+
 
     //private OnFragmentInteractionListener mListener;
     public interface OnSourceSelectedListener{
@@ -41,17 +67,17 @@ public class SourceItemFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        initData();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =inflater.inflate(R.layout.fragment_source_item, container, false);
-        sceneData();
+        view =inflater.inflate(R.layout.fragment_source_item, container, false);
         //得到控件
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_source_item);
+        textView=(TextView)view.findViewById(R.id.source_item) ;
         //设置布局管理器
         //--LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
         GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(),4);
@@ -65,7 +91,8 @@ public class SourceItemFragment extends Fragment {
         mAdapter.setOnItemClickListener(new GalleryAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Toast.makeText(view.getContext(),StringSource[position]+"",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(view.getContext(),position+"",Toast.LENGTH_SHORT).show();
+                //mOnSourceSelectedListener.onSourceSelected(position);
             }
         });
 
@@ -81,7 +108,7 @@ public class SourceItemFragment extends Fragment {
         return view;
         //return inflater.inflate(R.layout.fragment_source_item, container, false);
     }
-    private void sceneData()
+    private void initData()
     {
         mData = new ArrayList<>(Arrays.asList(
                 R.drawable.scene_1,
@@ -89,9 +116,21 @@ public class SourceItemFragment extends Fragment {
                 R.drawable.scene_3,
                 R.drawable.scene_4));
     }
+    private void sceneData()
+    {
+        mAdapter.mData = new ArrayList<>(Arrays.asList(
+                R.drawable.scene_1,
+                R.drawable.scene_2,
+                R.drawable.scene_3,
+                R.drawable.scene_4));
+    }
     private void signalData()
     {
-        mData = new ArrayList<>(Arrays.asList(
+        mAdapter.mData = new ArrayList<>(Arrays.asList(
+                R.drawable.ypbpr,
+                R.drawable.video,
+                R.drawable.sdi,
+                R.drawable.vlink,
                 R.drawable.ypbpr,
                 R.drawable.video,
                 R.drawable.sdi,

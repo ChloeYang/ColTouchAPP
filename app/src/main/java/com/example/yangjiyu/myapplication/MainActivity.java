@@ -12,12 +12,15 @@ import android.view.MenuItem;
 
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SourceItemListFragment.OnSourceListSelectedListener{
 
     private Fragment sourceList;
     private Fragment sourceItem;
     private Fragment video;
     private FragmentManager mFragmentManager;
+
+    private SourceItemFragment sf;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,10 +41,16 @@ public class MainActivity extends AppCompatActivity {
         video=new VideoWallFragment();
         mFragmentManager.beginTransaction().add(R.id.fragment_video_wall,video).commit();
 
-
+        sf=(SourceItemFragment) mFragmentManager.findFragmentById(R.id.fragment_source_item);
+        sf=new SourceItemFragment();
+        mFragmentManager.beginTransaction().add(R.id.fragment_source_item,sf).commit();
 
     }
 
+    public  void onSourceListSelected(int pos)
+    {
+        sf.onShow(pos);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

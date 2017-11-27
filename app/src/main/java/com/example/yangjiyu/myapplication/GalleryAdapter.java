@@ -21,7 +21,8 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     String[] StringScenee= {"Whole","H-2Parts","V-2Parts", "Single"};
     String[] StringSignal={"1-YPbPr","1-VIDEO","1-SDI","1-VLINK",
             "2-YPbPr","2-VIDEO","2-SDI","2-VLINK",
-            "3-YPbPr","3-VIDEO","3-SDI","3-VLINK",};
+            "3-YPbPr","3-VIDEO","3-SDI","3-VLINK",
+            "4-YPbPr","4-VIDEO","4-SDI","4-VLINK"};
 
     private List<Boolean> isClicks =new ArrayList<>();
 
@@ -36,7 +37,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     }
 
     private android.view.LayoutInflater mInflater;
-    private java.util.List<Integer> mData;
+    public java.util.List<Integer> mData;
 
     public GalleryAdapter(Context context, List<Integer> data)
     {
@@ -56,7 +57,12 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
 
         public void bind(int sourceId){
             //mImageViewSourceList.setImageResource(ImageSourceId[sourceId]);
-            mTxt.setText(StringScenee[sourceId]);
+            if(mData.size()==4){
+                mTxt.setText(StringScenee[sourceId]);
+            }
+            else {
+                mTxt.setText(StringSignal[sourceId]);
+            }
         }
     }
 
@@ -76,9 +82,17 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
                 viewGroup, false);
         ViewHolder viewHolder = new ViewHolder(view);
 
-        for (int ii = 0;i<StringScenee.length;i++)
-        {
-            isClicks.add(false);
+        if (mData.size()==4){
+            for (int ii = 0;i<StringScenee.length;i++)
+            {
+                isClicks.add(false);
+            }
+        }
+        else {
+            for (int ii = 0;i<StringSignal.length;i++)
+            {
+                isClicks.add(false);
+            }
         }
 
         viewHolder.mImg = (ImageView) view
