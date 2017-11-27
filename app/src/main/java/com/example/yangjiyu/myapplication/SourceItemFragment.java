@@ -2,6 +2,7 @@ package com.example.yangjiyu.myapplication;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ public class SourceItemFragment extends Fragment {
     private GalleryAdapter mAdapter;
     private List<Integer> mData;
 
+    String[] StringSource = {"Whole","H-2Parts","V-2Parts", "Single"};
 
     //private OnFragmentInteractionListener mListener;
     public interface OnSourceSelectedListener{
@@ -28,7 +30,7 @@ public class SourceItemFragment extends Fragment {
     }
     private SourceItemFragment.OnSourceSelectedListener mOnSourceSelectedListener;
 
-    public void setOnSourceListSelectedListener(SourceItemFragment.OnSourceSelectedListener onSourceSelectedListener) {
+    public void setOnSourceSelectedListener(SourceItemFragment.OnSourceSelectedListener onSourceSelectedListener) {
         mOnSourceSelectedListener = onSourceSelectedListener;
     }
 
@@ -47,23 +49,23 @@ public class SourceItemFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =inflater.inflate(R.layout.fragment_source_item, container, false);
-        initData();
+        sceneData();
         //得到控件
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_source_item);
         //设置布局管理器
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
-        //--GridLayoutManager gridLayoutManager = new GridLayoutManager(this,9);
+        //--LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(),4);
 
-        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        //--linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         //linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
-        mRecyclerView.setLayoutManager(linearLayoutManager);//--gridLayoutManager
+        mRecyclerView.setLayoutManager(gridLayoutManager);//--linearLayoutManager
         //设置适配器
         mAdapter = new GalleryAdapter(view.getContext(), mData);
         mAdapter.setOnItemClickListener(new GalleryAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Toast.makeText(view.getContext(),position+"",Toast.LENGTH_SHORT).show();
+                Toast.makeText(view.getContext(),StringSource[position]+"",Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -79,11 +81,28 @@ public class SourceItemFragment extends Fragment {
         return view;
         //return inflater.inflate(R.layout.fragment_source_item, container, false);
     }
-    private void initData()
+    private void sceneData()
     {
-        mData = new ArrayList<>(Arrays.asList(R.drawable.a,
-                R.drawable.b, R.drawable.c, R.drawable.d, R.drawable.e,
-                R.drawable.f, R.drawable.g, R.drawable.h, R.drawable.l));
+        mData = new ArrayList<>(Arrays.asList(
+                R.drawable.scene_1,
+                R.drawable.scene_2,
+                R.drawable.scene_3,
+                R.drawable.scene_4));
     }
-
+    private void signalData()
+    {
+        mData = new ArrayList<>(Arrays.asList(
+                R.drawable.ypbpr,
+                R.drawable.video,
+                R.drawable.sdi,
+                R.drawable.vlink,
+                R.drawable.ypbpr,
+                R.drawable.video,
+                R.drawable.sdi,
+                R.drawable.vlink,
+                R.drawable.ypbpr,
+                R.drawable.video,
+                R.drawable.sdi,
+                R.drawable.vlink));
+    }
 }

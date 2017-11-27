@@ -13,9 +13,9 @@
     <TextView
         android:id="@+id/source_item"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="35dp"
         android:text="@string/scene_list"
-        android:textSize="40sp"/>
+        android:textSize="20sp"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_source_item"
         android:layout_width="match_parent"

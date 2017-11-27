@@ -18,7 +18,7 @@ import java.util.List;
 public class SourceItemListFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
-    private GalleryAdapter mAdapter;
+    private SourceItemListAdapter mAdapter;
     private List<Integer> mData;
 
 //    private OnFragmentInteractionListener mListener;
@@ -49,31 +49,31 @@ public class SourceItemListFragment extends Fragment {
         // Inflate the layout for this fragment
         //return inflater.inflate(R.layout.fragment_source_item_list, container, false);
         View v = inflater.inflate(R.layout.fragment_source_item_list, container, false);
-        initData();
         mRecyclerView = (RecyclerView) v.findViewById(R.id.recycler_source_list);
 
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(v.getContext());
-
-        mLinearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        //mLinearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
 
         mRecyclerView.setHasFixedSize(true);
 
-        mAdapter = new GalleryAdapter(v.getContext(), mData);
-        mAdapter.setOnItemClickListener(new GalleryAdapter.OnItemClickListener() {
+        mAdapter = new SourceItemListAdapter();
+
+
+        mAdapter.setOnSourceListClickListener(new SourceItemListAdapter.OnSourceListClick() {
             @Override
-            public void onItemClick(View view, int position) {
-                Toast.makeText(view.getContext(),position+"",Toast.LENGTH_SHORT).show();
+            public void onSourceListClick(View view, int index) {
+                
+            }
+
+            @Override
+            public void onSourceListLongClick(View view, int index) {
+
             }
         });
         mRecyclerView.setAdapter(mAdapter);
         return v;
     }
-    private void initData()
-    {
-        mData = new ArrayList<>(Arrays.asList(R.drawable.a,
-                R.drawable.b, R.drawable.c, R.drawable.d, R.drawable.e,
-                R.drawable.f, R.drawable.g, R.drawable.h, R.drawable.l));
-    }
+
 
 }

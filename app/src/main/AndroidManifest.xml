@@ -31,8 +31,6 @@
         <activity android:name=".SettingPreference"
             android:label="@string/setting"
             android:exported="false"></activity>
-        <activity android:name=".WindowsActivity"
-            android:exported="false"></activity>
     </application>
 
 </manifest>
