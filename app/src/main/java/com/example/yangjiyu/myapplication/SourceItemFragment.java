@@ -1,5 +1,6 @@
 package com.example.yangjiyu.myapplication;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -56,6 +57,17 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
     }
     private SourceItemFragment.OnSourceSelectedListener mOnSourceSelectedListener;
 
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        // 确认容器 Activity 已实现该回调接口。否则，抛出异常
+        try {
+            mOnSourceSelectedListener = (SourceItemFragment.OnSourceSelectedListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnSourceListSelectedListener");
+        }
+    }
     public void setOnSourceSelectedListener(SourceItemFragment.OnSourceSelectedListener onSourceSelectedListener) {
         mOnSourceSelectedListener = onSourceSelectedListener;
     }
@@ -92,7 +104,7 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
             @Override
             public void onItemClick(View view, int position) {
                 //Toast.makeText(view.getContext(),position+"",Toast.LENGTH_SHORT).show();
-                //mOnSourceSelectedListener.onSourceSelected(position);
+                mOnSourceSelectedListener.onSourceSelected(position);
             }
         });
 

@@ -10,7 +10,8 @@ import java.util.UUID;
 
 public class VideoCell {
 
-    private final static String TAG = "vtron.dlpmini.VideoCell";
+    public final static int CUBE_ROW_MAX=100;
+    private final static String TAG = "vtron.VideoCell";
 
     public final static int sSuccess = 0;
     public final static int sFailure = -1;
@@ -23,13 +24,13 @@ public class VideoCell {
     public final static int sCellStateError = 4;
 
 
-    private UUID mCellId;
+    private int mCellId;
     private int mCellWidth;
     private int mCellHeight;
     private int mCellState = sCellStateUnknown;
     private int mCellPositionTopLeftX;
     private int mCellPositionTopLeftY;
-
+    private boolean mCellIsFlag=false;
 
 
     public VideoCell(int cellWidth, int cellHeight) {
@@ -39,13 +40,30 @@ public class VideoCell {
             setCellState(sCellStateBusy);
             mCellWidth = cellWidth;
             mCellHeight = cellHeight;
-            mCellId = UUID.randomUUID();
+            mCellId = 0;//UUID.randomUUID();
             setCellState(sCellStateReady);
+            mCellIsFlag=false;
         }
     }
 
-    public UUID getCellId() {
+    /*public UUID getCellId() {
         return mCellId;
+    }*/
+    public int getCellId() {
+        return mCellId;
+    }
+
+    public void setCellIsFlag(boolean bIsFlag)
+    {
+        this.mCellIsFlag=bIsFlag;
+    }
+    public boolean getCellIsFlag()
+    {
+        return this.mCellIsFlag;
+    }
+    public void setCellId(int row,int col)
+    {
+        this.mCellId=row*CUBE_ROW_MAX+col;
     }
 
     public int setVideoCellPosition(int posX, int posY){

@@ -12,7 +12,7 @@ import android.view.MenuItem;
 
 
 
-public class MainActivity extends AppCompatActivity implements SourceItemListFragment.OnSourceListSelectedListener{
+public class MainActivity extends AppCompatActivity implements SourceItemListFragment.OnSourceListSelectedListener ,SourceItemFragment.OnSourceSelectedListener{
 
     private Fragment sourceList;
     private Fragment sourceItem;
@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity implements SourceItemListFra
     private FragmentManager mFragmentManager;
 
     private SourceItemFragment sf;
+    private VideoWallFragment vf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,15 +42,19 @@ public class MainActivity extends AppCompatActivity implements SourceItemListFra
         video=new VideoWallFragment();
         mFragmentManager.beginTransaction().add(R.id.fragment_video_wall,video).commit();
 
-        sf=(SourceItemFragment) mFragmentManager.findFragmentById(R.id.fragment_source_item);
-        sf=new SourceItemFragment();
-        mFragmentManager.beginTransaction().add(R.id.fragment_source_item,sf).commit();
+        sf=(SourceItemFragment)sourceItem;
+        vf=(VideoWallFragment)video;
 
     }
 
     public  void onSourceListSelected(int pos)
     {
         sf.onShow(pos);
+        vf.upDataList(pos);
+    }
+    public void onSourceSelected(int pos)
+    {
+        vf.upDataItem(pos);
     }
 
     @Override

@@ -39,6 +39,10 @@ public class VclordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_vclord);
+
+        mButton = (Button)findViewById(R.id.connect_button);
+        mButton.setEnabled(false);
+
         mIpText=(IPEditText)findViewById(R.id.iptext);
         mSpinner = (Spinner)findViewById(R.id.vclord_ip);
         adapter = new ArrayAdapter<String>(
@@ -96,12 +100,14 @@ public class VclordActivity extends AppCompatActivity {
                     if (iterator.hasNext()) {
                         mCurSysInfo = iterator.next();
                     }
+                    mButton.setEnabled(true);
                 }
                 else {
                     Toast.makeText(getApplicationContext(), R.string.error_no_system, Toast.LENGTH_SHORT).show();
                     mCurSysInfo.sysID=-1;
                     mCurSysInfo.uiRow=0;
                     mCurSysInfo.uiCol=0;
+                    mButton.setEnabled(false);
                 }
 
                 SharedPreferences sharedPref = getSharedPreferences("setting",Context.MODE_PRIVATE);
@@ -128,7 +134,6 @@ public class VclordActivity extends AppCompatActivity {
         });
 
 
-        mButton = (Button)findViewById(R.id.connect_button);
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

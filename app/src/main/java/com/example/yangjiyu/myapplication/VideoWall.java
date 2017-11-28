@@ -36,7 +36,8 @@ public class VideoWall {
                 return sVideoWall;
             }
         }else{
-            return new VideoWall(wallWidth, wallHeight);
+            sVideoWall= new VideoWall(wallWidth, wallHeight);
+            return sVideoWall;
         }
     }
 
@@ -81,6 +82,7 @@ public class VideoWall {
                 mVideoCell = new VideoCell(VideoCellWidth, VideoCellHeight);
                 posX = j * (VideoCellWidth + sVideoCellGap);
                 mVideoCell.setVideoCellPosition(posX, posY);
+                mVideoCell.setCellId(i,j);
                 sVideoCellCollections.add(mVideoCell);
                 Log.i(TAG,"Add video cell: x = " + posX + ", y = " + posY);
             }
@@ -102,6 +104,63 @@ public class VideoWall {
         }
     }
 
+    public  static ArrayList<VideoCell> getH2PartVideoCellCollections(int rows,int cols)
+    {
+        //int VideoCellWidth = (int) Math.floor((sVideoWall.getWallWidth() - sVideoCellGap * (cols  - 1 )) / cols);
+        int VideoCellHeight = (int) Math.floor((sVideoWall.getWallHeight() - sVideoCellGap * (rows  - 1 )) / rows);
+
+        int upNum = (int)Math.floor(rows/2);
+        int downNum=rows-upNum;
+        //ToDo: takes time to modify the shape of video shape
+        //int VideoCellWidthTmp = (int) Math.floor(VideoCellHeight * sVideoCellSizeWidthToHeightRatioSmall);
+        //int VideoCellHeightTmp = (int) Math.floor(VideoCellWidth / sVideoCellSizeWidthToHeightRatioSmall);
+        sVideoCellCollections = new ArrayList<>();
+        int posX = 0;
+        int posY = 0;
+
+        sVideoWall.mVideoCell = new VideoCell(sVideoWall.getWallWidth(), (upNum * (VideoCellHeight + sVideoCellGap)-sVideoCellGap));
+        sVideoWall.mVideoCell.setVideoCellPosition(posX, posY);
+        //sVideoWall.mVideoCell.setCellId(i,j);
+        sVideoCellCollections.add(sVideoWall.mVideoCell);
+
+        posY = upNum * (VideoCellHeight + sVideoCellGap);
+        sVideoWall.mVideoCell = new VideoCell(sVideoWall.getWallWidth(), (downNum * (VideoCellHeight + sVideoCellGap)-sVideoCellGap));
+        sVideoWall.mVideoCell.setVideoCellPosition(posX, posY);
+        //sVideoWall.mVideoCell.setCellId(i,j);
+        sVideoCellCollections.add(sVideoWall.mVideoCell);
+
+
+        return sVideoCellCollections;
+    }
+
+    public  static ArrayList<VideoCell> getV2PartVideoCellCollections(int rows,int cols)
+    {
+        int VideoCellWidth = (int) Math.floor((sVideoWall.getWallWidth() - sVideoCellGap * (cols  - 1 )) / cols);
+        //int VideoCellHeight = (int) Math.floor((sVideoWall.getWallHeight() - sVideoCellGap * (rows  - 1 )) / rows);
+
+        int leftNum = (int)Math.floor(cols/2);
+        int rightNum=rows-leftNum;
+        //ToDo: takes time to modify the shape of video shape
+        //int VideoCellWidthTmp = (int) Math.floor(VideoCellHeight * sVideoCellSizeWidthToHeightRatioSmall);
+        //int VideoCellHeightTmp = (int) Math.floor(VideoCellWidth / sVideoCellSizeWidthToHeightRatioSmall);
+        sVideoCellCollections = new ArrayList<>();
+        int posX = 0;
+        int posY = 0;
+
+        sVideoWall.mVideoCell = new VideoCell((leftNum * (VideoCellWidth + sVideoCellGap)-sVideoCellGap),sVideoWall.getWallHeight());
+        sVideoWall.mVideoCell.setVideoCellPosition(posX, posY);
+        //sVideoWall.mVideoCell.setCellId(i,j);
+        sVideoCellCollections.add(sVideoWall.mVideoCell);
+
+        posX = leftNum * (VideoCellWidth + sVideoCellGap);
+        sVideoWall.mVideoCell = new VideoCell((rightNum * (VideoCellWidth + sVideoCellGap)-sVideoCellGap),sVideoWall.getWallHeight());
+        sVideoWall.mVideoCell.setVideoCellPosition(posX, posY);
+        //sVideoWall.mVideoCell.setCellId(i,j);
+        sVideoCellCollections.add(sVideoWall.mVideoCell);
+
+
+        return sVideoWall.sVideoCellCollections;
+    }
 
     /*{
         if( sVideoCellCollections.size() == 0 ){

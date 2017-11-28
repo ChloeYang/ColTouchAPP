@@ -27,7 +27,7 @@ public class IPEditText extends LinearLayout {
     private String text1="172";
     private String text2="16";
     private String text3="129";
-    private String text4="152";
+    private String text4="1";
 
     public IPEditText(final Context context, AttributeSet attrs) {
         super(context, attrs);

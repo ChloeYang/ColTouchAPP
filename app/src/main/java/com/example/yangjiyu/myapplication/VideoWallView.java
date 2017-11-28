@@ -1,25 +1,15 @@
 package com.example.yangjiyu.myapplication;
 
-import android.app.AlertDialog;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.inputmethodservice.Keyboard;
-import android.support.annotation.Nullable;
-import android.text.method.Touch;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
 import java.util.ArrayList;
-import java.util.EventListener;
 
 /**
  * Created by Howie on 2017/7/25.
@@ -38,8 +28,18 @@ public class VideoWallView extends View {
 
     private VideoWall mVideoWall;
 
-    private int m_cellRow=3;
-    private int m_cellCol=4;
+    private int m_cellRow=2;
+    private int m_cellCol=3;
+
+    public int mListIndex=-1;
+    public int mSceneIndex=-1;
+    public int mSignalIndex=-1;
+
+    private int mLastSceneIndex =-1;
+    private boolean mSceneIsChanged=false;
+
+    private int mLastSignalIndex =-1;
+    private boolean mSignalIsChanged=false;
 
     public int getCellState() {
         return CellState;
@@ -54,39 +54,84 @@ public class VideoWallView extends View {
     }
 
 
-    private int CellWidth;
-    private int CellHeight;
+    private int WallWidth;
+    private int WallHeight;
 
     private Bitmap CellBitmap;
     private Canvas CellCanvas;
     private Paint CellPaint;
 
-    public VideoWallView(Context context, int cellWidth, int cellHeight) {
+    public VideoWallView(Context context, int wallWidth, int wallHeight,int listIndex,int sceneIndex,int signalIndex) {
 
         super(context);
-        if( cellHeight * cellWidth < 0 ) {
+        if( wallHeight * wallWidth < 0 ) {
             setCellState(CELL_STATE_ERROR);
             return;
         }
         else {
-            CellWidth = cellWidth;
-            CellHeight = cellHeight;
+            WallWidth = wallWidth;
+            WallHeight = wallHeight;
+
+            mListIndex=listIndex;
+            mSceneIndex=sceneIndex;
+            mSignalIndex=signalIndex;
+
+            if (mSceneIndex != mLastSceneIndex)
+            {
+                mLastSceneIndex =mSceneIndex;
+                mSceneIsChanged=true;
+            }
+            else {
+                mSceneIsChanged=false;
+            }
+
+            if (mSignalIndex != mLastSignalIndex)
+            {
+                mLastSignalIndex =mSignalIndex;
+                mSignalIsChanged=true;
+            }
+            else {
+                mSignalIsChanged=false;
+            }
         }
-        initCell();
+        if (mListIndex==-1 || mSceneIndex==-1)
+        {
+            initCell();
+        }
+        if (mListIndex==0 && mSceneIsChanged==true)
+        {
+            //// TODO: 2017/11/28 canvas scene
+            if (mSceneIndex==0)
+            {
+                wholeSceneCell();
+            }
+            if (mSceneIndex==1)
+            {
+                h2PartSceneCell();
+            }
+            if (mSceneIndex==2)
+            {
+                v2PartSceneCell();
+            }
+            if (mSceneIndex==3)
+            {
+                allSceneCell();
+            }
+        }
     }
 
     private void initCell(){
 
-//        SharedPreferences preferences = getContext().getSharedPreferences("setting",Context.MODE_PRIVATE);
-//        m_cellRow=preferences.getInt("ROW",0);
-//        m_cellCol=preferences.getInt("COL",0);
+        SharedPreferences preferences = getContext().getSharedPreferences("setting",Context.MODE_PRIVATE);
+        m_cellRow=preferences.getInt("ROW",1);
+        m_cellCol=preferences.getInt("COL",1);
 
-        CellBitmap = Bitmap.createBitmap(CellWidth, CellHeight, Bitmap.Config.ARGB_8888);
+        CellBitmap = Bitmap.createBitmap(WallWidth, WallHeight, Bitmap.Config.ARGB_8888);
         CellBitmap.eraseColor(getResources().getColor(R.color.colorCellUnknown));
         CellCanvas = new Canvas(CellBitmap);
         CellPaint = new Paint(Paint.DITHER_FLAG);
 
-        VideoWall videoWall = VideoWall.newInstance(CellWidth,CellHeight);
+        VideoWall videoWall = VideoWall.newInstance(WallWidth, WallHeight);
         videoWall.layoutVideoCells(m_cellRow,m_cellCol);
         ArrayList<VideoCell> videoCells = VideoWall.getmVideoCellCollections(m_cellRow,m_cellCol);
         int i = 0;
@@ -114,6 +159,97 @@ public class VideoWallView extends View {
         int d = 20;
         CellCanvas.drawRect(20+d,30+d,40+d,60+d,CellPaint);*/
 
+    }
+
+    private void wholeSceneCell(){
+
+        CellBitmap = Bitmap.createBitmap(WallWidth, WallHeight, Bitmap.Config.ARGB_8888);
+        CellBitmap.eraseColor(getResources().getColor(R.color.colorCellUnknown));
+        CellCanvas = new Canvas(CellBitmap);
+        CellPaint = new Paint(Paint.DITHER_FLAG);
+        CellPaint.setColor(Color.BLUE);
+        VideoWall videoWall = VideoWall.newInstance(WallWidth, WallHeight);
+        videoWall.layoutVideoCells(1,1);
+        ArrayList<VideoCell> videoCells = VideoWall.getmVideoCellCollections(1,1);
+        int i = 0;
+        for (VideoCell cell :
+                videoCells) {
+            CellCanvas.drawRect(cell.getCellPositionTopLeftX(), cell.getCellPositionTopLeftY(),
+                    cell.getCellPositionTopLeftX() + cell.getCellWidth(),
+                    cell.getCellPositionTopLeftY() + cell.getCellHeight(), CellPaint);
+            CellPaint.setColor(Color.BLUE);
+        }
+    }
+
+    private void allSceneCell(){
+
+        SharedPreferences preferences = getContext().getSharedPreferences("setting",Context.MODE_PRIVATE);
+        m_cellRow=preferences.getInt("ROW",1);
+        m_cellCol=preferences.getInt("COL",1);
+
+        CellBitmap = Bitmap.createBitmap(WallWidth, WallHeight, Bitmap.Config.ARGB_8888);
+        CellBitmap.eraseColor(getResources().getColor(R.color.colorCellUnknown));
+        CellCanvas = new Canvas(CellBitmap);
+        CellPaint = new Paint(Paint.DITHER_FLAG);
+        CellPaint.setColor(Color.BLUE);
+        VideoWall videoWall = VideoWall.newInstance(WallWidth, WallHeight);
+        videoWall.layoutVideoCells(m_cellRow,m_cellCol);
+        ArrayList<VideoCell> videoCells = VideoWall.getmVideoCellCollections(m_cellRow,m_cellCol);
+        int i = 0;
+        for (VideoCell cell :
+                videoCells) {
+            CellCanvas.drawRect(cell.getCellPositionTopLeftX(), cell.getCellPositionTopLeftY(),
+                    cell.getCellPositionTopLeftX() + cell.getCellWidth(),
+                    cell.getCellPositionTopLeftY() + cell.getCellHeight(), CellPaint);
+            CellPaint.setColor(Color.BLUE);
+        }
+    }
+
+    private void h2PartSceneCell(){
+
+        SharedPreferences preferences = getContext().getSharedPreferences("setting",Context.MODE_PRIVATE);
+        m_cellRow=preferences.getInt("ROW",1);
+        m_cellCol=preferences.getInt("COL",1);
+
+        CellBitmap = Bitmap.createBitmap(WallWidth, WallHeight, Bitmap.Config.ARGB_8888);
+        CellBitmap.eraseColor(getResources().getColor(R.color.colorCellUnknown));
+        CellCanvas = new Canvas(CellBitmap);
+        CellPaint = new Paint(Paint.DITHER_FLAG);
+        CellPaint.setColor(Color.BLUE);
+        VideoWall videoWall = VideoWall.newInstance(WallWidth, WallHeight);
+        videoWall.layoutVideoCells(m_cellRow,m_cellCol);
+        ArrayList<VideoCell> videoCells = VideoWall.getH2PartVideoCellCollections(m_cellRow,m_cellCol);
+        int i = 0;
+        for (VideoCell cell :
+                videoCells) {
+            CellCanvas.drawRect(cell.getCellPositionTopLeftX(), cell.getCellPositionTopLeftY(),
+                    cell.getCellPositionTopLeftX() + cell.getCellWidth(),
+                    cell.getCellPositionTopLeftY() + cell.getCellHeight(), CellPaint);
+            CellPaint.setColor(Color.BLUE);
+        }
+    }
+    private void v2PartSceneCell(){
+
+        SharedPreferences preferences = getContext().getSharedPreferences("setting",Context.MODE_PRIVATE);
+        m_cellRow=preferences.getInt("ROW",1);
+        m_cellCol=preferences.getInt("COL",1);
+
+        CellBitmap = Bitmap.createBitmap(WallWidth, WallHeight, Bitmap.Config.ARGB_8888);
+        CellBitmap.eraseColor(getResources().getColor(R.color.colorCellUnknown));
+        CellCanvas = new Canvas(CellBitmap);
+        CellPaint = new Paint(Paint.DITHER_FLAG);
+        CellPaint.setColor(Color.BLUE);
+        VideoWall videoWall = VideoWall.newInstance(WallWidth, WallHeight);
+        videoWall.layoutVideoCells(m_cellRow,m_cellCol);
+        ArrayList<VideoCell> videoCells = VideoWall.getV2PartVideoCellCollections(m_cellRow,m_cellCol);
+        int i = 0;
+        for (VideoCell cell :
+                videoCells) {
+            CellCanvas.drawRect(cell.getCellPositionTopLeftX(), cell.getCellPositionTopLeftY(),
+                    cell.getCellPositionTopLeftX() + cell.getCellWidth(),
+                    cell.getCellPositionTopLeftY() + cell.getCellHeight(), CellPaint);
+            CellPaint.setColor(Color.BLUE);
+        }
     }
 
     private int PositionX;
@@ -155,7 +291,7 @@ public class VideoWallView extends View {
         if(event.getAction() == MotionEvent.ACTION_MOVE) {
             int x = (int) event.getX();
             int y = (int) event.getY();
-            ArrayList<VideoCell> cells = VideoWall.getmVideoCellCollections(3, 4);
+            ArrayList<VideoCell> cells = VideoWall.getmVideoCellCollections(m_cellRow, m_cellCol);
             for (VideoCell cell : cells) {
                 if (((x >= cell.getCellPositionTopLeftX()) && x <= (cell.getCellWidth() + cell.getCellPositionTopLeftX()))
                         && ((y >= cell.getCellPositionTopLeftY()) && y <= (cell.getCellHeight() + cell.getCellPositionTopLeftY()))) {
