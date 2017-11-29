@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class VideoWall {
 
-    private final static String TAG = "vtron.dlpmini.VideoWall";
+    private final static String TAG = "vtron.VideoWall";
     private final static int MAX_SUPPORT_CELL = 12;
     private final static int MAX_SUPPORT_WALL = 1;
 

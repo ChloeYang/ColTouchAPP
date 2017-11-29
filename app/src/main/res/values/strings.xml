@@ -16,6 +16,7 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="setting">Setting</string>
     <string name="action_vclord_connect">VCLORD CONNECT</string>
     <string name="point">.</string>
     <string name="error_no_system">System is unknown</string>
@@ -31,11 +32,34 @@
     <string name="pref_data_col">COL</string>
     <string name="pref_data_default_vclordip">172.16.129.111</string>
     <string name="pref_data_vclordip">IP</string>
-    <string name="setting">Setting</string>
+    <string name="pref_setting">Setting</string>
+    <string name="pref_define_scene">DefineScene</string>
+    <string name="pref_define1_flag">define1_flag</string>
+    <string name="pref_define2_flag">define2_flag</string>
+    <string name="pref_define1_num">define1_num</string>
+    <string name="pref_define2_num">define2_num</string>
+    <string name="pref_define1_startX_">define1_startX_</string>
+    <string name="pref_define1_startY_">define1_startY_</string>
+    <string name="pref_define1_endX_">define1_endX_</string>
+    <string name="pref_define1_endY_">define1_endY_</string>
+    <string name="pref_define2_startX_">define2_startX_</string>
+    <string name="pref_define2_startY_">define2_startY_</string>
+    <string name="pref_define2_endX_">define2_endX_</string>
+    <string name="pref_define2_endY_">define2_endY_</string>
+    <string name="pref_define1_signal_">define1_signal_</string>
+    <string name="pref_define2_signal_">define2_signal_</string>
+    <string name="pref_video_cell_list">VideoCellList</string>
+    <string name="pref_cubeNum">cubeNum</string>
+    <string name="pref_cubeId">cubeId</string>
+    <string name="pref_posX">posX</string>
+    <string name="pref_posY">posY</string>
+    <string name="pref_width">width</string>
+    <string name="pref_height">height</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="scene_list">Scene List</string>
     <string name="signal_list">Signal List</string>
     <string name="error_invalid_ip">Ip is incorrect</string>
+
 </resources>

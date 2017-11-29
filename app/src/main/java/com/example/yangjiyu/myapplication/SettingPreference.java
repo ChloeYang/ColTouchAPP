@@ -42,7 +42,7 @@ public class SettingPreference extends AppCompatPreferenceActivity {
             actionBar.setDisplayHomeAsUpEnabled( true );
         }
 
-        SharedPreferences preferences = getSharedPreferences("setting",Context.MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(getString(R.string.pref_setting),Context.MODE_PRIVATE);
         strIp=preferences.getString(getString(R.string.pref_data_vclordip),"");
         iSid=preferences.getInt(getString(R.string.pref_data_sid),-1);
         iRow=preferences.getInt(getString(R.string.pref_data_row),0);

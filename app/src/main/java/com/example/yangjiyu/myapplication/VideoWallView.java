@@ -61,6 +61,13 @@ public class VideoWallView extends View {
     private Canvas CellCanvas;
     private Paint CellPaint;
 
+    private int mDefine1Flag;
+    private int mDefine2Flag;
+    private int mDefine1Num;
+    private int mDefine2Num;
+    private ArrayList<SingleSceneCell> m_define1_sceneList=new ArrayList<>();
+    private ArrayList<SingleSceneCell> m_define2_sceneList=new ArrayList<>();
+
     public VideoWallView(Context context, int wallWidth, int wallHeight,int listIndex,int sceneIndex,int signalIndex) {
 
         super(context);
@@ -76,55 +83,106 @@ public class VideoWallView extends View {
             mSceneIndex=sceneIndex;
             mSignalIndex=signalIndex;
 
-            if (mSceneIndex != mLastSceneIndex)
-            {
-                mLastSceneIndex =mSceneIndex;
+            if (mSceneIndex != mLastSceneIndex){
                 mSceneIsChanged=true;
             }
             else {
                 mSceneIsChanged=false;
             }
 
-            if (mSignalIndex != mLastSignalIndex)
-            {
-                mLastSignalIndex =mSignalIndex;
+            if (mSignalIndex != mLastSignalIndex){
                 mSignalIsChanged=true;
             }
             else {
                 mSignalIsChanged=false;
             }
         }
-        if (mListIndex==-1 || mSceneIndex==-1)
-        {
+        if (mListIndex==-1 && mSceneIndex==-1){
             initCell();
         }
-        if (mListIndex==0 && mSceneIsChanged==true)
-        {
+
+
+        SharedPreferences defineShared = getContext().getSharedPreferences(getContext().getString(R.string.pref_define_scene),Context.MODE_PRIVATE);
+        if (mSceneIsChanged==true){
             //// TODO: 2017/11/28 canvas scene
-            if (mSceneIndex==0)
+            switch (mSceneIndex)
             {
-                wholeSceneCell();
+                case 0:
+                    wholeSceneCell();
+                    break;
+                case 1:
+                    h2PartSceneCell();
+                    break;
+                case 2:
+                    v2PartSceneCell();
+                    break;
+                case 3:
+                    eachSceneCell();
+                    break;
+                case 4:
+                    //// TODO: 2017/11/29 get sharedpreferences
+                    mDefine1Flag=defineShared.getInt(getContext().getString(R.string.pref_define1_flag),0);
+                    if (mDefine1Flag==0){
+                        initCell();
+                    }else {
+                        mDefine1Num=defineShared.getInt(getContext().getString(R.string.pref_define1_num),0);
+                        for (int index=0;index<mDefine1Num;index++){
+                            SingleSceneCell ss =new SingleSceneCell();
+                            ss.setM_startX(defineShared.getInt(getContext().getString(R.string.pref_define1_startX_),0));
+                            ss.setM_startX(defineShared.getInt(getContext().getString(R.string.pref_define1_startY_),0));
+                            ss.setM_startX(defineShared.getInt(getContext().getString(R.string.pref_define1_endX_),0));
+                            ss.setM_startX(defineShared.getInt(getContext().getString(R.string.pref_define1_endY_),0));
+                            ss.setM_startX(defineShared.getInt(getContext().getString(R.string.pref_define1_signal_),0));
+                            m_define1_sceneList.add(ss);
+                        }
+                    }
+                    break;
+                case 5:
+                    //// TODO: 2017/11/29 get sharedpreferences
+                    mDefine2Flag=defineShared.getInt(getContext().getString(R.string.pref_define2_flag),0);
+                    if (mDefine2Flag==0){
+                        initCell();
+                    }else {
+                        mDefine2Num=defineShared.getInt(getContext().getString(R.string.pref_define2_num),0);
+                        for (int index=0;index<mDefine2Num;index++){
+                            SingleSceneCell ss =new SingleSceneCell();
+                            ss.setM_startX(defineShared.getInt(getContext().getString(R.string.pref_define2_startX_),0));
+                            ss.setM_startX(defineShared.getInt(getContext().getString(R.string.pref_define2_startY_),0));
+                            ss.setM_startX(defineShared.getInt(getContext().getString(R.string.pref_define2_endX_),0));
+                            ss.setM_startX(defineShared.getInt(getContext().getString(R.string.pref_define2_endY_),0));
+                            ss.setM_startX(defineShared.getInt(getContext().getString(R.string.pref_define2_signal_),0));
+                            m_define2_sceneList.add(ss);
+                        }
+                    }
+                    break;
+                case 6:
+                    //// TODO: 2017/11/29 clear shared
+                    if (mLastSignalIndex==4 )
+                    {
+                        SharedPreferences.Editor editor = defineShared.edit();
+                        editor.putInt("define1_flag",0);
+                    }
+                    if(mLastSignalIndex==5)
+                    {
+                        SharedPreferences.Editor editor = defineShared.edit();
+                        editor.putInt("define2_flag",0);
+                    }
+                    initCell();
+                    break;
+                default:
+                    initCell();
+                    break;
             }
-            if (mSceneIndex==1)
-            {
-                h2PartSceneCell();
-            }
-            if (mSceneIndex==2)
-            {
-                v2PartSceneCell();
-            }
-            if (mSceneIndex==3)
-            {
-                allSceneCell();
-            }
+            mLastSceneIndex =mSceneIndex;
+            mLastSignalIndex =mSignalIndex;
         }
     }
 
     private void initCell(){
 
-        SharedPreferences preferences = getContext().getSharedPreferences("setting",Context.MODE_PRIVATE);
-        m_cellRow=preferences.getInt("ROW",1);
-        m_cellCol=preferences.getInt("COL",1);
+        SharedPreferences preferences = getContext().getSharedPreferences(getContext().getString(R.string.setting),Context.MODE_PRIVATE);
+        m_cellRow=preferences.getInt(getContext().getString(R.string.pref_data_row),1);
+        m_cellCol=preferences.getInt(getContext().getString(R.string.pref_data_col),1);
 
         CellBitmap = Bitmap.createBitmap(WallWidth, WallHeight, Bitmap.Config.ARGB_8888);
         CellBitmap.eraseColor(getResources().getColor(R.color.colorCellUnknown));
@@ -145,6 +203,21 @@ public class VideoWallView extends View {
                     cell.getCellPositionTopLeftY() + cell.getCellHeight()/2+i,CellPaint);
             CellPaint.setColor(Color.BLACK);
         }
+
+
+        SharedPreferences sharedPref = getContext().getSharedPreferences(getContext().getString(R.string.pref_video_cell_list),Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        int iCellNum=videoCells.size();
+        editor.putInt(getContext().getString(R.string.pref_cubeNum),iCellNum);
+        for (int index=0;index<iCellNum;index++)
+        {
+            editor.putInt(getContext().getString(R.string.pref_cubeId),videoCells.get(index).getCellId());
+            editor.putInt(getContext().getString(R.string.pref_posX),videoCells.get(index).getCellPositionTopLeftX());
+            editor.putInt(getContext().getString(R.string.pref_posY),videoCells.get(index).getCellPositionTopLeftY());
+            editor.putInt(getContext().getString(R.string.pref_width),videoCells.get(index).getCellWidth());
+            editor.putInt(getContext().getString(R.string.pref_height),videoCells.get(index).getCellHeight());
+        }
+
         /*VideoCell cell = videoCells.get(1);
         int left = cell.getCellPositionTopLeftX();
         int top = cell.getCellPositionTopLeftY();
@@ -163,6 +236,9 @@ public class VideoWallView extends View {
 
     private void wholeSceneCell(){
 
+        SharedPreferences preferences = getContext().getSharedPreferences(getContext().getString(R.string.setting),Context.MODE_PRIVATE);
+        m_cellRow=preferences.getInt(getContext().getString(R.string.pref_data_row),1);
+        m_cellCol=preferences.getInt(getContext().getString(R.string.pref_data_col),1);
         CellBitmap = Bitmap.createBitmap(WallWidth, WallHeight, Bitmap.Config.ARGB_8888);
         CellBitmap.eraseColor(getResources().getColor(R.color.colorCellUnknown));
         CellCanvas = new Canvas(CellBitmap);
@@ -181,12 +257,11 @@ public class VideoWallView extends View {
         }
     }
 
-    private void allSceneCell(){
+    private void eachSceneCell(){
 
-        SharedPreferences preferences = getContext().getSharedPreferences("setting",Context.MODE_PRIVATE);
-        m_cellRow=preferences.getInt("ROW",1);
-        m_cellCol=preferences.getInt("COL",1);
-
+        SharedPreferences preferences = getContext().getSharedPreferences(getContext().getString(R.string.setting),Context.MODE_PRIVATE);
+        m_cellRow=preferences.getInt(getContext().getString(R.string.pref_data_row),1);
+        m_cellCol=preferences.getInt(getContext().getString(R.string.pref_data_col),1);
         CellBitmap = Bitmap.createBitmap(WallWidth, WallHeight, Bitmap.Config.ARGB_8888);
         CellBitmap.eraseColor(getResources().getColor(R.color.colorCellUnknown));
         CellCanvas = new Canvas(CellBitmap);
@@ -207,10 +282,9 @@ public class VideoWallView extends View {
 
     private void h2PartSceneCell(){
 
-        SharedPreferences preferences = getContext().getSharedPreferences("setting",Context.MODE_PRIVATE);
-        m_cellRow=preferences.getInt("ROW",1);
-        m_cellCol=preferences.getInt("COL",1);
-
+        SharedPreferences preferences = getContext().getSharedPreferences(getContext().getString(R.string.setting),Context.MODE_PRIVATE);
+        m_cellRow=preferences.getInt(getContext().getString(R.string.pref_data_row),1);
+        m_cellCol=preferences.getInt(getContext().getString(R.string.pref_data_col),1);
         CellBitmap = Bitmap.createBitmap(WallWidth, WallHeight, Bitmap.Config.ARGB_8888);
         CellBitmap.eraseColor(getResources().getColor(R.color.colorCellUnknown));
         CellCanvas = new Canvas(CellBitmap);
@@ -230,10 +304,9 @@ public class VideoWallView extends View {
     }
     private void v2PartSceneCell(){
 
-        SharedPreferences preferences = getContext().getSharedPreferences("setting",Context.MODE_PRIVATE);
-        m_cellRow=preferences.getInt("ROW",1);
-        m_cellCol=preferences.getInt("COL",1);
-
+        SharedPreferences preferences = getContext().getSharedPreferences(getContext().getString(R.string.setting),Context.MODE_PRIVATE);
+        m_cellRow=preferences.getInt(getContext().getString(R.string.pref_data_row),1);
+        m_cellCol=preferences.getInt(getContext().getString(R.string.pref_data_col),1);
         CellBitmap = Bitmap.createBitmap(WallWidth, WallHeight, Bitmap.Config.ARGB_8888);
         CellBitmap.eraseColor(getResources().getColor(R.color.colorCellUnknown));
         CellCanvas = new Canvas(CellBitmap);

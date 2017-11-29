@@ -35,13 +35,11 @@ public class VideoWallFragment extends Fragment {
     }
     public void upDataItem(int pos)
     {
-        if (mListIndex==0)
-        {
+        if (mListIndex==0 || mListIndex==-1){
             mSceneIndex=pos;
             mVideoWallView. mSceneIndex=mSceneIndex;
         }
-        else if (mListIndex==1)
-        {
+        else if (mListIndex==1){
             mSignalIndex=pos;
             mVideoWallView. mSignalIndex=mSignalIndex;
         }

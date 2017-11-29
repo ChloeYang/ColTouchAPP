@@ -222,5 +222,18 @@ public class IPEditText extends LinearLayout {
         }
         return text;
     }
+    public void setText(String ip0,String ip1,String ip2,String ip3){
+
+            text1=ip0;
+            text2=ip1;
+            text3=ip2;
+            text4=ip3;
+
+            Edit1.setText(text1);
+            Edit2.setText(text2);
+            Edit3.setText(text3);
+            Edit4.setText(text4);
+
+    }
 
 }

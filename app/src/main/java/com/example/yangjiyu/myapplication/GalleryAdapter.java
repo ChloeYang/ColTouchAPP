@@ -18,11 +18,45 @@ import java.util.List;
 
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHolder>
 {
-    String[] StringScenee= {"Whole","H-2Parts","V-2Parts", "Single"};
+    int[] ImgSceneNormal = {R.drawable.scene_1_normal,
+            R.drawable.scene_2_normal,
+            R.drawable.scene_3_normal,
+            R.drawable.scene_4_normal,
+            R.drawable.scene,
+            R.drawable.scene,
+            R.drawable.clear_normal};
+    int[] ImgScenePressed = {R.drawable.scene_1_pressed,
+            R.drawable.scene_2_pressed,
+            R.drawable.scene_3_pressed,
+            R.drawable.scene_4_pressed,
+            R.drawable.scene_press,
+            R.drawable.scene_press,
+            R.drawable.clear_pressdown};
+
+    int[]ImgSignalNormal={R.drawable.ypbpr,
+            R.drawable.video,
+            R.drawable.sdi,
+            R.drawable.vlink,
+            R.drawable.ypbpr,
+            R.drawable.video,
+            R.drawable.sdi,
+            R.drawable.vlink,
+            R.drawable.ypbpr,
+            R.drawable.video,
+            R.drawable.sdi,
+            R.drawable.vlink,
+            R.drawable.ypbpr,
+            R.drawable.video,
+            R.drawable.sdi,
+            R.drawable.vlink};
+
+    String[] StringScenee= {"Whole","H-2Parts","V-2Parts", "Single","Define1","Define2","Clear"};
     String[] StringSignal={"1-YPbPr","1-VIDEO","1-SDI","1-VLINK",
             "2-YPbPr","2-VIDEO","2-SDI","2-VLINK",
             "3-YPbPr","3-VIDEO","3-SDI","3-VLINK",
             "4-YPbPr","4-VIDEO","4-SDI","4-VLINK"};
+    private int mSceneNum=7;
+    private int mSignalNum=12;
 
     private List<Boolean> isClicks =new ArrayList<>();
 
@@ -57,10 +91,12 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
 
         public void bind(int sourceId){
             //mImageViewSourceList.setImageResource(ImageSourceId[sourceId]);
-            if(mData.size()==4){
+            if(mData.size()==mSceneNum){
+                mImg.setImageResource(ImgSceneNormal[sourceId]);
                 mTxt.setText(StringScenee[sourceId]);
             }
             else {
+                mImg.setImageResource(ImgSignalNormal[sourceId]);
                 mTxt.setText(StringSignal[sourceId]);
             }
         }
@@ -82,7 +118,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
                 viewGroup, false);
         ViewHolder viewHolder = new ViewHolder(view);
 
-        if (mData.size()==4){
+        if (mData.size()==mSceneNum){
             for (int ii = 0;i<StringScenee.length;i++)
             {
                 isClicks.add(false);
@@ -110,12 +146,20 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         viewHolder.bind(i);
         if (isClicks.get(i))
         {
+            if (mData.size()==mSceneNum)
+            {
+                viewHolder.mImg.setImageResource(ImgScenePressed[i]);
+            }
             viewHolder.mTxt.setTextColor(Color.parseColor("#500000"));
         }
         else {
+            if (mData.size()==mSceneNum)
+            {
+                viewHolder.mImg.setImageResource(ImgSceneNormal[i]);
+            }
             viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
         }
-        viewHolder.mImg.setImageResource(mData.get(i));
+        //viewHolder.mImg.setImageResource(mData.get(i));//img unbind
         //// TODO: 2017/11/17 listener
         if (mOnItemClickListener!=null)
         {

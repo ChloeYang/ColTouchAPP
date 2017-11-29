@@ -123,18 +123,24 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
     private void initData()
     {
         mData = new ArrayList<>(Arrays.asList(
-                R.drawable.scene_1,
-                R.drawable.scene_2,
-                R.drawable.scene_3,
-                R.drawable.scene_4));
+                R.drawable.scene_1_normal,
+                R.drawable.scene_2_normal,
+                R.drawable.scene_3_normal,
+                R.drawable.scene_4_normal,
+                R.drawable.scene,
+                R.drawable.scene,
+                R.drawable.clear_normal));
     }
     private void sceneData()
     {
         mAdapter.mData = new ArrayList<>(Arrays.asList(
-                R.drawable.scene_1,
-                R.drawable.scene_2,
-                R.drawable.scene_3,
-                R.drawable.scene_4));
+                R.drawable.scene_1_normal,
+                R.drawable.scene_2_normal,
+                R.drawable.scene_3_normal,
+                R.drawable.scene_4_normal,
+                R.drawable.scene,
+                R.drawable.scene,
+                R.drawable.clear_normal));
     }
     private void signalData()
     {

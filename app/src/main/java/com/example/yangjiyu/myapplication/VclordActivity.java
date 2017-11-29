@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Vector;
 
 import commprocess.VCL3CommProcess;
-import engine.CpComm;
 
 import static engine.CpComm.*;
 
@@ -44,6 +43,13 @@ public class VclordActivity extends AppCompatActivity {
         mButton.setEnabled(false);
 
         mIpText=(IPEditText)findViewById(R.id.iptext);
+        SharedPreferences ipShare=getSharedPreferences(getString(R.string.pref_setting),Context.MODE_PRIVATE);
+        mVclordIp=ipShare.getString(getString(R.string.pref_data_vclordip),"");
+        String[] strIp=mVclordIp.split("\\.");
+        if (strIp.length>0) {
+            mIpText.setText(strIp[0], strIp[1], strIp[2], strIp[3]);
+        }
+
         mSpinner = (Spinner)findViewById(R.id.vclord_ip);
         adapter = new ArrayAdapter<String>(
                 this,android.R.layout.simple_spinner_dropdown_item,intData()
@@ -54,7 +60,8 @@ public class VclordActivity extends AppCompatActivity {
             //Todo spinner selectedListener
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                mVclordIp =mIpText.getText().toString().trim();
+                mVclordIp =mIpText.getText();
+
                 //Toast.makeText(getApplicationContext(),""+mVclordIp+":"+mPort,Toast.LENGTH_SHORT).show();
 
                 VCL3CommProcess vcl3CommProcess=new VCL3CommProcess(mVclordIp,mPort );
@@ -68,11 +75,11 @@ public class VclordActivity extends AppCompatActivity {
                 }
 
                 //// TODO: 2017/11/22 test vecSys
-                SYS_INFO testSys = new SYS_INFO();
-                testSys.sysID=2;
-                testSys.uiRow=2;
-                testSys.uiCol=2;
-                vecSys.add(testSys);
+//                SYS_INFO testSys = new SYS_INFO();
+//                testSys.sysID=2;
+//                testSys.uiRow=3;
+//                testSys.uiCol=3;
+//                vecSys.add(testSys);
                 //end test
 
                 if (vecSys.isEmpty()) {
@@ -110,7 +117,7 @@ public class VclordActivity extends AppCompatActivity {
                     mButton.setEnabled(false);
                 }
 
-                SharedPreferences sharedPref = getSharedPreferences("setting",Context.MODE_PRIVATE);
+                SharedPreferences sharedPref = getSharedPreferences(getString(R.string.pref_setting),Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putString(getString(R.string.pref_data_vclordip), mVclordIp);
                 editor.putInt(getString(R.string.pref_data_sid),mCurSysInfo.sysID);
@@ -152,4 +159,10 @@ public class VclordActivity extends AppCompatActivity {
         return datalist;
     }
 
+    /**
+     * Created by yangjiyu on 2017/11/29.
+     */
+
+    public static class SingleScene {
+    }
 }
