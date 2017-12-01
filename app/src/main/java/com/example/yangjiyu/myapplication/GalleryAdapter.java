@@ -24,14 +24,16 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             R.drawable.scene_4_normal,
             R.drawable.scene,
             R.drawable.scene,
-            R.drawable.clear_normal};
+            R.drawable.clear_normal,
+            R.drawable.scene_confirm};
     int[] ImgScenePressed = {R.drawable.scene_1_pressed,
             R.drawable.scene_2_pressed,
             R.drawable.scene_3_pressed,
             R.drawable.scene_4_pressed,
             R.drawable.scene_press,
             R.drawable.scene_press,
-            R.drawable.clear_pressdown};
+            R.drawable.clear_pressdown,
+            R.drawable.scene_confirm};
 
     int[]ImgSignalNormal={R.drawable.ypbpr,
             R.drawable.video,
@@ -50,12 +52,12 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             R.drawable.sdi,
             R.drawable.vlink};
 
-    String[] StringScenee= {"Whole","H-2Parts","V-2Parts", "Single","Define1","Define2","Clear"};
+    String[] StringScenee= {"Whole","H-2Parts","V-2Parts", "Single","Define1","Define2","Clear","Defined-Confirm"};
     String[] StringSignal={"1-YPbPr","1-VIDEO","1-SDI","1-VLINK",
             "2-YPbPr","2-VIDEO","2-SDI","2-VLINK",
             "3-YPbPr","3-VIDEO","3-SDI","3-VLINK",
             "4-YPbPr","4-VIDEO","4-SDI","4-VLINK"};
-    private int mSceneNum=7;
+    private int mSceneNum=8;
     private int mSignalNum=12;
 
     private List<Boolean> isClicks =new ArrayList<>();

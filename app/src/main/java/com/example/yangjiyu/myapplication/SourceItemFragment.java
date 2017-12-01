@@ -129,7 +129,8 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
                 R.drawable.scene_4_normal,
                 R.drawable.scene,
                 R.drawable.scene,
-                R.drawable.clear_normal));
+                R.drawable.clear_normal,
+                R.drawable.scene_confirm));
     }
     private void sceneData()
     {
@@ -140,7 +141,8 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
                 R.drawable.scene_4_normal,
                 R.drawable.scene,
                 R.drawable.scene,
-                R.drawable.clear_normal));
+                R.drawable.clear_normal,
+                R.drawable.scene_confirm));
     }
     private void signalData()
     {

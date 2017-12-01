@@ -119,58 +119,67 @@ public class VideoWallView extends View {
         mLastSignalIndex=setPref.getInt(getContext().getString(R.string.pref_LastSignalIndex),-1);
         if (mSceneIsChanged==true){
             //// TODO: 2017/11/28 canvas scene
-            switch (mSceneIndex)
-            {
-                case 0:
-                    wholeSceneCell();
-                    break;
-                case 1:
-                    h2PartSceneCell();
-                    break;
-                case 2:
-                    v2PartSceneCell();
-                    break;
-                case 3:
-                    eachSceneCell();
-                    break;
-                case 4:
-                    //// TODO: 2017/11/29 get sharedpreferences
-                    mDefine1Flag=defineShared.getInt(getContext().getString(R.string.pref_define1_flag),0);
-                    if (mDefine1Flag==0){
+            if (mSceneIndex==7 && (mLastSceneIndex==4 || mLastSceneIndex==5)){
+                confirmDefinedScene(mLastSceneIndex);
+                mSceneIndex=mLastSceneIndex;
+            }else{
+                if (sceneIndex==7 && mLastSceneIndex <4){ mSceneIndex=mLastSceneIndex;}
+                switch (mSceneIndex)
+                {
+                    case 0:
+                        wholeSceneCell();
+                        break;
+                    case 1:
+                        h2PartSceneCell();
+                        break;
+                    case 2:
+                        v2PartSceneCell();
+                        break;
+                    case 3:
+                        eachSceneCell();
+                        break;
+                    case 4:
+                        //// TODO: 2017/11/29 get sharedpreferences
+                        mDefine1Flag=defineShared.getInt(getContext().getString(R.string.pref_define1_flag),0);
+                        if (mDefine1Flag==0){
+                            initCell();
+                        }else {
+                            getDefine1Scene();
+                            drawDefinedScene(mSceneIndex);
+                        }
+                        break;
+                    case 5:
+                        //// TODO: 2017/11/29 get sharedpreferences
+                        mDefine2Flag=defineShared.getInt(getContext().getString(R.string.pref_define2_flag),0);
+                        if (mDefine2Flag==0){
+                            initCell();
+                        }else {
+                            getDefine2Scene();
+                            drawDefinedScene(mSceneIndex);
+                        }
+                        break;
+                    case 6:
+                        //// TODO: 2017/11/29 clear sharedpreferences
+                        if (mLastSceneIndex==4 )
+                        {
+                            mDefine1Num=0;
+                            Log.i("videowallview","initDefine1Scene");
+                            initDefine1Scene();
+                        }
+                        if(mLastSceneIndex==5)
+                        {
+                            mDefine2Num=0;
+                            Log.i("videowallview","initDefine2Scene");
+                            initDefine2Scene();
+                        }
                         initCell();
-                    }else {
-                        getDefine1Scene();
-                    }
-                    break;
-                case 5:
-                    //// TODO: 2017/11/29 get sharedpreferences
-                    mDefine2Flag=defineShared.getInt(getContext().getString(R.string.pref_define2_flag),0);
-                    if (mDefine2Flag==0){
+                        break;
+                    default:
                         initCell();
-                    }else {
-                        getDefine2Scene();
-                    }
-                    break;
-                case 6:
-                    //// TODO: 2017/11/29 clear shared
-                    if (mLastSceneIndex==4 )
-                    {
-                        mDefine1Num=0;
-                        Log.i("videowallview","initDefine1Scene");
-                        initDefine1Scene();
-                    }
-                    if(mLastSceneIndex==5)
-                    {
-                        mDefine2Num=0;
-                        Log.i("videowallview","initDefine2Scene");
-                        initDefine2Scene();
-                    }
-                    initCell();
-                    break;
-                default:
-                    initCell();
-                    break;
+                        break;
+                }
             }
+
             mLastSceneIndex=mSceneIndex;
             mLastSignalIndex=mSignalIndex;
             editor.putInt(getContext().getString(R.string.pref_LastSceneIndex), mLastSceneIndex);
@@ -540,5 +549,33 @@ public class VideoWallView extends View {
             editor.putInt(getContext().getString(R.string.pref_define2_signal_)+index,0);
         }
         editor.commit();
+    }
+    public void confirmDefinedScene(int LastSceneIndex){
+        SharedPreferences sharedPref = getContext().getSharedPreferences(getContext().getString(R.string.pref_define_scene), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        if (LastSceneIndex==4){
+            editor.putInt(getContext().getString(R.string.pref_define1_flag), 1);
+        }else if (LastSceneIndex==5) {
+            editor.putInt(getContext().getString(R.string.pref_define2_flag), 1);
+        }
+        editor.commit();
+        drawDefinedScene(LastSceneIndex);
+    }
+    public void drawDefinedScene(int sceneIndex){
+        initCell();
+        if (sceneIndex==4){
+            for (SingleSceneCell cell:getDefine1Scene()){
+                CellPaint.setColor(Color.BLUE);
+                CellCanvas.drawRect(cell.getM_startX(), cell.getM_startY(),
+                        cell.getM_endX(), cell.getM_endY(), CellPaint);
+            }
+        }else if (sceneIndex==5){
+            for (SingleSceneCell cell:getDefine2Scene()){
+                CellPaint.setColor(Color.BLUE);
+                CellCanvas.drawRect(cell.getM_startX(), cell.getM_startY(),
+                        cell.getM_endX(), cell.getM_endY(), CellPaint);
+            }
+        }else{}
+        invalidate();
     }
 }
