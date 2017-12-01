@@ -14,6 +14,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -33,6 +34,7 @@ public class VclordActivity extends AppCompatActivity {
     private SYS_INFO mCurSysInfo = new SYS_INFO();
     ArrayAdapter<String> adapter;
 
+    private int iCount=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +46,7 @@ public class VclordActivity extends AppCompatActivity {
 
         mIpText=(IPEditText)findViewById(R.id.iptext);
         SharedPreferences ipShare=getSharedPreferences(getString(R.string.pref_setting),Context.MODE_PRIVATE);
-        mVclordIp=ipShare.getString(getString(R.string.pref_data_vclordip),"");
+        mVclordIp=ipShare.getString(getString(R.string.pref_data_vclordip),"172.16.129.152");
         String[] strIp=mVclordIp.split("\\.");
         if (strIp.length>0) {
             mIpText.setText(strIp[0], strIp[1], strIp[2], strIp[3]);
@@ -60,8 +62,13 @@ public class VclordActivity extends AppCompatActivity {
             //Todo spinner selectedListener
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+//                iCount++;
+//                if(iCount!=1)
+//                {
+//                    iCount=0;
+//                    return;
+//                }
                 mVclordIp =mIpText.getText();
-
                 //Toast.makeText(getApplicationContext(),""+mVclordIp+":"+mPort,Toast.LENGTH_SHORT).show();
 
                 VCL3CommProcess vcl3CommProcess=new VCL3CommProcess(mVclordIp,mPort );
@@ -75,11 +82,11 @@ public class VclordActivity extends AppCompatActivity {
                 }
 
                 //// TODO: 2017/11/22 test vecSys
-//                SYS_INFO testSys = new SYS_INFO();
-//                testSys.sysID=2;
-//                testSys.uiRow=3;
-//                testSys.uiCol=3;
-//                vecSys.add(testSys);
+                SYS_INFO testSys = new SYS_INFO();
+                testSys.sysID=2;
+                testSys.uiRow=3;
+                testSys.uiCol=3;
+                vecSys.add(testSys);
                 //end test
 
                 if (vecSys.isEmpty()) {
@@ -92,13 +99,13 @@ public class VclordActivity extends AppCompatActivity {
                     SYS_INFO sys_info;
                     while (iterator.hasNext()) {
                         sys_info=iterator.next();
-                        adapter.add("系统号"+sys_info.sysID+" :"+sys_info.uiRow+"行 "+sys_info.uiCol+"列");
+                        adapter.add(getString(R.string.pref_data_sid)+""+sys_info.sysID+" :"+sys_info.uiRow+getString(R.string.pref_data_row)+" "+sys_info.uiCol+getString(R.string.pref_data_col));
                     }
                 }
 
                 String strItem=(String)mSpinner.getSelectedItem();
                 if (strItem!="") {
-                    Toast.makeText(getApplicationContext(), "" +strItem, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "" +strItem, Toast.LENGTH_SHORT).show();
                     int index = position;
                     Iterator<SYS_INFO> iterator = vecSys.iterator();
                     while (index > 1 && iterator.hasNext()) {
@@ -125,6 +132,16 @@ public class VclordActivity extends AppCompatActivity {
                 editor.putInt(getString(R.string.pref_data_col),mCurSysInfo.uiCol);
                 editor.commit();
 
+                Class<?>myClass=AdapterView.class;
+                try{
+                    Field field=myClass.getDeclaredField("mOldSelectedPosition");
+                    field.setAccessible(true);
+                    field.setInt(mSpinner,AdapterView.INVALID_POSITION);
+                }catch (NoSuchFieldException  e){
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
 //                String strSysInfo=(String)mSpinner.getSelectedItem();
 //                String[] str=strSysInfo.split(":");
 //                mSid=Integer.parseInt(str[0]);
@@ -155,7 +172,7 @@ public class VclordActivity extends AppCompatActivity {
     {
         // TODO Auto-generated method stub
         List<String> datalist=new ArrayList<String>();
-        datalist.add("");
+        datalist.add(getString(R.string.check_system));
         return datalist;
     }
 

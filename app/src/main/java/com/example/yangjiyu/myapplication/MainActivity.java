@@ -24,15 +24,11 @@ public class MainActivity extends AppCompatActivity implements SourceItemListFra
     private SourceItemFragment sf;
     private VideoWallFragment vf;
 
-    private final static int MAX_SUPPORT_CELL = 12;
+    public final static int MAX_SUPPORT_CELL = 12;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        SharedPreferences ipShared = getSharedPreferences(getString(R.string.pref_setting),Context.MODE_PRIVATE);
-        SharedPreferences.Editor ipEditor = ipShared.edit();
-        ipEditor.putString(getString(R.string.pref_data_vclordip), "172.16.129.152");
 
         SharedPreferences sharedPref = getSharedPreferences(getString(R.string.pref_define_scene), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -40,22 +36,23 @@ public class MainActivity extends AppCompatActivity implements SourceItemListFra
         editor.putInt(getString(R.string.pref_define1_num),0);
         for (int index=0;index<MAX_SUPPORT_CELL;index++)
         {
-            editor.putInt(getString(R.string.pref_define1_startX_),0);
-            editor.putInt(getString(R.string.pref_define1_startY_),0);
-            editor.putInt(getString(R.string.pref_define1_endX_),0);
-            editor.putInt(getString(R.string.pref_define1_endY_),0);
-            editor.putInt(getString(R.string.pref_define1_signal_),0);
+            editor.putInt(getString(R.string.pref_define1_startX_)+index,0);
+            editor.putInt(getString(R.string.pref_define1_startY_)+index,0);
+            editor.putInt(getString(R.string.pref_define1_endX_)+index,0);
+            editor.putInt(getString(R.string.pref_define1_endY_)+index,0);
+            editor.putInt(getString(R.string.pref_define1_signal_)+index,0);
         }
         editor.putInt(getString(R.string.pref_define2_flag),0);
         editor.putInt(getString(R.string.pref_define2_num),0);
         for (int index=0;index<MAX_SUPPORT_CELL;index++)
         {
-            editor.putInt(getString(R.string.pref_define2_startX_),0);
-            editor.putInt(getString(R.string.pref_define2_startY_),0);
-            editor.putInt(getString(R.string.pref_define2_endX_),0);
-            editor.putInt(getString(R.string.pref_define2_endY_),0);
-            editor.putInt(getString(R.string.pref_define2_signal_),0);
+            editor.putInt(getString(R.string.pref_define2_startX_)+index,0);
+            editor.putInt(getString(R.string.pref_define2_startY_)+index,0);
+            editor.putInt(getString(R.string.pref_define2_endX_)+index,0);
+            editor.putInt(getString(R.string.pref_define2_endY_)+index,0);
+            editor.putInt(getString(R.string.pref_define2_signal_)+index,0);
         }
+        editor.commit();
 
         mFragmentManager=getSupportFragmentManager();
 

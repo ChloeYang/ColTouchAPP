@@ -1,8 +1,12 @@
 package com.example.yangjiyu.myapplication;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.util.ArrayList;
+
+import static java.security.AccessController.getContext;
 
 /**
  * Created by Howie on 2017/7/25.
@@ -16,7 +20,7 @@ public class VideoWall {
 
     private final static float sVideoCellSizeWidthToHeightRatioSmall = 4 / 3;
     private final static float sVideoCellSizeWidthToHeightRatioLarge = 16 / 9;
-    private final static int sVideoCellGap = 2;
+    public final static int sVideoCellGap = 2;
 
     public final static int sSuccess = 0;
     public final static int sFailure = -1;
@@ -68,6 +72,7 @@ public class VideoWall {
 
         int VideoCellWidth = (int) Math.floor((getWallWidth() - sVideoCellGap * (columns  - 1 )) / columns);
         int VideoCellHeight = (int) Math.floor((getWallHeight() - sVideoCellGap * (rows  - 1 )) / rows);
+
 
         //ToDo: takes time to modify the shape of video shape
         //int VideoCellWidthTmp = (int) Math.floor(VideoCellHeight * sVideoCellSizeWidthToHeightRatioSmall);
