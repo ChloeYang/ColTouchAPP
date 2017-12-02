@@ -34,6 +34,11 @@
     <string name="pref_data_vclordip">IP</string>
     <string name="pref_setting">Setting</string>
     <string name="pref_define_scene">DefineScene</string>
+    <string name="pref_default_num">default_num_</string>
+    <string name="pref_default_startX_">default_startX_</string>
+    <string name="pref_default_startY_">default_startY_</string>
+    <string name="pref_default_endX_">defaultendX_</string>
+    <string name="pref_default_endY_">default_endY_</string>
     <string name="pref_define1_flag">define1_flag</string>
     <string name="pref_define2_flag">define2_flag</string>
     <string name="pref_define1_num">define1_num</string>
@@ -46,6 +51,7 @@
     <string name="pref_define2_startY_">define2_startY_</string>
     <string name="pref_define2_endX_">define2_endX_</string>
     <string name="pref_define2_endY_">define2_endY_</string>
+    <string name="pref_default_signal_">default_signal_</string>
     <string name="pref_define1_signal_">define1_signal_</string>
     <string name="pref_define2_signal_">define2_signal_</string>
     <string name="pref_video_cell_list">VideoCellList</string>

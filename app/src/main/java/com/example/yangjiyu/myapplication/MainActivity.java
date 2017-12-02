@@ -12,9 +12,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import android.content.Context;
 
 
-public class MainActivity extends AppCompatActivity implements SourceItemListFragment.OnSourceListSelectedListener ,SourceItemFragment.OnSourceSelectedListener{
+public class MainActivity extends AppCompatActivity implements SourceItemListFragment.OnSourceListSelectedListener ,SourceItemFragment.OnSourceSelectedListener,VideoWallView.onCleanDefineScenelClickListener{
 
     private Fragment sourceList;
     private Fragment sourceItem;
@@ -31,28 +32,15 @@ public class MainActivity extends AppCompatActivity implements SourceItemListFra
         setContentView(R.layout.activity_main);
 
         SharedPreferences sharedPref = getSharedPreferences(getString(R.string.pref_define_scene), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt(getString(R.string.pref_define1_flag),0);
-        editor.putInt(getString(R.string.pref_define1_num),0);
-        for (int index=0;index<MAX_SUPPORT_CELL;index++)
-        {
-            editor.putInt(getString(R.string.pref_define1_startX_)+index,0);
-            editor.putInt(getString(R.string.pref_define1_startY_)+index,0);
-            editor.putInt(getString(R.string.pref_define1_endX_)+index,0);
-            editor.putInt(getString(R.string.pref_define1_endY_)+index,0);
-            editor.putInt(getString(R.string.pref_define1_signal_)+index,0);
+        int Define1Flag=sharedPref.getInt(getString(R.string.pref_define1_flag),0);
+        int Define2Flag=sharedPref.getInt(getString(R.string.pref_define2_flag),0);
+        if (Define1Flag==0){
+            initDefine1Scene();
         }
-        editor.putInt(getString(R.string.pref_define2_flag),0);
-        editor.putInt(getString(R.string.pref_define2_num),0);
-        for (int index=0;index<MAX_SUPPORT_CELL;index++)
-        {
-            editor.putInt(getString(R.string.pref_define2_startX_)+index,0);
-            editor.putInt(getString(R.string.pref_define2_startY_)+index,0);
-            editor.putInt(getString(R.string.pref_define2_endX_)+index,0);
-            editor.putInt(getString(R.string.pref_define2_endY_)+index,0);
-            editor.putInt(getString(R.string.pref_define2_signal_)+index,0);
+        if (Define2Flag==0){
+            initDefine2Scene();
         }
-        editor.commit();
+
 
         mFragmentManager=getSupportFragmentManager();
 
@@ -73,6 +61,39 @@ public class MainActivity extends AppCompatActivity implements SourceItemListFra
 
     }
 
+    public void initDefine1Scene()
+    {
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.pref_define_scene), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(getString(R.string.pref_define1_flag),0);
+        editor.putInt(getString(R.string.pref_define1_num),0);
+        for (int index=0;index<MainActivity.MAX_SUPPORT_CELL;index++)
+        {
+            editor.putInt(getString(R.string.pref_define1_startX_)+index,0);
+            editor.putInt(getString(R.string.pref_define1_startY_)+index,0);
+            editor.putInt(getString(R.string.pref_define1_endX_)+index,0);
+            editor.putInt(getString(R.string.pref_define1_endY_)+index,0);
+            editor.putInt(getString(R.string.pref_define1_signal_)+index,0);
+        }
+        editor.commit();
+    }
+    public void initDefine2Scene()
+    {
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.pref_define_scene), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(getString(R.string.pref_define2_flag),0);
+        editor.putInt(getString(R.string.pref_define2_num),0);
+        for (int index=0;index<MainActivity.MAX_SUPPORT_CELL;index++)
+        {
+            editor.putInt(getString(R.string.pref_define2_startX_)+index,0);
+            editor.putInt(getString(R.string.pref_define2_startY_)+index,0);
+            editor.putInt(getString(R.string.pref_define2_endX_)+index,0);
+            editor.putInt(getString(R.string.pref_define2_endY_)+index,0);
+            editor.putInt(getString(R.string.pref_define2_signal_)+index,0);
+        }
+        editor.commit();
+    }
+
     public  void onSourceListSelected(int pos)
     {
         sf.onShow(pos);
@@ -83,6 +104,10 @@ public class MainActivity extends AppCompatActivity implements SourceItemListFra
         vf.upDataItem(pos);
     }
 
+    public void onCleanDefineScene(int pos)
+    {
+        sf.setCurrentItem(pos);
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

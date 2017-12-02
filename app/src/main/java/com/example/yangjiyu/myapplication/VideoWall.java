@@ -67,7 +67,7 @@ public class VideoWall {
             Log.e(TAG,"VideoCell number more than the max support number: " + VideoCellNumber);
             return sFailure;
         }else {
-            Log.i(TAG,"Begin to layout: rows = " + rows + ", columns = " + columns);
+            //Log.i(TAG,"Begin to layout: rows = " + rows + ", columns = " + columns);
         }
 
         int VideoCellWidth = (int) Math.floor((getWallWidth() - sVideoCellGap * (columns  - 1 )) / columns);
@@ -89,11 +89,11 @@ public class VideoWall {
                 mVideoCell.setVideoCellPosition(posX, posY);
                 mVideoCell.setCellId(i,j);
                 sVideoCellCollections.add(mVideoCell);
-                Log.i(TAG,"Add video cell: x = " + posX + ", y = " + posY);
+                //Log.i(TAG,"Add video cell: x = " + posX + ", y = " + posY);
             }
             posX = 0;
         }
-        Log.i(TAG, "VideoCell number in VideoWall: " + sVideoCellCollections.size());
+        //Log.i(TAG, "VideoCell number in VideoWall: " + sVideoCellCollections.size());
         return sSuccess;
     }
 

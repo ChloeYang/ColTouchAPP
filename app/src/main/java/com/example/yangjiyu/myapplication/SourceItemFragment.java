@@ -50,6 +50,9 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
         }
     }
 
+    void setCurrentItem(int pos){
+        mAdapter.onSetCurrent(mAdapter.mViewHolder,pos);
+    }
 
     //private OnFragmentInteractionListener mListener;
     public interface OnSourceSelectedListener{

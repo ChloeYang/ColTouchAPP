@@ -60,6 +60,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     private int mSceneNum=8;
     private int mSignalNum=12;
 
+    public ViewHolder mViewHolder;
     private List<Boolean> isClicks =new ArrayList<>();
 
     public interface OnItemClickListener
@@ -118,7 +119,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     {
         View view = mInflater.inflate(R.layout.itemlayout,
                 viewGroup, false);
-        ViewHolder viewHolder = new ViewHolder(view);
+        mViewHolder = new ViewHolder(view);
 
         if (mData.size()==mSceneNum){
             for (int ii = 0;i<StringScenee.length;i++)
@@ -133,10 +134,10 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             }
         }
 
-        viewHolder.mImg = (ImageView) view
+        mViewHolder.mImg = (ImageView) view
                 .findViewById(R.id.id_index_gallery_item_image);
-        viewHolder.mTxt = (TextView)view.findViewById(R.id.id_index_gallery_item_text);
-        return viewHolder;
+        mViewHolder.mTxt = (TextView)view.findViewById(R.id.id_index_gallery_item_text);
+        return mViewHolder;
     }
 
     /**
@@ -178,6 +179,37 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
                 }
             });
         }
+    }
+
+    public void onSetCurrent(final ViewHolder viewHolder, final int i)
+    {
+        viewHolder.bind(i);
+        if (isClicks.get(i))
+        {
+            if (mData.size()==mSceneNum)
+            {
+                viewHolder.mImg.setImageResource(ImgScenePressed[i]);
+            }
+            viewHolder.mTxt.setTextColor(Color.parseColor("#500000"));
+        }
+        else {
+            if (mData.size()==mSceneNum)
+            {
+                viewHolder.mImg.setImageResource(ImgSceneNormal[i]);
+            }
+            viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
+        }
+        //viewHolder.mImg.setImageResource(mData.get(i));//img unbind
+        //// TODO: 2017/11/17 listener
+
+        for (int ii=0;ii<isClicks.size();ii++)
+        {
+            isClicks.set(ii,false);
+        }
+        isClicks.set(i, true);
+        notifyDataSetChanged();
+        mOnItemClickListener.onItemClick(viewHolder.itemView,i);
+
     }
 
 }
