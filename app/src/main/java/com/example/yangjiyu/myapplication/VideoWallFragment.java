@@ -38,16 +38,16 @@ public class VideoWallFragment extends Fragment {
         if (mListIndex==0 || mListIndex==-1){
             mSceneIndex=pos;
             mVideoWallView. mSceneIndex=mSceneIndex;
+            mVideoWallView = new VideoWallView(getContext(), windowsWidth, windowsHeight,mListIndex,mSceneIndex,mSignalIndex);
+            mRelativeLayout = (RelativeLayout)v.findViewById(R.id.fragment_video_wall_view);
+            mRelativeLayout.addView(mVideoWallView, new ViewGroup.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT
+            ));
         }
         else if (mListIndex==1){
             mSignalIndex=pos;
             mVideoWallView. mSignalIndex=mSignalIndex;
         }
-        mVideoWallView = new VideoWallView(getContext(), windowsWidth, windowsHeight,mListIndex,mSceneIndex,mSignalIndex);
-        mRelativeLayout = (RelativeLayout)v.findViewById(R.id.fragment_video_wall_view);
-        mRelativeLayout.addView(mVideoWallView, new ViewGroup.LayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT
-        ));
     }
 
 

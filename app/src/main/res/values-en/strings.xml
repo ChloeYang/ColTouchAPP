@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">My Application</string>
     <string name="title_activity_login">Sign in</string>
@@ -6,32 +5,34 @@
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
-    <string name="prompt_password">密码</string>
-    <string name="action_sign_in">登录</string>
-    <string name="action_sign_in_short">登录</string>
-    <string name="error_invalid_email">该Email地址无效</string>
-    <string name="error_invalid_password">该密码无效</string>
-    <string name="error_incorrect_password">该密码不正确</string>
-    <string name="error_sign_in">请输入有效信息，或与VTRON人员联系</string>
-    <string name="error_field_required">请输入有效信息</string>
-    <string name="permission_rationale">请提供完整Email，或使用有效信息</string>
-    <string name="setting">设置</string>
-    <string name="action_vclord_connect">VCLORD服务连接</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is not correct</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_sign_in">"Please get a valid information,or register a new one from  VTRON TECHNOLOGIES LTD."</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="setting">Setting</string>
+    <string name="action_vclord_connect">VCLORD CONNECT</string>
     <string name="point">.</string>
-    <string name="error_no_system">系统未知</string>
-    <string name="prf_generation">通用信息</string>
-    <string name="prf_data">系统信息</string>
+    <string name="error_no_system">System is unknown</string>
+    <string name="prf_generation">Generation</string>
+    <string name="prf_data">Data</string>
     <string name="pref_gen_default_display_name">admin@vtron.com</string>
-    <string name="pref_gen_display_name">用户名</string>
+    <string name="pref_gen_display_name">USER</string>
     <string name="pref_data_default_sid">1</string>
-    <string name="pref_data_sid">系统ID</string>
+    <string name="pref_data_sid">SID</string>
     <string name="pref_data_default_row">1</string>
-    <string name="pref_data_row">行数</string>
+    <string name="pref_data_row">ROW</string>
     <string name="pref_data_default_col">1</string>
-    <string name="pref_data_col">列数</string>
+    <string name="pref_data_col">COL</string>
     <string name="pref_data_default_vclordip">172.16.129.111</string>
-    <string name="pref_data_vclordip">IP地址</string>
-    <string name="pref_setting">设置</string>
+    <string name="pref_data_vclordip">IP</string>
+    <string name="pref_setting">Setting</string>
     <string name="pref_define_scene">DefineScene</string>
     <string name="pref_default_num">default_num_</string>
     <string name="pref_default_startX_">default_startX_</string>
@@ -68,16 +69,16 @@
     <string name="pref_v2part_scene">v2part_scene</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">黑色背景</string>
-    <string name="scene_list">场景布局列表</string>
-    <string name="signal_list">信号源列表</string>
-    <string name="error_invalid_ip">IP地址不正确</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="scene_list">Scene List</string>
+    <string name="signal_list">Signal List</string>
+    <string name="error_invalid_ip">Ip is incorrect</string>
     <string name="check_system"></string>
-    <string name="define_scene_finished">操作完成</string>
+    <string name="define_scene_finished">Finished</string>
     <string name="VCLORD_IP">VCLORD IP</string>
-    <string name="SystemInfo">系统信息</string>
-    <string name="system_id">系统</string>
-    <string name="system_row">行</string>
-    <string name="system_col">列</string>
+    <string name="SystemInfo">SystemInfo</string>
+    <string name="system_id">SYS</string>
+    <string name="system_row">ROW</string>
+    <string name="system_col">COL</string>
 
 </resources>

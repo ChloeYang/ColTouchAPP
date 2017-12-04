@@ -99,7 +99,7 @@ public class VclordActivity extends AppCompatActivity {
                     SYS_INFO sys_info;
                     while (iterator.hasNext()) {
                         sys_info=iterator.next();
-                        adapter.add(getString(R.string.pref_data_sid)+""+sys_info.sysID+" :"+sys_info.uiRow+getString(R.string.pref_data_row)+" "+sys_info.uiCol+getString(R.string.pref_data_col));
+                        adapter.add(getString(R.string.system_id)+""+sys_info.sysID+" :"+sys_info.uiRow+getString(R.string.system_row)+" "+sys_info.uiCol+getString(R.string.system_col));
                     }
                 }
 

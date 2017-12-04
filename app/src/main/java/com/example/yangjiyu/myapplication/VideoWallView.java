@@ -88,6 +88,13 @@ public class VideoWallView extends View {
     public VideoWallView(Context context, int wallWidth, int wallHeight,int listIndex,int sceneIndex,int signalIndex) {
 
         super(context);
+
+        SharedPreferences defineShared = getContext().getSharedPreferences(getContext().getString(R.string.pref_define_scene),Context.MODE_PRIVATE);//getResources()
+        SharedPreferences setPref = getContext().getSharedPreferences(getContext().getString(R.string.pref_setting), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = setPref.edit();
+        mLastSceneIndex=setPref.getInt(getContext().getString(R.string.pref_LastSceneIndex),-1);
+        mLastSignalIndex=setPref.getInt(getContext().getString(R.string.pref_LastSignalIndex),-1);
+
         mCleanDefineScenelClickListener = (VideoWallView.onCleanDefineScenelClickListener) context;
         if( wallHeight * wallWidth < 0 ) {
             setCellState(CELL_STATE_ERROR);
@@ -119,12 +126,6 @@ public class VideoWallView extends View {
             initCell();
         }
 
-
-        SharedPreferences defineShared = getContext().getSharedPreferences(getContext().getString(R.string.pref_define_scene),Context.MODE_PRIVATE);//getResources()
-        SharedPreferences setPref = getContext().getSharedPreferences(getContext().getString(R.string.pref_setting), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = setPref.edit();
-        mLastSceneIndex=setPref.getInt(getContext().getString(R.string.pref_LastSceneIndex),-1);
-        mLastSignalIndex=setPref.getInt(getContext().getString(R.string.pref_LastSignalIndex),-1);
         if (mSceneIsChanged==true){
             //// TODO: 2017/11/28 canvas scene
             if (mSceneIndex==7 && (mLastSceneIndex==4 || mLastSceneIndex==5)){
@@ -244,7 +245,7 @@ public class VideoWallView extends View {
                     cell.getCellPositionTopLeftX() + cell.getCellWidth(),
                     cell.getCellPositionTopLeftY() + cell.getCellHeight(), CellPaint);
             CellPaint.setColor(Color.BLUE);
-            saveDefaultScene("v2part",i, cell.getCellPositionTopLeftX(), cell.getCellPositionTopLeftY(),
+            saveDefaultScene(getContext().getString(R.string.pref_whole_scene),i, cell.getCellPositionTopLeftX(), cell.getCellPositionTopLeftY(),
                     cell.getCellPositionTopLeftX() + cell.getCellWidth(),
                     cell.getCellPositionTopLeftY() + cell.getCellHeight());
             i=i+1;
@@ -264,7 +265,7 @@ public class VideoWallView extends View {
         for (SingleSceneCell cell:singleSceneCells){
             CellCanvas.drawRect(cell.getM_startX(), cell.getM_startY(),cell.getM_endX(),cell.getM_endY(), CellPaint);
             CellPaint.setColor(Color.BLUE);
-            saveDefaultScene("each",i, cell.getM_startX(), cell.getM_startY(),cell.getM_endX(),cell.getM_endY());
+            saveDefaultScene(getContext().getString(R.string.pref_each_scene),i, cell.getM_startX(), cell.getM_startY(),cell.getM_endX(),cell.getM_endY());
             i=i+1;
         }
     }
@@ -282,7 +283,7 @@ public class VideoWallView extends View {
         for (SingleSceneCell cell:singleSceneCells){
             CellCanvas.drawRect(cell.getM_startX(), cell.getM_startY(),cell.getM_endX(),cell.getM_endY(), CellPaint);
             CellPaint.setColor(Color.BLUE);
-            saveDefaultScene("h2part",i, cell.getM_startX(), cell.getM_startY(),cell.getM_endX(),cell.getM_endY());
+            saveDefaultScene(getContext().getString(R.string.pref_h2part_scene),i, cell.getM_startX(), cell.getM_startY(),cell.getM_endX(),cell.getM_endY());
             i=i+1;
         }
     }
@@ -299,7 +300,7 @@ public class VideoWallView extends View {
         for (SingleSceneCell cell:singleSceneCells){
             CellCanvas.drawRect(cell.getM_startX(), cell.getM_startY(),cell.getM_endX(),cell.getM_endY(), CellPaint);
             CellPaint.setColor(Color.BLUE);
-            saveDefaultScene("v2part",i, cell.getM_startX(), cell.getM_startY(),cell.getM_endX(),cell.getM_endY());
+            saveDefaultScene(getContext().getString(R.string.pref_v2part_scene),i, cell.getM_startX(), cell.getM_startY(),cell.getM_endX(),cell.getM_endY());
             i=i+1;
         }
     }
@@ -352,6 +353,18 @@ public class VideoWallView extends View {
                     }
                     //Toast.makeText(getContext(), "save", Toast.LENGTH_SHORT).show();
                     saveDefine1Scene(flag1, mDefine1Num+1, start_x, start_y, end_x, end_y);
+                    if (start_x>end_x){
+                        int temp=start_x;
+                        start_x=end_x;
+                        end_x=temp;
+                    }
+                    if (start_y>end_y){
+                        int temp=start_y;
+                        start_y=end_y;
+                        end_y=temp;
+                    }
+                    CellPaint.setColor(Color.RED);
+                    CellCanvas.drawRect(start_x, start_y,end_x,end_y, CellPaint);
                 }else if(mSceneIndex==5 ) {
                     for (SingleSceneCell cell:getDefine2Scene()){
                         if ((start_x >= cell.getM_startX() && start_x <= cell.getM_endX()) && (start_y >= cell.getM_startY() && start_y <= cell.getM_endY())){
@@ -365,11 +378,21 @@ public class VideoWallView extends View {
                         }
                     }
                     saveDefine2Scene(flag2,mDefine2Num+1,start_x,start_y,end_x,end_y);
+                    if (start_x>end_x){
+                        int temp=start_x;
+                        start_x=end_x;
+                        end_x=temp;
+                    }
+                    if (start_y>end_y){
+                        int temp=start_y;
+                        start_y=end_y;
+                        end_y=temp;
+                    }
+                    CellPaint.setColor(Color.RED);
+                    CellCanvas.drawRect(start_x, start_y,end_x,end_y, CellPaint);
                 }else {
                     break;
                 }
-                CellPaint.setColor(Color.RED);
-                CellCanvas.drawRect(start_x, start_y,end_x,end_y, CellPaint);
 
                 invalidate();
                 return true;

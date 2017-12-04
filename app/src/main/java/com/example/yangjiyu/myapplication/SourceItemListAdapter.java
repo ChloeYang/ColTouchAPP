@@ -22,7 +22,7 @@ class SourceItemListAdapter extends RecyclerView.Adapter<SourceItemListAdapter.S
 
     int[] ImageClicked={R.drawable.scene_press,R.drawable.signal_press};
 
-    String[] StringSource = {"Scene", "Signal"};
+    String[] StringSource = {"场景布局列表", "信号源列表"};//R.string.scene_list   R.string.signal_list
     private List<Boolean> isClicks =new ArrayList<>();
 
     public interface OnSourceListClick{

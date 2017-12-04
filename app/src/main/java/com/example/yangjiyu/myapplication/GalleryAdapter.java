@@ -52,11 +52,18 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             R.drawable.sdi,
             R.drawable.vlink};
 
-    String[] StringScenee= {"Whole","H-2Parts","V-2Parts", "Single","Define1","Define2","Clear","Defined-Confirm"};
-    String[] StringSignal={"1-YPbPr","1-VIDEO","1-SDI","1-VLINK",
-            "2-YPbPr","2-VIDEO","2-SDI","2-VLINK",
-            "3-YPbPr","3-VIDEO","3-SDI","3-VLINK",
-            "4-YPbPr","4-VIDEO","4-SDI","4-VLINK"};
+    String[] StringScenee= {"整墙",
+            "H-二分",
+            "V-二分",
+            "单屏",
+            "自定义1",
+            "自定义2",
+            "清除",
+            "确认"};//"Whole","H-2Parts","V-2Parts", "Single","Define1","Define2","Clear","Defined-Confirm"
+    String[] StringSignal={"1-DP","1-HDMI","1-DVI_1","1-DVI_2",
+            "2-DP","2-HDMI","2-DVI_1","2-DVI_2",
+            "3-DP","3-HDMI","3-DVI_1","3-DVI_2",
+            "4-DP","4-HDMI","4-DVI_1","4-DVI_2"};
     private int mSceneNum=8;
     private int mSignalNum=12;
 
@@ -122,13 +129,13 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         mViewHolder = new ViewHolder(view);
 
         if (mData.size()==mSceneNum){
-            for (int ii = 0;i<StringScenee.length;i++)
+            for (int ii = 0;ii<StringScenee.length;ii++)
             {
                 isClicks.add(false);
             }
         }
         else {
-            for (int ii = 0;i<StringSignal.length;i++)
+            for (int ii = 0;ii<StringSignal.length;ii++)
             {
                 isClicks.add(false);
             }
@@ -212,4 +219,21 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
 
     }
 
+    public ViewHolder initViewHolder()
+    {
+        isClicks.clear();
+        if (mData.size()==mSceneNum){
+            for (int ii = 0;ii<StringScenee.length;ii++)
+            {
+                isClicks.add(false);
+            }
+        }
+        else {
+            for (int ii = 0;ii<StringSignal.length;ii++)
+            {
+                isClicks.add(false);
+            }
+        }
+        return mViewHolder;
+    }
 }

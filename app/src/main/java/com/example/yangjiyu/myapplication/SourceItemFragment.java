@@ -35,6 +35,7 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
         nowIndex= pos;
         //Toast.makeText(getActivity(),"pos="+pos,Toast.LENGTH_SHORT).show();
         getNewData(pos);
+        mAdapter.initViewHolder();
         mAdapter.notifyDataSetChanged();
 
     }
@@ -42,11 +43,11 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
         if (pos==0)
         {
             sceneData();
-            textView.setText("SceneList");
+            textView.setText(getString(R.string.scene_list));
         }
         else {
             signalData();
-            textView.setText("SignalList");
+            textView.setText(getString(R.string.signal_list));
         }
     }
 
