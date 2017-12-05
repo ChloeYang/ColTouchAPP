@@ -120,12 +120,6 @@ public class VideoWallView extends View {
                 mSceneIsChanged=false;
             }
 
-            if (mSignalIndex != mLastSignalIndex){
-                mSignalIsChanged=true;
-            }
-            else {
-                mSignalIsChanged=false;
-            }
         }
         if (mListIndex==-1 && mSceneIndex==-1){
             initCell();
@@ -200,7 +194,6 @@ public class VideoWallView extends View {
             }
 
             mLastSceneIndex=mSceneIndex;
-            mLastSignalIndex=mSignalIndex;
             editor.putInt(getContext().getString(R.string.pref_LastSceneIndex), mLastSceneIndex);
             editor.putInt(getContext().getString(R.string.pref_LastSignalIndex), mLastSceneIndex);
             editor.commit();
@@ -345,7 +338,14 @@ public class VideoWallView extends View {
                 start_x = (int) Math.floor((int)event.getX()/m_cellWidth) * (m_cellWidth + VideoWall.sVideoCellGap);
                 start_y = (int) Math.floor((int)event.getY()/m_cellHeight) * (m_cellHeight+ VideoWall.sVideoCellGap);
                 Log.i("TouchEvent","ACTION_DOWN start_x="+start_x+" start_y="+start_y);
-                if (mSignalIndex>=0 && mSignalIndex<StringSignal.length){
+
+                if (mSignalIndex != mLastSignalIndex){
+                    mSignalIsChanged=true;
+                }
+                else {
+                    mSignalIsChanged=false;
+                }
+                if (mSignalIndex>=0 && mSignalIndex<StringSignal.length && mSignalIsChanged){
                     ArrayList<VideoCell> cells = new ArrayList<>();
                     cells=getVideoCellList();
                     ArrayList<SingleSceneCell> sceneCells = new ArrayList<>();
@@ -389,6 +389,7 @@ public class VideoWallView extends View {
                         }
                     }
                 }
+                mLastSignalIndex=mSignalIndex;
                 invalidate();
                 return true;
             case MotionEvent.ACTION_UP:
@@ -397,7 +398,9 @@ public class VideoWallView extends View {
                 end_y=(int) Math.floor((int)event.getY()/m_cellHeight) * (m_cellHeight+ VideoWall.sVideoCellGap)+m_cellHeight;
                 //Log.i("TouchEvent","ACTION_UP endx="+end_x+" endy="+end_y);
                 if(mSceneIndex==4 ) {
-                    for (SingleSceneCell cell : getDefine1Scene()) {
+                    ArrayList<SingleSceneCell> cells=getDefine1Scene();
+                    if (mDefine1Flag==1){ return false;}
+                    for (SingleSceneCell cell : cells) {
                         if ((start_x >= cell.getM_startX() && start_x <= cell.getM_endX()) && (start_y >= cell.getM_startY() && start_y <= cell.getM_endY())){
                             Log.i("TouchEvent","startXY is covered");
                             return false;
@@ -429,7 +432,9 @@ public class VideoWallView extends View {
                     CellPaint.setColor(Color.RED);
                     CellCanvas.drawRect(start_x, start_y,end_x,end_y, CellPaint);
                 }else if(mSceneIndex==5 ) {
-                    for (SingleSceneCell cell:getDefine2Scene()){
+                    ArrayList<SingleSceneCell> cells=getDefine2Scene();
+                    if (mDefine2Flag==1){ return false;}
+                    for (SingleSceneCell cell:cells){
                         if ((start_x >= cell.getM_startX() && start_x <= cell.getM_endX()) && (start_y >= cell.getM_startY() && start_y <= cell.getM_endY())){
                             Log.i("TouchEvent","startXY is covered");
                             return false;
