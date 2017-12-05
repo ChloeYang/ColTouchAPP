@@ -85,6 +85,11 @@ public class VideoWallView extends View {
     int end_x=0;
     int end_y=0;
 
+    String[] StringSignal={"1-DP","1-HDMI","1-DVI_1","1-DVI_2",
+            "2-DP","2-HDMI","2-DVI_1","2-DVI_2",
+            "3-DP","3-HDMI","3-DVI_1","3-DVI_2",
+            "4-DP","4-HDMI","4-DVI_1","4-DVI_2"};
+
     public VideoWallView(Context context, int wallWidth, int wallHeight,int listIndex,int sceneIndex,int signalIndex) {
 
         super(context);
@@ -126,7 +131,7 @@ public class VideoWallView extends View {
             initCell();
         }
 
-        if (mSceneIsChanged==true){
+        if (true){
             //// TODO: 2017/11/28 canvas scene
             if (mSceneIndex==7 && (mLastSceneIndex==4 || mLastSceneIndex==5)){
                 confirmDefinedScene(mLastSceneIndex);
@@ -206,10 +211,16 @@ public class VideoWallView extends View {
     private void initCell(){
 
         getSystemInfo();
-        CellBitmap = Bitmap.createBitmap(WallWidth, WallHeight, Bitmap.Config.ARGB_8888);
+        if (CellBitmap==null) {
+            CellBitmap = Bitmap.createBitmap(WallWidth, WallHeight, Bitmap.Config.ARGB_8888);
+        }
         CellBitmap.eraseColor(getResources().getColor(R.color.colorCellUnknown));
-        CellCanvas = new Canvas(CellBitmap);
-        CellPaint = new Paint(Paint.DITHER_FLAG);
+        if (CellCanvas==null) {
+            CellCanvas = new Canvas(CellBitmap);
+        }
+        if (CellPaint==null) {
+            CellPaint = new Paint(Paint.DITHER_FLAG);
+        }
 
         VideoWall videoWall = VideoWall.newInstance(WallWidth, WallHeight);
         videoWall.layoutVideoCells(m_cellRow,m_cellCol);
@@ -334,12 +345,57 @@ public class VideoWallView extends View {
                 start_x = (int) Math.floor((int)event.getX()/m_cellWidth) * (m_cellWidth + VideoWall.sVideoCellGap);
                 start_y = (int) Math.floor((int)event.getY()/m_cellHeight) * (m_cellHeight+ VideoWall.sVideoCellGap);
                 Log.i("TouchEvent","ACTION_DOWN start_x="+start_x+" start_y="+start_y);
+                if (mSignalIndex>=0 && mSignalIndex<StringSignal.length){
+                    ArrayList<VideoCell> cells = new ArrayList<>();
+                    cells=getVideoCellList();
+                    ArrayList<SingleSceneCell> sceneCells = new ArrayList<>();
+                    switch (mLastSceneIndex){
+                        case 0:
+                            sceneCells =getDefaultScene(getContext().getString(R.string.pref_whole_scene));
+                            break;
+                        case 1:
+                            sceneCells=getDefaultScene(getContext().getString(R.string.pref_h2part_scene));
+                            break;
+                        case 2:
+                            sceneCells=getDefaultScene(getContext().getString(R.string.pref_v2part_scene));
+                            break;
+                        case 3:
+                            sceneCells=getDefaultScene(getContext().getString(R.string.pref_each_scene));
+                            break;
+                        case 4:
+                            sceneCells=getDefine1Scene();
+                            break;
+                        case 5:
+                            sceneCells=getDefine2Scene();
+                            break;
+                        default:
+                            break;
+                    }
+                    for (SingleSceneCell scene_cell :sceneCells){
+                        if ((start_x >= scene_cell.getM_startX() && start_x <= scene_cell.getM_endX()) && (start_y >= scene_cell.getM_startY() && start_y <= scene_cell.getM_endY())){
+                            CellPaint.setColor(Color.WHITE);
+                            CellPaint.setTextSize(20);
+                            CellCanvas.drawText("   " + StringSignal[mSignalIndex] +"   ",(scene_cell.getM_startX()+scene_cell.getM_endX())/2,(scene_cell.getM_startY()+scene_cell.getM_endY())/2,CellPaint);
+                            scene_cell.setM_signal(mSignalIndex);
+                            //// TODO: 2017/12/4 save signal to sharedpreferences
+                        }
+                        for (VideoCell cell:cells){
+                            if (!cell.getCellIsFlag()){
+                                if (cell.getCellPositionTopLeftX()<=scene_cell.getM_endX()){
+                                    cell.setCellIsFlag(true);
+                                    //// TODO: 2017/12/4 send cmd to engine
+                                }
+                            }
+                        }
+                    }
+                }
+                invalidate();
                 return true;
             case MotionEvent.ACTION_UP:
                 Log.i("TouchEvent","mDefine1Num="+mDefine1Num+" mDefine2Num="+mDefine2Num);
                 end_x=(int) Math.floor((int)event.getX()/m_cellWidth) * (m_cellWidth + VideoWall.sVideoCellGap)+m_cellWidth;
                 end_y=(int) Math.floor((int)event.getY()/m_cellHeight) * (m_cellHeight+ VideoWall.sVideoCellGap)+m_cellHeight;
-                Log.i("TouchEvent","ACTION_UP endx="+end_x+" endy="+end_y);
+                //Log.i("TouchEvent","ACTION_UP endx="+end_x+" endy="+end_y);
                 if(mSceneIndex==4 ) {
                     for (SingleSceneCell cell : getDefine1Scene()) {
                         if ((start_x >= cell.getM_startX() && start_x <= cell.getM_endX()) && (start_y >= cell.getM_startY() && start_y <= cell.getM_endY())){
@@ -353,16 +409,23 @@ public class VideoWallView extends View {
                     }
                     //Toast.makeText(getContext(), "save", Toast.LENGTH_SHORT).show();
                     saveDefine1Scene(flag1, mDefine1Num+1, start_x, start_y, end_x, end_y);
-                    if (start_x>end_x){
+                    /*if (start_x>end_x){
                         int temp=start_x;
                         start_x=end_x;
                         end_x=temp;
-                    }
-                    if (start_y>end_y){
+
+                        temp=start_y;
+                        start_y=end_y;
+                        end_y=temp;
+                    }else if (start_y>end_y){
                         int temp=start_y;
                         start_y=end_y;
                         end_y=temp;
-                    }
+
+                        temp=start_x;
+                        start_x=end_x;
+                        end_x=temp;
+                    }*/
                     CellPaint.setColor(Color.RED);
                     CellCanvas.drawRect(start_x, start_y,end_x,end_y, CellPaint);
                 }else if(mSceneIndex==5 ) {
@@ -378,16 +441,23 @@ public class VideoWallView extends View {
                         }
                     }
                     saveDefine2Scene(flag2,mDefine2Num+1,start_x,start_y,end_x,end_y);
-                    if (start_x>end_x){
+                    /*if (start_x>end_x){
                         int temp=start_x;
                         start_x=end_x;
                         end_x=temp;
-                    }
-                    if (start_y>end_y){
+
+                        temp=start_y;
+                        start_y=end_y;
+                        end_y=temp;
+                    }else if (start_y>end_y){
                         int temp=start_y;
                         start_y=end_y;
                         end_y=temp;
-                    }
+
+                        temp=start_x;
+                        start_x=end_x;
+                        end_x=temp;
+                    }*/
                     CellPaint.setColor(Color.RED);
                     CellCanvas.drawRect(start_x, start_y,end_x,end_y, CellPaint);
                 }else {
@@ -401,38 +471,9 @@ public class VideoWallView extends View {
                 break;
         }
 
-
-        if(mListIndex ==1 && event.getAction() == MotionEvent.ACTION_DOWN){
-            int x = (int) event.getX();
-            int y = (int) event.getY();
-            ArrayList<VideoCell> cells = VideoWall.getmVideoCellCollections(3, 4);
-            for (VideoCell cell : cells) {
-                if (((x >= cell.getCellPositionTopLeftX()) && x <= (cell.getCellWidth() + cell.getCellPositionTopLeftX()))
-                        && ((y >= cell.getCellPositionTopLeftY()) && y <= (cell.getCellHeight() + cell.getCellPositionTopLeftY()))) {
-
-                    if( CellPaint.getColor() == Color.BLACK)
-                        CellPaint.setColor(Color.BLUE);
-                    else
-                        CellPaint.setColor(Color.BLACK);
-
-                    CellCanvas.drawRect(cell.getCellPositionTopLeftX(), cell.getCellPositionTopLeftY(),
-                            cell.getCellPositionTopLeftX() + cell.getCellWidth(),
-                            cell.getCellPositionTopLeftY() + cell.getCellHeight(), CellPaint);
-                }
-            }
-            invalidate();
-            return true;
-        }else {
-            invalidate();
-            return super.onTouchEvent(event);
-        }
-        }/*else{
-            setColor(getResources().getColor(R.color.colorCellUnknown));
-            Log.i("TouchEvent", "On touch event: " + event.getAction());
-        }
         invalidate();
-        return super.onTouchEvent(event);
-    }*/
+        return true;
+    }
 
     public void getSystemInfo()
     {
@@ -497,10 +538,10 @@ public class VideoWallView extends View {
         for (int index=0;index<num;index++){
             SingleSceneCell ss =new SingleSceneCell();
             ss.setM_startX(defineShared.getInt(getContext().getString(R.string.pref_default_startX_)+str+"_"+index,0));
-            ss.setM_startY(defineShared.getInt(getContext().getString(R.string.pref_default_startY_)+str+index,0));
-            ss.setM_endX(defineShared.getInt(getContext().getString(R.string.pref_default_endX_)+str+index,0));
-            ss.setM_endY(defineShared.getInt(getContext().getString(R.string.pref_default_endY_)+str+index,0));
-            ss.setM_signal(defineShared.getInt(getContext().getString(R.string.pref_default_signal_)+str+index,0));
+            ss.setM_startY(defineShared.getInt(getContext().getString(R.string.pref_default_startY_)+str+"_"+index,0));
+            ss.setM_endX(defineShared.getInt(getContext().getString(R.string.pref_default_endX_)+str+"_"+index,0));
+            ss.setM_endY(defineShared.getInt(getContext().getString(R.string.pref_default_endY_)+str+"_"+index,0));
+            ss.setM_signal(defineShared.getInt(getContext().getString(R.string.pref_default_signal_)+str+"_"+index,0));
             cells.add(ss);
         }
         return cells;
