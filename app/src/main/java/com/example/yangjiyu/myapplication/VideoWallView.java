@@ -339,13 +339,13 @@ public class VideoWallView extends View {
                 start_y = (int) Math.floor((int)event.getY()/m_cellHeight) * (m_cellHeight+ VideoWall.sVideoCellGap);
                 Log.i("TouchEvent","ACTION_DOWN start_x="+start_x+" start_y="+start_y);
 
-                if (mSignalIndex != mLastSignalIndex){
+                /*if (mSignalIndex != mLastSignalIndex){
                     mSignalIsChanged=true;
                 }
                 else {
                     mSignalIsChanged=false;
-                }
-                if (mSignalIndex>=0 && mSignalIndex<StringSignal.length && mSignalIsChanged){
+                }*/
+                if (mSignalIndex>=0 && mSignalIndex<StringSignal.length /*&& mSignalIsChanged*/){
                     ArrayList<VideoCell> cells = new ArrayList<>();
                     cells=getVideoCellList();
                     ArrayList<SingleSceneCell> sceneCells = new ArrayList<>();
@@ -373,8 +373,10 @@ public class VideoWallView extends View {
                     }
                     for (SingleSceneCell scene_cell :sceneCells){
                         if ((start_x >= scene_cell.getM_startX() && start_x <= scene_cell.getM_endX()) && (start_y >= scene_cell.getM_startY() && start_y <= scene_cell.getM_endY())){
+                            CellPaint.setColor(Color.BLUE);
+                            CellCanvas.drawRect(scene_cell.getM_startX(), scene_cell.getM_startY(),scene_cell.getM_endX(), scene_cell.getM_endY(), CellPaint);
                             CellPaint.setColor(Color.WHITE);
-                            CellPaint.setTextSize(20);
+                            CellPaint.setTextSize(30);
                             CellCanvas.drawText("   " + StringSignal[mSignalIndex] +"   ",(scene_cell.getM_startX()+scene_cell.getM_endX())/2,(scene_cell.getM_startY()+scene_cell.getM_endY())/2,CellPaint);
                             scene_cell.setM_signal(mSignalIndex);
                             //// TODO: 2017/12/4 save signal to sharedpreferences
@@ -389,7 +391,8 @@ public class VideoWallView extends View {
                         }
                     }
                 }
-                mLastSignalIndex=mSignalIndex;
+                /*mLastSignalIndex=mSignalIndex;*/
+                mSignalIndex=-1;
                 invalidate();
                 return true;
             case MotionEvent.ACTION_UP:
