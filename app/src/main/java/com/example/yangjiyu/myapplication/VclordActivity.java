@@ -26,11 +26,14 @@ import static engine.CpComm.*;
 
 public class VclordActivity extends AppCompatActivity {
 
+    public  int INPUT_BOARD_NUM=4;
     private Button mButton;
     private IPEditText mIpText;
     private Spinner mSpinner;
     private String mVclordIp="172.16.129.4";
-    private int mPort=5800;
+    private byte mRow=1;
+    private byte mCol=1;
+    public static int PORT=5800;
     private SYS_INFO mCurSysInfo = new SYS_INFO();
     ArrayAdapter<String> adapter;
 
@@ -71,7 +74,7 @@ public class VclordActivity extends AppCompatActivity {
                 mVclordIp =mIpText.getText();
                 //Toast.makeText(getApplicationContext(),""+mVclordIp+":"+mPort,Toast.LENGTH_SHORT).show();
 
-                VCL3CommProcess vcl3CommProcess=new VCL3CommProcess(mVclordIp,mPort );
+                VCL3CommProcess vcl3CommProcess=new VCL3CommProcess(mVclordIp,PORT );
                 Vector<SYS_INFO> vecSys=new Vector<SYS_INFO>();
                 vcl3CommProcess.QueryAllSystem(vecSys);
                 try {
@@ -132,6 +135,8 @@ public class VclordActivity extends AppCompatActivity {
                 editor.putInt(getString(R.string.pref_data_col),mCurSysInfo.uiCol);
                 editor.commit();
 
+                mRow=(byte)mCurSysInfo.uiRow;
+                mCol=(byte)mCurSysInfo.uiCol;
                 Class<?>myClass=AdapterView.class;
                 try{
                     Field field=myClass.getDeclaredField("mOldSelectedPosition");
@@ -161,9 +166,27 @@ public class VclordActivity extends AppCompatActivity {
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //// TODO: 2017/11/22 if unknown
-                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                startActivity(intent);
+                //// TODO: 2017/11/22 if unknown ------ get signal info. && set signal position
+                VCL3CommProcess vcl3CommProcess=new VCL3CommProcess(mVclordIp,PORT );
+                if (vcl3CommProcess!=null) {
+                    CpSignalInfo signalInfo = new CpSignalInfo();
+                    vcl3CommProcess.GetSignalInfo(signalInfo);
+                    saveSignalInfo(signalInfo);
+
+                    int outputNum=signalInfo.ucOutputNum;
+                    Vector<Short> cubeID=new Vector<>();
+                    for (int irow=0;irow<mRow;irow++){
+                        for (int icol=0;icol<mCol;icol++){
+                            short deviceID=(short)(irow*VideoCell.CUBE_ROW_MAX+icol);
+                            cubeID.add(deviceID);
+                        }
+                    }
+                    for (int i=0;i<outputNum;i++) {
+                        vcl3CommProcess.SetSignalPosition((byte)i,cubeID.get(i*INPUT_BOARD_NUM),cubeID.get(i*INPUT_BOARD_NUM+1),cubeID.get(i*INPUT_BOARD_NUM+2),cubeID.get(i*INPUT_BOARD_NUM+3),mRow,mCol);
+                    }
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -181,5 +204,57 @@ public class VclordActivity extends AppCompatActivity {
      */
 
     public static class SingleScene {
+    }
+
+    private void saveSiganl(int inputId,byte sigInfo){
+
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.pref_setting), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        int dvi1,dvi2,hdmi,dp;
+                    /*
+                    /*0 、1  bit 分别表示 DVI0，DVI1
+                    /*2:     HDMI 信号
+                    /*3：DP 信号
+                    */
+        dvi1=sigInfo&0x01;
+        dvi2=sigInfo&0x02;
+        hdmi=sigInfo&0x04;
+        dp=sigInfo&0x08;
+        editor.putInt(getString(R.string.pref_input_all_sig_)+(inputId*INPUT_BOARD_NUM+0), dvi1);
+        editor.putInt(getString(R.string.pref_input_all_sig_)+(inputId*INPUT_BOARD_NUM+1), dvi2);
+        editor.putInt(getString(R.string.pref_input_all_sig_)+(inputId*INPUT_BOARD_NUM+2), hdmi);
+        editor.putInt(getString(R.string.pref_input_all_sig_)+(inputId*INPUT_BOARD_NUM+3), dp);
+        editor.commit();
+    }
+    private void saveSignalInfo(CpSignalInfo signalInfo){
+
+        saveSiganl(0,signalInfo.ucInput1);
+        saveSiganl(1,signalInfo.ucInput2);
+        saveSiganl(2,signalInfo.ucInput3);
+        saveSiganl(3,signalInfo.ucInput4);
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.pref_setting), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        int pixX, pixY;
+        switch (signalInfo.ucPix){
+            case 0:
+                pixX=1920;
+                pixY=1080;
+                break;
+            case 1:
+                pixX=1400;
+                pixY=1050;
+                break;
+            case 2:
+                pixX=1024;
+                pixY=768;
+                break;
+            default:
+                pixX=1024;
+                pixY=768;
+                break;
+        }
+        editor.putInt(getString(R.string.pref_pix_x), pixX);
+        editor.putInt(getString(R.string.pref_pix_y), pixY);
+        editor.commit();
     }
 }

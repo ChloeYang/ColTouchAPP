@@ -15,6 +15,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Vector;
 
 public class SourceItemFragment extends Fragment /*implements SourceItemListFragment.OnSourceListSelectedListener*/{
     // TODO: Rename parameter arguments, choose names that match
@@ -26,6 +27,8 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
     private TextView textView;
     private View view;
 
+    public Vector<String> Scene=new Vector<>();
+    public Vector<String> Signal=new Vector<>();
     int  nowIndex=0;
 
     //String[] StringSource = {"Whole","H-2Parts","V-2Parts", "Single"};
@@ -103,7 +106,7 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
 
         mRecyclerView.setLayoutManager(gridLayoutManager);//--linearLayoutManager
         //设置适配器
-        mAdapter = new GalleryAdapter(view.getContext(), mData);
+        mAdapter = new GalleryAdapter(view.getContext(), mData,Scene,Signal);
         mAdapter.setOnItemClickListener(new GalleryAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -135,6 +138,34 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
                 R.drawable.scene,
                 R.drawable.clear_normal,
                 R.drawable.scene_confirm));
+
+        //mAdapter.StringScene.clear();
+        Scene.add(getString(R.string.scene_whole));
+        Scene.add(getString(R.string.scene_h2part));
+        Scene.add(getString(R.string.scene_v2part));
+        Scene.add(getString(R.string.scene_each));
+        Scene.add(getString(R.string.scene_define1));
+        Scene.add(getString(R.string.scene_define2));
+        Scene.add(getString(R.string.clear));
+        Scene.add(getString(R.string.confirm));
+
+        Signal.add(getString(R.string.DVI_1_1));
+        Signal.add(getString(R.string.DVI_1_2));
+        Signal.add(getString(R.string.HDMI_1));
+        Signal.add(getString(R.string.DP_1));
+        Signal.add(getString(R.string.DVI_2_1));
+        Signal.add(getString(R.string.DVI_2_2));
+        Signal.add(getString(R.string.HDMI_2));
+        Signal.add(getString(R.string.DP_2));
+        Signal.add(getString(R.string.DVI_3_1));
+        Signal.add(getString(R.string.DVI_3_2));
+        Signal.add(getString(R.string.HDMI_3));
+        Signal.add(getString(R.string.DP_3));
+        Signal.add(getString(R.string.DVI_4_1));
+        Signal.add(getString(R.string.DVI_4_2));
+        Signal.add(getString(R.string.HDMI_4));
+        Signal.add(getString(R.string.DP_4));
+        Signal.add(getString(R.string.clear));
     }
     private void sceneData()
     {
@@ -166,6 +197,9 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
                 R.drawable.ypbpr,
                 R.drawable.video,
                 R.drawable.sdi,
-                R.drawable.vlink));
+                R.drawable.vlink,
+                R.drawable.clear_normal));
+
     }
+
 }

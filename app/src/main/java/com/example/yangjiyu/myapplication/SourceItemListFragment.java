@@ -13,7 +13,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+import java.util.Vector;
 
 
 public class SourceItemListFragment extends Fragment {
@@ -22,6 +22,7 @@ public class SourceItemListFragment extends Fragment {
     private SourceItemListAdapter mAdapter;
     private List<Integer> mData;
 
+    public Vector<String> StringSource=new Vector<>();
 //    private OnFragmentInteractionListener mListener;
 
 
@@ -51,7 +52,9 @@ public class SourceItemListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        StringSource.clear();
+        StringSource.add(getString(R.string.scene_list));
+        StringSource.add(getString(R.string.signal_list));
     }
 
     @Override
@@ -68,7 +71,7 @@ public class SourceItemListFragment extends Fragment {
 
         mRecyclerView.setHasFixedSize(true);
 
-        mAdapter = new SourceItemListAdapter();
+        mAdapter = new SourceItemListAdapter(StringSource);
 
 
         mAdapter.setOnSourceListClickListener(new SourceItemListAdapter.OnSourceListClick() {

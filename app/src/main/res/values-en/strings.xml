@@ -32,7 +32,7 @@
     <string name="pref_data_col">COL</string>
     <string name="pref_data_default_vclordip">172.16.129.111</string>
     <string name="pref_data_vclordip">IP</string>
-    <string name="pref_setting">Setting</string>
+    <string name="pref_setting">Property</string>
     <string name="pref_define_scene">DefineScene</string>
     <string name="pref_default_num">default_num_</string>
     <string name="pref_default_startX_">default_startX_</string>
@@ -67,6 +67,11 @@
     <string name="pref_each_scene">each_scene</string>
     <string name="pref_h2part_scene">h2part_scene</string>
     <string name="pref_v2part_scene">v2part_scene</string>
+    <string name="pref_signal_window_num">signal_window_num</string>
+    <string name="pref_pix_x">cube_pix_x</string>
+    <string name="pref_pix_y">cube_pix_y</string>
+    <string name="pref_input_id_">input_board_id_</string>
+    <string name="pref_input_all_sig_">input_all_sig_</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -80,5 +85,31 @@
     <string name="system_id">SYS</string>
     <string name="system_row">ROW</string>
     <string name="system_col">COL</string>
+
+    <string name="DVI_1_1">1-DVI_1</string>
+    <string name="DVI_1_2">1-DVI_2</string>
+    <string name="HDMI_1">1-HDMI</string>
+    <string name="DP_1">1-DP</string>
+    <string name="DVI_2_1">2-DVI_1</string>
+    <string name="DVI_2_2">2-DVI_2</string>
+    <string name="HDMI_2">2-HDMI</string>
+    <string name="DP_2">2-DP</string>
+    <string name="DVI_3_1">3-DVI_1</string>
+    <string name="DVI_3_2">3-DVI_2</string>
+    <string name="HDMI_3">3-HDMI</string>
+    <string name="DP_3">3-DP</string>
+    <string name="DVI_4_1">4-DVI_1</string>
+    <string name="DVI_4_2">4-DVI_2</string>
+    <string name="HDMI_4">4-HDMI</string>
+    <string name="DP_4">4-DP</string>
+    <string name="clear">Clear</string>
+
+    <string name="scene_whole">Whole</string>
+    <string name="scene_h2part">H-2Parts</string>
+    <string name="scene_v2part">V-2Parts</string>
+    <string name="scene_each">Single</string>
+    <string name="scene_define1">Define1</string>
+    <string name="scene_define2">Define2</string>
+    <string name="confirm">Confirm</string>
 
 </resources>

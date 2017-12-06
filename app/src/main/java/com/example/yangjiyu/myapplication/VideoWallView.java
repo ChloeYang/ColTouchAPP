@@ -1,27 +1,28 @@
 package com.example.yangjiyu.myapplication;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.nfc.Tag;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
-import static java.security.AccessController.getContext;
+import commprocess.VCL3CommProcess;
 
 /**
  * Created by Howie on 2017/7/25.
  */
 
 public class VideoWallView extends View {
+    public static final int INPUT_BOARD_NUM=4;
+    public static final int OUTPUT_BOARD_NUM=3;
     private final static String TAG = SceneWall.class.getSimpleName();
     private static final int  CELL_MAX_STATE_NUMBER = 4;
     public static final int CELL_STATE_ERROR = -1;
@@ -47,6 +48,12 @@ public class VideoWallView extends View {
 
     private int mLastSignalIndex =-1;
     private boolean mSignalIsChanged=false;
+
+    private VCL3CommProcess mVcl3CommProces;
+    private String mVclordIp="";
+    private int mSignalWindowCount =-1;//start from 0
+    private int m_pixX=1024;
+    private int m_pixY=768;
 
     public int getCellState() {
         return CellState;
@@ -85,10 +92,11 @@ public class VideoWallView extends View {
     int end_x=0;
     int end_y=0;
 
-    String[] StringSignal={"1-DP","1-HDMI","1-DVI_1","1-DVI_2",
-            "2-DP","2-HDMI","2-DVI_1","2-DVI_2",
-            "3-DP","3-HDMI","3-DVI_1","3-DVI_2",
-            "4-DP","4-HDMI","4-DVI_1","4-DVI_2"};
+    String[] StringSignal={getContext().getString(R.string.DVI_1_1),getContext().getString(R.string.DVI_1_2),getContext().getString(R.string.HDMI_1),getContext().getString(R.string.DP_1),
+            getContext().getString(R.string.DVI_2_1),getContext().getString(R.string.DVI_2_2),getContext().getString(R.string.HDMI_2),getContext().getString(R.string.DP_2),
+            getContext().getString(R.string.DVI_3_1),getContext().getString(R.string.DVI_3_2),getContext().getString(R.string.HDMI_3),getContext().getString(R.string.DP_3),
+            getContext().getString(R.string.DVI_4_1),getContext().getString(R.string.DVI_4_2),getContext().getString(R.string.HDMI_4),getContext().getString(R.string.DP_4),
+            getContext().getString(R.string.clear)};
 
     public VideoWallView(Context context, int wallWidth, int wallHeight,int listIndex,int sceneIndex,int signalIndex) {
 
@@ -332,6 +340,7 @@ public class VideoWallView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         int flag1=0;
         int flag2=0;
+        byte winId=0;
         switch (event.getAction())
         {
             case MotionEvent.ACTION_DOWN:
@@ -346,8 +355,10 @@ public class VideoWallView extends View {
                     mSignalIsChanged=false;
                 }*/
                 if (mSignalIndex>=0 && mSignalIndex<StringSignal.length /*&& mSignalIsChanged*/){
-                    ArrayList<VideoCell> cells = new ArrayList<>();
-                    cells=getVideoCellList();
+                    SharedPreferences preferences = getContext().getSharedPreferences(getContext().getString(R.string.pref_setting),Context.MODE_PRIVATE);
+                    mSignalWindowCount =preferences.getInt(getContext().getString(R.string.pref_signal_window_num),-1);
+                    m_pixX=preferences.getInt(getContext().getString(R.string.pref_pix_x),1024);
+                    m_pixY=preferences.getInt(getContext().getString(R.string.pref_pix_y),768);
                     ArrayList<SingleSceneCell> sceneCells = new ArrayList<>();
                     switch (mLastSceneIndex){
                         case 0:
@@ -379,15 +390,22 @@ public class VideoWallView extends View {
                             CellPaint.setTextSize(30);
                             CellCanvas.drawText("   " + StringSignal[mSignalIndex] +"   ",(scene_cell.getM_startX()+scene_cell.getM_endX())/2,(scene_cell.getM_startY()+scene_cell.getM_endY())/2,CellPaint);
                             scene_cell.setM_signal(mSignalIndex);
-                            //// TODO: 2017/12/4 save signal to sharedpreferences
-                        }
-                        for (VideoCell cell:cells){
-                            if (!cell.getCellIsFlag()){
-                                if (cell.getCellPositionTopLeftX()<=scene_cell.getM_endX()){
-                                    cell.setCellIsFlag(true);
-                                    //// TODO: 2017/12/4 send cmd to engine
-                                }
+                            //// TODO: 2017/12/4 save signal to sharedpreferences && send cmd to engine
+                            //byte winId=(byte)((mSignalWindowCount+1)&0xff);
+                            byte inputId=(byte)(mSignalIndex/INPUT_BOARD_NUM);
+                            byte sigNum=(byte)(mSignalIndex%INPUT_BOARD_NUM);
+                            short posX=(short)((scene_cell.getM_startX()/m_cellWidth)*m_pixX);
+                            short posY=(short)((scene_cell.getM_startY()/m_cellHeight)*m_pixY);
+                            short widthX=(short)(((scene_cell.getM_endX()-scene_cell.getM_startY())/m_cellWidth)*m_pixX);
+                            short heightY=(short)(((scene_cell.getM_endY()-scene_cell.getM_startY())/m_cellHeight)*m_pixY);
+                            clearWindow(winId,(byte)0,false);
+                            boolean ret = openWindow(winId,inputId,sigNum,posX,posY,widthX,heightY);
+                            if (ret){
+                                Toast.makeText(getContext(),R.string.operation_finished,Toast.LENGTH_SHORT).show();
+                            }else {
+                                Toast.makeText(getContext(),R.string.error_open_signal_failed,Toast.LENGTH_SHORT).show();
                             }
+                            winId++;
                         }
                     }
                 }
@@ -669,5 +687,59 @@ public class VideoWallView extends View {
             }
         }else{}
         invalidate();
+    }
+    public void initVCL3Comm(){
+        SharedPreferences preferences = getContext().getSharedPreferences(getContext().getString(R.string.pref_setting),Context.MODE_PRIVATE);
+        mVclordIp=preferences.getString(getContext().getString(R.string.pref_data_vclordip),"");
+        if (mVcl3CommProces==null) {
+            mVcl3CommProces = new VCL3CommProcess(mVclordIp, VclordActivity.PORT);
+        }
+    }
+    public void stopVCL3Comm(){
+        try {
+            mVcl3CommProces.ProcessCancel();
+            mVcl3CommProces=null;
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            Toast.makeText(getContext(),""+e,Toast.LENGTH_SHORT).show();
+        }
+    }
+    public void clearWindow(byte winId,byte type,boolean bIsAll){
+        SharedPreferences preferences = getContext().getSharedPreferences(getContext().getString(R.string.pref_setting),Context.MODE_PRIVATE);
+        mSignalWindowCount =preferences.getInt(getContext().getString(R.string.pref_signal_window_num),-1);
+        if (mVcl3CommProces==null) {
+            initVCL3Comm();
+        }
+        if (bIsAll) {
+            for (byte i = 0; i <= mSignalWindowCount; i++) {
+                mVcl3CommProces.CloseSignalWindow(i, type);
+            }
+            winId=0;
+        }else {
+            mVcl3CommProces.CloseSignalWindow(winId,type);
+        }
+
+        SharedPreferences.Editor editor=preferences.edit();
+        editor.putInt(getContext().getString(R.string.pref_signal_window_num),winId-1);
+        editor.commit();
+    }
+    public boolean openWindow(byte winId,byte inputId,byte sig,short posX,short posY,short widthX,short widthY){
+        if (mVcl3CommProces==null){
+            initVCL3Comm();
+        }
+        byte high_startX=(byte)(posX>>8);
+        byte low_startX= (byte)(posX & 0x00FF);
+        byte high_startY=(byte)(posY>>8);
+        byte low_startY=(byte)(posY & 0x00FF);
+        byte width_high_X=(byte)(widthX>>8);
+        byte width_low_X=(byte)(widthX & 0x00FF);
+        byte width_high_Y=(byte)(widthY>>8);
+        byte width_low_Y=(byte)(widthY & 0x00FF);
+        boolean ret =mVcl3CommProces.OpenSignalWindow( winId, inputId, sig, high_startX, low_startX, high_startY, low_startY,width_high_X, width_low_X, width_high_Y, width_low_Y);
+        SharedPreferences preferences = getContext().getSharedPreferences(getContext().getString(R.string.pref_setting),Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=preferences.edit();
+        editor.putInt(getContext().getString(R.string.pref_signal_window_num),winId);
+        editor.commit();
+        return ret;
     }
 }

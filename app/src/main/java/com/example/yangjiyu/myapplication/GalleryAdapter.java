@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * Created by yangjiyu on 2017/11/17.
@@ -50,9 +51,13 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             R.drawable.ypbpr,
             R.drawable.video,
             R.drawable.sdi,
-            R.drawable.vlink};
+            R.drawable.vlink,
+            R.drawable.clear_normal};
 
-    String[] StringScenee= {"整墙",
+    public Vector<String> StringScene=new Vector<>();
+    public Vector<String> StringSignal=new Vector<>();
+
+    /*public String[] StringScene = {"整墙",
             "H-二分",
             "V-二分",
             "单屏",
@@ -60,10 +65,11 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             "自定义2",
             "清除",
             "确认"};//"Whole","H-2Parts","V-2Parts", "Single","Define1","Define2","Clear","Defined-Confirm"
-    String[] StringSignal={"1-DP","1-HDMI","1-DVI_1","1-DVI_2",
-            "2-DP","2-HDMI","2-DVI_1","2-DVI_2",
-            "3-DP","3-HDMI","3-DVI_1","3-DVI_2",
-            "4-DP","4-HDMI","4-DVI_1","4-DVI_2"};
+    public String[] StringSignal={"1-DVI_1","1-DVI_2","1-HDMI","1-DP",
+            "2-DVI_1","2-DVI_2","2-HDMI","2-DP",
+            "3-DVI_1","3-DVI_2","3-HDMI","3-DP",
+            "4-DVI_1","4-DVI_2","4-HDMI","4-DP",
+            "清除"};*/
     private int mSceneNum=8;
     private int mSignalNum=12;
 
@@ -83,10 +89,12 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     private android.view.LayoutInflater mInflater;
     public java.util.List<Integer> mData;
 
-    public GalleryAdapter(Context context, List<Integer> data)
+    public GalleryAdapter(Context context, List<Integer> data,Vector<String> Scene,Vector<String> Signal)
     {
         mInflater = LayoutInflater.from(context);
         mData = data;
+        StringScene=Scene;
+        StringSignal=Signal;
     }
 
     public  class ViewHolder extends RecyclerView.ViewHolder
@@ -103,11 +111,11 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             //mImageViewSourceList.setImageResource(ImageSourceId[sourceId]);
             if(mData.size()==mSceneNum){
                 mImg.setImageResource(ImgSceneNormal[sourceId]);
-                mTxt.setText(StringScenee[sourceId]);
+                mTxt.setText(StringScene.get(sourceId));
             }
             else {
                 mImg.setImageResource(ImgSignalNormal[sourceId]);
-                mTxt.setText(StringSignal[sourceId]);
+                mTxt.setText(StringSignal.get(sourceId));
             }
         }
     }
@@ -129,13 +137,13 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         mViewHolder = new ViewHolder(view);
 
         if (mData.size()==mSceneNum){
-            for (int ii = 0;ii<StringScenee.length;ii++)
+            for (int ii = 0; ii< StringScene.size(); ii++)
             {
                 isClicks.add(false);
             }
         }
         else {
-            for (int ii = 0;ii<StringSignal.length;ii++)
+            for (int ii = 0;ii<StringSignal.size();ii++)
             {
                 isClicks.add(false);
             }
@@ -223,13 +231,13 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     {
         isClicks.clear();
         if (mData.size()==mSceneNum){
-            for (int ii = 0;ii<StringScenee.length;ii++)
+            for (int ii = 0; ii< StringScene.size(); ii++)
             {
                 isClicks.add(false);
             }
         }
         else {
-            for (int ii = 0;ii<StringSignal.length;ii++)
+            for (int ii = 0;ii<StringSignal.size();ii++)
             {
                 isClicks.add(false);
             }

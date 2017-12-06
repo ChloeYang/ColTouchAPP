@@ -47,6 +47,8 @@ public class VideoWallFragment extends Fragment {
         else if (mListIndex==1){
             mSignalIndex=pos;
             mVideoWallView. mSignalIndex=mSignalIndex;
+            mVideoWallView.initVCL3Comm();
+            if (mSignalIndex==16){ mVideoWallView.clearWindow((byte)0,(byte)0,true);}
         }
     }
 

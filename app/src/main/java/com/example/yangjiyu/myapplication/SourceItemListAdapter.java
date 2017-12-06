@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * Created by Howie on 2017/8/9.
@@ -22,7 +23,8 @@ class SourceItemListAdapter extends RecyclerView.Adapter<SourceItemListAdapter.S
 
     int[] ImageClicked={R.drawable.scene_press,R.drawable.signal_press};
 
-    String[] StringSource = {"场景布局列表", "信号源列表"};//R.string.scene_list   R.string.signal_list
+    //public String[] StringSource = {"场景布局列表", "信号源列表"};//R.string.scene_list   R.string.signal_list
+    public Vector<String> StringSource=new Vector<>();
     private List<Boolean> isClicks =new ArrayList<>();
 
     public interface OnSourceListClick{
@@ -35,6 +37,9 @@ class SourceItemListAdapter extends RecyclerView.Adapter<SourceItemListAdapter.S
         this.mOnSourceListClick = onSourceListClickListener;
     }
 
+    public SourceItemListAdapter(Vector<String> source){
+        this.StringSource=source;
+    }
 
     @Override
     public SourceItemListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -44,7 +49,7 @@ class SourceItemListAdapter extends RecyclerView.Adapter<SourceItemListAdapter.S
         LayoutInflater inflater = LayoutInflater.from(context);
         boolean shouldAttachToParentImmediately = false;
 
-        for (int i = 0;i<StringSource.length;i++)
+        for (int i = 0;i<StringSource.size();i++)
         {
             isClicks.add(false);
         }
@@ -95,7 +100,7 @@ class SourceItemListAdapter extends RecyclerView.Adapter<SourceItemListAdapter.S
 //        return ImageSourceId.length > StringSource.length
 //                ? StringSource.length
 //                : ImageSourceId.length;
-        return StringSource.length;
+        return StringSource.size();
     }
 
     class SourceItemListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -111,11 +116,11 @@ class SourceItemListAdapter extends RecyclerView.Adapter<SourceItemListAdapter.S
 
         public void bind(int sourceId){
             mImageViewSourceList.setImageResource(ImageSourceId[sourceId]);
-            mTextViewSourceList.setText(StringSource[sourceId]);
+            mTextViewSourceList.setText(StringSource.get(sourceId));
         }
 
         public String getItemName(int nameId){
-            return StringSource[nameId];
+            return StringSource.get(nameId);
         }
 
         @Override
