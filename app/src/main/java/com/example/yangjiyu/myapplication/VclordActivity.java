@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -41,6 +42,7 @@ public class VclordActivity extends AppCompatActivity {
     Vector<SYS_INFO> vecSys=new Vector<>();
     ProgressDialog mProgressDialog;
     private int iCount=0;
+    private boolean ret=false;
 
     public static VCL3CommProcess vcl3CommProcess;
     @Override
@@ -53,7 +55,7 @@ public class VclordActivity extends AppCompatActivity {
         mProgressDialog.setTitle(getString(R.string.app_name));
         String messageInfo = getString(R.string.progress_check_system);
         mProgressDialog.setMessage(messageInfo);
-        mProgressDialog.setCancelable(false);
+        mProgressDialog.setCancelable(true);
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 
         mButton = (Button)findViewById(R.id.connect_button);
@@ -123,7 +125,7 @@ public class VclordActivity extends AppCompatActivity {
                 }
 
                 saveSetting();
-                /*Class<?>myClass=AdapterView.class;
+                Class<?>myClass=AdapterView.class;
                 try{
                     Field field=myClass.getDeclaredField("mOldSelectedPosition");
                     field.setAccessible(true);
@@ -132,7 +134,7 @@ public class VclordActivity extends AppCompatActivity {
                     e.printStackTrace();
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
-                }*/
+                }
 
             }
 
@@ -231,13 +233,17 @@ public class VclordActivity extends AppCompatActivity {
         }
         protected Void doInBackground(String... phoneNumber) {
             vcl3CommProcess = new VCL3CommProcess(mVclordIp,PORT );
-            vcl3CommProcess.QueryAllSystem(vecSys);
+            ret =vcl3CommProcess.QueryAllSystem(vecSys);
             /*try {
                 vcl3CommProcess.ProcessCancel();
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 Toast.makeText(getApplicationContext(),""+e,Toast.LENGTH_SHORT).show();
             }*/
+            if (!ret){
+                //Toast.makeText(getApplicationContext(),R.string.error_network,Toast.LENGTH_SHORT).show();
+                return null;
+            }
             if (vecSys.isEmpty()) {
                 Toast.makeText(getApplicationContext(),R.string.error_no_system,Toast.LENGTH_SHORT).show();
             }else {
@@ -261,6 +267,9 @@ public class VclordActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             //super.onPostExecute(aVoid);
+            if (!ret){
+                return;
+            }
             adapter.clear();
             adapter.add(getString(R.string.check_system));
             Iterator<SYS_INFO> iterator= vecSys.iterator();
@@ -287,7 +296,11 @@ public class VclordActivity extends AppCompatActivity {
             VCL3CommProcess vcl3CommProcess=new VCL3CommProcess(mVclordIp,PORT );
             if (vcl3CommProcess!=null) {
                 CpSignalInfo signalInfo = new CpSignalInfo();
-                vcl3CommProcess.GetSignalInfo(signalInfo);
+                ret = vcl3CommProcess.GetSignalInfo(signalInfo);
+                if (!ret){
+                    //Toast.makeText(getApplicationContext(),R.string.error_network,Toast.LENGTH_SHORT).show();
+                    return null;
+                }
                 saveSignalInfo(signalInfo);
 
                 int outputNum=signalInfo.ucOutputNum;
@@ -298,8 +311,17 @@ public class VclordActivity extends AppCompatActivity {
                         cubeID.add(deviceID);
                     }
                 }
+                short s1=0,s2=0,s3=0,s4=0;
                 for (int i=0;i<outputNum;i++) {
-                    vcl3CommProcess.SetSignalPosition((byte)i,cubeID.get(i*INPUT_BOARD_NUM),cubeID.get(i*INPUT_BOARD_NUM+1),cubeID.get(i*INPUT_BOARD_NUM+2),cubeID.get(i*INPUT_BOARD_NUM+3),mRow,mCol);
+                    if (i*INPUT_BOARD_NUM>=cubeID.size()){  s1=0xff; }else { s1=cubeID.get(i*INPUT_BOARD_NUM);}
+                    if ((i*INPUT_BOARD_NUM+1)>=cubeID.size()){  s2=0xff; }else { s2=cubeID.get(i*INPUT_BOARD_NUM+1);}
+                    if ((i*INPUT_BOARD_NUM+2)>=cubeID.size()){  s3=0xff; }else { s3=cubeID.get(i*INPUT_BOARD_NUM+2);}
+                    if ((i*INPUT_BOARD_NUM+3)>=cubeID.size()){  s4=0xff; }else { s4=cubeID.get(i*INPUT_BOARD_NUM+3);}
+                    ret = vcl3CommProcess.SetSignalPosition((byte)i,s1,s2,s3,s4,mRow,mCol);
+                }
+                if (!ret){
+                    //Toast.makeText(getApplicationContext(),R.string.error_network,Toast.LENGTH_SHORT).show();
+                    return null;
                 }
                 try {
                     vcl3CommProcess.ProcessCancel();
@@ -318,7 +340,9 @@ public class VclordActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             //super.onPostExecute(aVoid);
-
+            if (!ret){
+                return;
+            }
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
         }

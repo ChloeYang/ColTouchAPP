@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
-
+import android.widget.Toast;
 
 
 public class VideoWallFragment extends Fragment {
@@ -26,6 +26,7 @@ public class VideoWallFragment extends Fragment {
     private int mListIndex=-1;
     private int mSceneIndex=-1;
     private int mSignalIndex=-1;
+    private int mLastIndex =-1;
 
     public void upDataList(int pos)
     {
@@ -35,6 +36,9 @@ public class VideoWallFragment extends Fragment {
     public void upDataItem(int pos)
     {
         if (mListIndex==0 || mListIndex==-1){
+            /*if (mLastIndex ==1){
+                mVideoWallView.closeWindow((byte)0,(byte)0,true);
+            }*/
             mSceneIndex=pos;
             mVideoWallView.mSceneIndex = mSceneIndex;
             mVideoWallView = new VideoWallView(getContext(), windowsWidth, windowsHeight, mListIndex, mSceneIndex, mSignalIndex);
@@ -46,8 +50,12 @@ public class VideoWallFragment extends Fragment {
         else if (mListIndex == 1){
             mSignalIndex = pos;
             mVideoWallView. mSignalIndex = mSignalIndex;
-            if (mSignalIndex==16){ mVideoWallView.closeWindow((byte)0,(byte)0,true);}
+            if (mSignalIndex==16){
+                mVideoWallView.closeWindow((byte)0,(byte)0,true);
+                Toast.makeText(getContext(), R.string.operation_finished, Toast.LENGTH_SHORT).show();
+            }
         }
+        mLastIndex =mListIndex;
     }
 
 

@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/vclord_ip"
         android:scrollbarSize="30dp"
-        android:entries="@array/languages">
+        >
     </Spinner>
     <Button
         android:id="@+id/connect_button"

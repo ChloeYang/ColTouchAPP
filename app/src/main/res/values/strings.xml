@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">My Application</string>
-    <string name="title_activity_login">Sign in</string>
-    <string name="title_recycler">RecyclerView</string>
+    <string name="app_name">VTRON显控一体化系统管理软件</string>
+    <string name="title_activity_login">VTRON显控一体化系统管理软件</string>
+    <string name="title_recycler">VTRON显控一体化系统管理软件</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -19,6 +19,7 @@
     <string name="action_vclord_connect">VCLORD服务连接</string>
     <string name="point">.</string>
     <string name="error_no_system">系统未知</string>
+    <string name="error_network">网路连接错误</string>
     <string name="prf_generation">通用信息</string>
     <string name="prf_data">系统信息</string>
     <string name="pref_gen_default_display_name">admin@vtron.com</string>
@@ -66,18 +67,19 @@
     <string name="pref_each_scene">each_scene</string>
     <string name="pref_h2part_scene">h2part_scene</string>
     <string name="pref_v2part_scene">v2part_scene</string>
-    <string name="pref_signal_window_num">signal_window_num</string>
+    <string name="pref_signal_window_count">signal_window_num</string>
     <string name="pref_pix_x">cube_pix_x</string>
     <string name="pref_pix_y">cube_pix_y</string>
     <string name="pref_input_id_">input_board_id_</string>
     <string name="pref_input_all_sig_">input_all_sig_</string>
+    <string name="pref_signal_output_board_window_num_">input_board_num_</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">黑色背景</string>
     <string name="scene_list">场景布局列表</string>
     <string name="signal_list">信号源列表</string>
     <string name="error_invalid_ip">IP地址不正确</string>
-    <string name="check_system">点击获取系统</string>
+    <string name="check_system"> </string>
     <string name="progress_check_system">正在获取系统信息</string>
     <string name="define_scene_finished">操作完成</string>
     <string name="VCLORD_IP">VCLORD IP</string>
@@ -89,6 +91,7 @@
     <string name="operation_failed">操作失败</string>
     <string name="error_open_signal_failed">信号开窗失败</string>
     <string name="error_close_signal_failed">信号关窗失败</string>
+    <string name="error_signal_larger_than_max">超过单采集卡最大开窗数，请先关窗再开窗</string>
 
     <string name="DVI_1_1">1-DVI_1</string>
     <string name="DVI_1_2">1-DVI_2</string>

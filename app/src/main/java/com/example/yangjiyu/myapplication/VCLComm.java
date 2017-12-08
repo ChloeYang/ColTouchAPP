@@ -8,11 +8,14 @@ import java.io.IOException;
 
 import commprocess.VCL3CommProcess;
 
+
 /**
  * Created by yangjiyu on 2017/12/7.
- */
+ *//*
 
-/*public class VCLComm extends AsyncTask<Byte,Void,Boolean> {
+
+*/
+public class VCLComm extends AsyncTask<Byte,Void,Boolean> {
 
     public String mIp;
     public int mPort;
@@ -50,4 +53,5 @@ import commprocess.VCL3CommProcess;
     }
 
 
-}*/
+}
+

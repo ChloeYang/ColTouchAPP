@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">My Application</string>
-    <string name="title_activity_login">Sign in</string>
-    <string name="title_recycler">RecyclerView</string>
+    <string name="app_name">Col Touch</string>
+    <string name="title_activity_login">Col Touch</string>
+    <string name="title_recycler">Col Touch</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -13,13 +13,12 @@
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_sign_in">"Please get a valid information,or register a new one from  VTRON TECHNOLOGIES LTD."</string>
     <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
     <string name="setting">Setting</string>
     <string name="action_vclord_connect">VCLORD CONNECT</string>
     <string name="point">.</string>
     <string name="error_no_system">System is unknown</string>
+    <string name="error_network">Network is error</string>
     <string name="prf_generation">Generation</string>
     <string name="prf_data">Data</string>
     <string name="pref_gen_default_display_name">admin@vtron.com</string>
@@ -67,18 +66,19 @@
     <string name="pref_each_scene">each_scene</string>
     <string name="pref_h2part_scene">h2part_scene</string>
     <string name="pref_v2part_scene">v2part_scene</string>
-    <string name="pref_signal_window_num">signal_window_num</string>
+    <string name="pref_signal_window_count">signal_window_num</string>
     <string name="pref_pix_x">cube_pix_x</string>
     <string name="pref_pix_y">cube_pix_y</string>
     <string name="pref_input_id_">input_board_id_</string>
     <string name="pref_input_all_sig_">input_all_sig_</string>
+    <string name="pref_signal_output_board_window_num_">input_board_num_</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="scene_list">Scene List</string>
     <string name="signal_list">Signal List</string>
     <string name="error_invalid_ip">Ip is incorrect</string>
-    <string name="check_system">Click to check...</string>
+    <string name="check_system"> </string>
     <string name="progress_check_system">Checking System Info.</string>
     <string name="define_scene_finished">Finished</string>
     <string name="VCLORD_IP">VCLORD IP</string>
@@ -86,6 +86,11 @@
     <string name="system_id">SYS</string>
     <string name="system_row">ROW</string>
     <string name="system_col">COL</string>
+    <string name="operation_finished">Finished</string>
+    <string name="operation_failed">Failed</string>
+    <string name="error_open_signal_failed">Open failed</string>
+    <string name="error_close_signal_failed">Close failed</string>
+    <string name="error_signal_larger_than_max">Over the largest num, close first</string>
 
     <string name="DVI_1_1">1-DVI_1</string>
     <string name="DVI_1_2">1-DVI_2</string>
