@@ -36,22 +36,56 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             R.drawable.clear_pressdown,
             R.drawable.scene_confirm};
 
-    int[]ImgSignalNormal={R.drawable.ypbpr,
-            R.drawable.video,
-            R.drawable.sdi,
-            R.drawable.vlink,
-            R.drawable.ypbpr,
-            R.drawable.video,
-            R.drawable.sdi,
-            R.drawable.vlink,
-            R.drawable.ypbpr,
-            R.drawable.video,
-            R.drawable.sdi,
-            R.drawable.vlink,
-            R.drawable.ypbpr,
-            R.drawable.video,
-            R.drawable.sdi,
-            R.drawable.vlink,
+    int[]ImgSignalNormal={R.drawable.dvi1_normal,
+            R.drawable.dvi2_normal,
+            R.drawable.hdmi_normal,
+            R.drawable.dp_normal,
+            R.drawable.dvi1_normal,
+            R.drawable.dvi2_normal,
+            R.drawable.hdmi_normal,
+            R.drawable.dp_normal,
+            R.drawable.dvi1_normal,
+            R.drawable.dvi2_normal,
+            R.drawable.hdmi_normal,
+            R.drawable.dp_normal,
+            R.drawable.dvi1_normal,
+            R.drawable.dvi2_normal,
+            R.drawable.hdmi_normal,
+            R.drawable.dp_normal,
+            R.drawable.clear_normal};
+    int[]ImgSignalPressed={R.drawable.dvi1_pressed,
+            R.drawable.dvi2_pressed,
+            R.drawable.hdmi_pressed,
+            R.drawable.dp_pressed,
+            R.drawable.dvi1_pressed,
+            R.drawable.dvi2_pressed,
+            R.drawable.hdmi_pressed,
+            R.drawable.dp_pressed,
+            R.drawable.dvi1_pressed,
+            R.drawable.dvi2_pressed,
+            R.drawable.hdmi_pressed,
+            R.drawable.dp_pressed,
+            R.drawable.dvi1_pressed,
+            R.drawable.dvi2_pressed,
+            R.drawable.hdmi_pressed,
+            R.drawable.dp_pressed,
+            R.drawable.clear_pressdown,};
+    int[]ImgSignalOffline={R.drawable.dvi1_offline,
+            R.drawable.dvi2_offline,
+            R.drawable.hdmi_offline,
+            R.drawable.dp_offline,
+            R.drawable.dvi1_offline,
+            R.drawable.dvi2_offline,
+            R.drawable.hdmi_offline,
+            R.drawable.dp_offline,
+            R.drawable.dvi1_offline,
+            R.drawable.dvi2_offline,
+            R.drawable.hdmi_offline,
+            R.drawable.dp_offline,
+            R.drawable.dvi1_offline,
+            R.drawable.dvi2_offline,
+            R.drawable.hdmi_offline,
+            R.drawable.dp_offline,
             R.drawable.clear_normal};
 
     public Vector<String> StringScene=new Vector<>();
@@ -167,6 +201,8 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             if (mData.size()==mSceneNum)
             {
                 viewHolder.mImg.setImageResource(ImgScenePressed[i]);
+            }else {
+                viewHolder.mImg.setImageResource(ImgSignalPressed[i]);
             }
             viewHolder.mTxt.setTextColor(Color.parseColor("#500000"));
         }
@@ -174,6 +210,8 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             if (mData.size()==mSceneNum)
             {
                 viewHolder.mImg.setImageResource(ImgSceneNormal[i]);
+            }else {
+                viewHolder.mImg.setImageResource(ImgSignalNormal[i]);
             }
             viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
         }
@@ -204,6 +242,8 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             if (mData.size()==mSceneNum)
             {
                 viewHolder.mImg.setImageResource(ImgScenePressed[i]);
+            }else {
+                viewHolder.mImg.setImageResource(ImgSignalPressed[i]);
             }
             viewHolder.mTxt.setTextColor(Color.parseColor("#500000"));
         }
@@ -211,6 +251,8 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             if (mData.size()==mSceneNum)
             {
                 viewHolder.mImg.setImageResource(ImgSceneNormal[i]);
+            }else {
+                viewHolder.mImg.setImageResource(ImgSignalNormal[i]);
             }
             viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
         }

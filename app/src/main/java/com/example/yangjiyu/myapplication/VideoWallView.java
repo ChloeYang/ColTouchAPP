@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -51,7 +52,7 @@ public class VideoWallView extends View {
 
     private VCL3CommProcess mVcl3CommProces;
     private String mVclordIp="";
-    private int mSignalWindowCount =-1;//start from 0
+    private int mSignalWindowCount =0;//start from 1
     private int m_pixX=1024;
     private int m_pixY=768;
 
@@ -102,11 +103,6 @@ public class VideoWallView extends View {
 
         super(context);
 
-        SharedPreferences defineShared = getContext().getSharedPreferences(getContext().getString(R.string.pref_define_scene),Context.MODE_PRIVATE);//getResources()
-        SharedPreferences setPref = getContext().getSharedPreferences(getContext().getString(R.string.pref_setting), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = setPref.edit();
-        mLastSceneIndex=setPref.getInt(getContext().getString(R.string.pref_LastSceneIndex),-1);
-        mLastSignalIndex=setPref.getInt(getContext().getString(R.string.pref_LastSignalIndex),-1);
 
         mCleanDefineScenelClickListener = (VideoWallView.onCleanDefineScenelClickListener) context;
         if( wallHeight * wallWidth < 0 ) {
@@ -133,6 +129,16 @@ public class VideoWallView extends View {
             initCell();
         }
 
+        showVideoWall(sceneIndex);
+    }
+
+    private void showVideoWall(int sceneIndex){
+
+        SharedPreferences defineShared = getContext().getSharedPreferences(getContext().getString(R.string.pref_define_scene),Context.MODE_PRIVATE);//getResources()
+        SharedPreferences setPref = getContext().getSharedPreferences(getContext().getString(R.string.pref_setting), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = setPref.edit();
+        mLastSceneIndex=setPref.getInt(getContext().getString(R.string.pref_LastSceneIndex),-1);
+        mLastSignalIndex=setPref.getInt(getContext().getString(R.string.pref_LastSignalIndex),-1);
         if (true){
             //// TODO: 2017/11/28 canvas scene
             if (mSceneIndex==7 && (mLastSceneIndex==4 || mLastSceneIndex==5)){
@@ -208,7 +214,6 @@ public class VideoWallView extends View {
 
         }
     }
-
     private void initCell(){
 
         getSystemInfo();
@@ -334,13 +339,38 @@ public class VideoWallView extends View {
         PositionY = y;
     }
 
-
+    private ArrayList<SingleSceneCell> getSceneCell(){
+        ArrayList<SingleSceneCell> sceneCells = new ArrayList<>();
+        switch (mLastSceneIndex){
+            case 0:
+                sceneCells =getDefaultScene(getContext().getString(R.string.pref_whole_scene));
+                break;
+            case 1:
+                sceneCells=getDefaultScene(getContext().getString(R.string.pref_h2part_scene));
+                break;
+            case 2:
+                sceneCells=getDefaultScene(getContext().getString(R.string.pref_v2part_scene));
+                break;
+            case 3:
+                sceneCells=getDefaultScene(getContext().getString(R.string.pref_each_scene));
+                break;
+            case 4:
+                sceneCells=getDefine1Scene();
+                break;
+            case 5:
+                sceneCells=getDefine2Scene();
+                break;
+            default:
+                break;
+        }
+        return sceneCells;
+    }
     private static int CellNumber = 0;
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int flag1=0;
         int flag2=0;
-        byte winId=0;
+        byte winId=1;
         switch (event.getAction())
         {
             case MotionEvent.ACTION_DOWN:
@@ -356,56 +386,40 @@ public class VideoWallView extends View {
                 }*/
                 if (mSignalIndex>=0 && mSignalIndex<StringSignal.length /*&& mSignalIsChanged*/){
                     SharedPreferences preferences = getContext().getSharedPreferences(getContext().getString(R.string.pref_setting),Context.MODE_PRIVATE);
-                    mSignalWindowCount =preferences.getInt(getContext().getString(R.string.pref_signal_window_num),-1);
+                    mSignalWindowCount =preferences.getInt(getContext().getString(R.string.pref_signal_window_num),0);
                     m_pixX=preferences.getInt(getContext().getString(R.string.pref_pix_x),1024);
                     m_pixY=preferences.getInt(getContext().getString(R.string.pref_pix_y),768);
                     ArrayList<SingleSceneCell> sceneCells = new ArrayList<>();
-                    switch (mLastSceneIndex){
-                        case 0:
-                            sceneCells =getDefaultScene(getContext().getString(R.string.pref_whole_scene));
-                            break;
-                        case 1:
-                            sceneCells=getDefaultScene(getContext().getString(R.string.pref_h2part_scene));
-                            break;
-                        case 2:
-                            sceneCells=getDefaultScene(getContext().getString(R.string.pref_v2part_scene));
-                            break;
-                        case 3:
-                            sceneCells=getDefaultScene(getContext().getString(R.string.pref_each_scene));
-                            break;
-                        case 4:
-                            sceneCells=getDefine1Scene();
-                            break;
-                        case 5:
-                            sceneCells=getDefine2Scene();
-                            break;
-                        default:
-                            break;
-                    }
+                    sceneCells = getSceneCell();
+                    winId=(byte)(mSignalWindowCount);
                     for (SingleSceneCell scene_cell :sceneCells){
-                        if ((start_x >= scene_cell.getM_startX() && start_x <= scene_cell.getM_endX()) && (start_y >= scene_cell.getM_startY() && start_y <= scene_cell.getM_endY())){
+                        if (((int)event.getX() >= scene_cell.getM_startX() && (int)event.getX() <= scene_cell.getM_endX()) && ((int)event.getY() >= scene_cell.getM_startY() && (int)event.getY() <= scene_cell.getM_endY())){
                             CellPaint.setColor(Color.BLUE);
                             CellCanvas.drawRect(scene_cell.getM_startX(), scene_cell.getM_startY(),scene_cell.getM_endX(), scene_cell.getM_endY(), CellPaint);
-                            CellPaint.setColor(Color.WHITE);
-                            CellPaint.setTextSize(30);
-                            CellCanvas.drawText("   " + StringSignal[mSignalIndex] +"   ",(scene_cell.getM_startX()+scene_cell.getM_endX())/2,(scene_cell.getM_startY()+scene_cell.getM_endY())/2,CellPaint);
-                            scene_cell.setM_signal(mSignalIndex);
-                            //// TODO: 2017/12/4 save signal to sharedpreferences && send cmd to engine
-                            //byte winId=(byte)((mSignalWindowCount+1)&0xff);
-                            byte inputId=(byte)(mSignalIndex/INPUT_BOARD_NUM);
-                            byte sigNum=(byte)(mSignalIndex%INPUT_BOARD_NUM);
-                            short posX=(short)((scene_cell.getM_startX()/m_cellWidth)*m_pixX);
-                            short posY=(short)((scene_cell.getM_startY()/m_cellHeight)*m_pixY);
-                            short widthX=(short)(((scene_cell.getM_endX()-scene_cell.getM_startY())/m_cellWidth)*m_pixX);
-                            short heightY=(short)(((scene_cell.getM_endY()-scene_cell.getM_startY())/m_cellHeight)*m_pixY);
-                            clearWindow(winId,(byte)0,false);
-                            boolean ret = openWindow(winId,inputId,sigNum,posX,posY,widthX,heightY);
-                            if (ret){
-                                Toast.makeText(getContext(),R.string.operation_finished,Toast.LENGTH_SHORT).show();
-                            }else {
-                                Toast.makeText(getContext(),R.string.error_open_signal_failed,Toast.LENGTH_SHORT).show();
+
+                            if (mSignalIndex!=StringSignal.length-1) {
+                                CellPaint.setColor(Color.WHITE);
+                                CellPaint.setTextSize(30);
+                                CellCanvas.drawText("   " + StringSignal[mSignalIndex] + "   ", (scene_cell.getM_startX() + scene_cell.getM_endX()) / 2, (scene_cell.getM_startY() + scene_cell.getM_endY()) / 2, CellPaint);
+
+                                scene_cell.setM_signal(mSignalIndex);
+                                //// TODO: 2017/12/4 save signal to sharedpreferences && send cmd to engine
+                                //byte winId=(byte)((mSignalWindowCount+1)&0xff);
+                                byte inputId = (byte) (mSignalIndex / INPUT_BOARD_NUM);
+                                byte sigNum = (byte) (mSignalIndex % INPUT_BOARD_NUM);
+                                short posX = (short) ((scene_cell.getM_startX() / m_cellWidth) * m_pixX);
+                                short posY = (short) ((scene_cell.getM_startY() / m_cellHeight) * m_pixY);
+                                short widthX = (short) (((scene_cell.getM_endX() - scene_cell.getM_startX()) / m_cellWidth) * m_pixX);
+                                short heightY = (short) (((scene_cell.getM_endY() - scene_cell.getM_startY()) / m_cellHeight) * m_pixY);
+                                winId++;
+                                closeWindow(winId, (byte) 0, false);
+                                boolean ret = openWindow(winId, inputId, sigNum, posX, posY, widthX, heightY);
+                                if (ret) {
+                                    Toast.makeText(getContext(), R.string.operation_finished, Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getContext(), R.string.error_open_signal_failed, Toast.LENGTH_SHORT).show();
+                                }
                             }
-                            winId++;
                         }
                     }
                 }
@@ -503,7 +517,7 @@ public class VideoWallView extends View {
 
     public void getSystemInfo()
     {
-        SharedPreferences preferences = getContext().getSharedPreferences(getContext().getString(R.string.setting),Context.MODE_PRIVATE);
+        SharedPreferences preferences = getContext().getSharedPreferences(getContext().getString(R.string.pref_setting),Context.MODE_PRIVATE);
         m_cellRow=preferences.getInt(getContext().getString(R.string.pref_data_row),1);
         m_cellCol=preferences.getInt(getContext().getString(R.string.pref_data_col),1);
         m_cellWidth=preferences.getInt(getContext().getString(R.string.pref_width),1);
@@ -525,7 +539,7 @@ public class VideoWallView extends View {
         }
         editor.commit();
 
-        SharedPreferences preferences = getContext().getSharedPreferences(getContext().getString(R.string.setting),Context.MODE_PRIVATE);
+        SharedPreferences preferences = getContext().getSharedPreferences(getContext().getString(R.string.pref_setting),Context.MODE_PRIVATE);
         SharedPreferences.Editor ed = preferences.edit();
         ed.putInt(getContext().getString(R.string.pref_width),m_cellWidth);
         ed.putInt(getContext().getString(R.string.pref_height),m_cellHeight);
@@ -600,6 +614,7 @@ public class VideoWallView extends View {
         SharedPreferences defineShared = getContext().getSharedPreferences(getContext().getString(R.string.pref_define_scene),Context.MODE_PRIVATE);
         mDefine1Flag=defineShared.getInt(getContext().getString(R.string.pref_define1_flag),0);
         mDefine1Num=defineShared.getInt(getContext().getString(R.string.pref_define1_num),0);
+        m_define1_sceneList.clear();
         Log.i(TAG,"mDefine1Num="+mDefine1Num);
         for (int index=0;index<mDefine1Num;index++){
             SingleSceneCell ss =new SingleSceneCell();
@@ -617,6 +632,7 @@ public class VideoWallView extends View {
         mDefine2Flag=defineShared.getInt(getContext().getString(R.string.pref_define2_flag),0);
         mDefine2Num=defineShared.getInt(getContext().getString(R.string.pref_define2_num),0);
         Log.i(TAG,"mDefine2Num="+mDefine2Num);
+        m_define2_sceneList.clear();
         for (int index=0;index<mDefine2Num;index++){
             SingleSceneCell ss =new SingleSceneCell();
             ss.setM_startX(defineShared.getInt(getContext().getString(R.string.pref_define2_startX_)+index,0));
@@ -689,11 +705,11 @@ public class VideoWallView extends View {
         invalidate();
     }
     public void initVCL3Comm(){
-        SharedPreferences preferences = getContext().getSharedPreferences(getContext().getString(R.string.pref_setting),Context.MODE_PRIVATE);
+        SharedPreferences preferences = getContext().getSharedPreferences(getContext().getString(R.string.pref_setting), Context.MODE_PRIVATE);
         mVclordIp=preferences.getString(getContext().getString(R.string.pref_data_vclordip),"");
-        if (mVcl3CommProces==null) {
+        /*if (mVcl3CommProces == null) {
             mVcl3CommProces = new VCL3CommProcess(mVclordIp, VclordActivity.PORT);
-        }
+        }*/
     }
     public void stopVCL3Comm(){
         try {
@@ -704,29 +720,35 @@ public class VideoWallView extends View {
             Toast.makeText(getContext(),""+e,Toast.LENGTH_SHORT).show();
         }
     }
-    public void clearWindow(byte winId,byte type,boolean bIsAll){
+    public void closeWindow(byte winId, byte type, boolean bIsAll){
         SharedPreferences preferences = getContext().getSharedPreferences(getContext().getString(R.string.pref_setting),Context.MODE_PRIVATE);
-        mSignalWindowCount =preferences.getInt(getContext().getString(R.string.pref_signal_window_num),-1);
-        if (mVcl3CommProces==null) {
-            initVCL3Comm();
-        }
+        mSignalWindowCount =preferences.getInt(getContext().getString(R.string.pref_signal_window_num),0);
+        initVCL3Comm();
+        //VCLComm vclComm = new VCLComm(mVclordIp,VclordActivity.PORT);
         if (bIsAll) {
-            for (byte i = 0; i <= mSignalWindowCount; i++) {
-                mVcl3CommProces.CloseSignalWindow(i, type);
+            for (byte i = 1; i <= mSignalWindowCount; i++) {
+                VclordActivity.vcl3CommProcess.CloseSignalWindow(i, type);
+                //vclComm.execute((byte)2,winId,type,(byte)1,(byte)mSignalWindowCount);
             }
-            winId=0;
+            winId=1;
+            ArrayList<SingleSceneCell> sceneCells = getSceneCell();
+            for (SingleSceneCell scene_cell :sceneCells) {
+                CellPaint.setColor(Color.BLUE);
+                CellCanvas.drawRect(scene_cell.getM_startX(), scene_cell.getM_startY(), scene_cell.getM_endX(), scene_cell.getM_endY(), CellPaint);
+                invalidate();
+            }
         }else {
-            mVcl3CommProces.CloseSignalWindow(winId,type);
+            VclordActivity.vcl3CommProcess.CloseSignalWindow(winId,type);
+            //vclComm.execute((byte)2,winId,type,(byte)2);
         }
 
         SharedPreferences.Editor editor=preferences.edit();
         editor.putInt(getContext().getString(R.string.pref_signal_window_num),winId-1);
         editor.commit();
+
     }
     public boolean openWindow(byte winId,byte inputId,byte sig,short posX,short posY,short widthX,short widthY){
-        if (mVcl3CommProces==null){
-            initVCL3Comm();
-        }
+        initVCL3Comm();
         byte high_startX=(byte)(posX>>8);
         byte low_startX= (byte)(posX & 0x00FF);
         byte high_startY=(byte)(posY>>8);
@@ -735,11 +757,60 @@ public class VideoWallView extends View {
         byte width_low_X=(byte)(widthX & 0x00FF);
         byte width_high_Y=(byte)(widthY>>8);
         byte width_low_Y=(byte)(widthY & 0x00FF);
-        boolean ret =mVcl3CommProces.OpenSignalWindow( winId, inputId, sig, high_startX, low_startX, high_startY, low_startY,width_high_X, width_low_X, width_high_Y, width_low_Y);
+        boolean ret =VclordActivity.vcl3CommProcess.OpenSignalWindow( winId, inputId, sig, high_startX, low_startX, high_startY, low_startY,width_high_X, width_low_X, width_high_Y, width_low_Y);
+        /*VCLComm vclComm= new VCLComm(mVclordIp,VclordActivity.PORT);
+        Boolean ret = null;
+        try {
+            ret = vclComm.execute((byte)1, winId, inputId, sig, high_startX, low_startX, high_startY, low_startY,width_high_X, width_low_X, width_high_Y, width_low_Y).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }*/
         SharedPreferences preferences = getContext().getSharedPreferences(getContext().getString(R.string.pref_setting),Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
         editor.putInt(getContext().getString(R.string.pref_signal_window_num),winId);
         editor.commit();
         return ret;
+    }
+
+    private class VCLComm extends AsyncTask<Byte,Void,Boolean> {
+
+        public String mIp;
+        public int mPort;
+        VCL3CommProcess mVcl3CommProces=null;
+        public VCLComm(String ip,int port){
+            mIp=ip;
+            mPort=port;
+            mVcl3CommProces = new VCL3CommProcess(mIp, mPort);
+        }
+
+
+        @Override
+        protected Boolean doInBackground(Byte... FuncName) {
+            boolean ret=false;
+            if (FuncName[0]==1){
+                ret = mVcl3CommProces.OpenSignalWindow( FuncName[1], FuncName[2], FuncName[3], FuncName[4], FuncName[5], FuncName[6], FuncName[7],FuncName[8], FuncName[9], FuncName[10], FuncName[11]);
+            }
+            else if (FuncName[0]==2){
+                if (FuncName[3]==1 &&FuncName[4]>=0){
+                    for (int i =0;i<FuncName[4];i++){
+                        ret |=mVcl3CommProces.CloseSignalWindow(FuncName[1], FuncName[2]);
+                    }
+                }else {
+                    ret = mVcl3CommProces.CloseSignalWindow(FuncName[1], FuncName[2]);
+                }
+            }
+            //end
+            try {
+                mVcl3CommProces.ProcessCancel();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            mVcl3CommProces=null;
+            return ret;
+        }
+
+
     }
 }

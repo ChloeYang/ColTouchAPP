@@ -2,7 +2,6 @@ package com.example.yangjiyu.myapplication;
 
 import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -21,8 +20,8 @@ public class VideoWallFragment extends Fragment {
     VideoWallView mVideoWallView;
     View v;
 
-    int windowsWidth = 2100;//1585
-    int windowsHeight = 840;//610
+    int windowsWidth = 1585;//1585//2100
+    int windowsHeight = 610;//610//840
 
     private int mListIndex=-1;
     private int mSceneIndex=-1;
@@ -44,11 +43,10 @@ public class VideoWallFragment extends Fragment {
                     RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT
             ));
         }
-        else if (mListIndex==1){
-            mSignalIndex=pos;
-            mVideoWallView. mSignalIndex=mSignalIndex;
-            mVideoWallView.initVCL3Comm();
-            if (mSignalIndex==16){ mVideoWallView.clearWindow((byte)0,(byte)0,true);}
+        else if (mListIndex == 1){
+            mSignalIndex = pos;
+            mVideoWallView. mSignalIndex = mSignalIndex;
+            if (mSignalIndex==16){ mVideoWallView.closeWindow((byte)0,(byte)0,true);}
         }
     }
 

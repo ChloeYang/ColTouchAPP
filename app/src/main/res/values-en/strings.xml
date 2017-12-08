@@ -78,7 +78,8 @@
     <string name="scene_list">Scene List</string>
     <string name="signal_list">Signal List</string>
     <string name="error_invalid_ip">Ip is incorrect</string>
-    <string name="check_system"></string>
+    <string name="check_system">Click to check...</string>
+    <string name="progress_check_system">Checking System Info.</string>
     <string name="define_scene_finished">Finished</string>
     <string name="VCLORD_IP">VCLORD IP</string>
     <string name="SystemInfo">SystemInfo</string>
