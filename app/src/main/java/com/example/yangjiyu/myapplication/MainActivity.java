@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,10 +11,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import android.content.Context;
 
-
-public class MainActivity extends AppCompatActivity implements SourceItemListFragment.OnSourceListSelectedListener ,SourceItemFragment.OnSourceSelectedListener,VideoWallView.onCleanDefineScenelClickListener{
+public class MainActivity extends AppCompatActivity implements SourceItemListFragment.OnSourceListSelectedListener ,SourceItemFragment.OnSourceSelectedListener,VideoWallView.onCleanDefineSceneClickListener {
 
     private Fragment sourceList;
     private Fragment sourceItem;
@@ -26,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements SourceItemListFra
     private VideoWallFragment vf;
 
     public final static int MAX_SUPPORT_CELL = 12;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +56,9 @@ public class MainActivity extends AppCompatActivity implements SourceItemListFra
 
         sf=(SourceItemFragment)sourceItem;
         vf=(VideoWallFragment)video;
+
+        //// TODO: 2017/12/13 disable HOME_KEY  在onCreate设置，此时home被拦截
+        this.getWindow().setFlags(LoginActivity.FLAG_HOMEKEY_DISPATCHED, LoginActivity.FLAG_HOMEKEY_DISPATCHED);//关键代码
 
     }
 

@@ -44,6 +44,8 @@ public class VclordActivity extends AppCompatActivity {
     private int iCount=0;
     private boolean ret=false;
 
+    private static Context mInstance;
+
     public static VCL3CommProcess vcl3CommProcess;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,6 +147,7 @@ public class VclordActivity extends AppCompatActivity {
         });
 
 
+        mInstance=getApplicationContext();
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,6 +157,10 @@ public class VclordActivity extends AppCompatActivity {
             }
         });
 
+    }
+    public static Context getVclordActivity()
+    {
+        return  mInstance;
     }
     private List<String> intData()
     {
@@ -343,6 +350,7 @@ public class VclordActivity extends AppCompatActivity {
             if (!ret){
                 return;
             }
+
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
         }
