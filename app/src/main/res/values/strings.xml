@@ -82,6 +82,7 @@
     <string name="error_invalid_ip">IP地址不正确</string>
     <string name="check_system"> </string>
     <string name="progress_check_system">正在获取系统信息</string>
+    <string name="progress_power">正在进行开关机</string>
     <string name="define_scene_finished">操作完成</string>
     <string name="VCLORD_IP">VCLORD IP</string>
     <string name="SystemInfo">系统信息</string>

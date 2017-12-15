@@ -257,42 +257,6 @@ public class VclordActivity extends AppCompatActivity {
         editor.commit();
     }
 
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    public Action getIndexApiAction() {
-        Thing object = new Thing.Builder()
-                .setName("Vclord Page") // TODO: Define a title for the content shown.
-                // TODO: Make sure this auto-generated URL is correct.
-                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
-                .build();
-        return new Action.Builder(Action.TYPE_VIEW)
-                .setObject(object)
-                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
-                .build();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        AppIndex.AppIndexApi.start(client, getIndexApiAction());
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        AppIndex.AppIndexApi.end(client, getIndexApiAction());
-        client.disconnect();
-    }
-
     private class GetSystemInfo extends AsyncTask<String, String, Void> {
         protected void onPreExecute() {
             super.onPreExecute();
@@ -302,12 +266,6 @@ public class VclordActivity extends AppCompatActivity {
         protected Void doInBackground(String... phoneNumber) {
             vcl3CommProcess = new VCL3CommProcess(mVclordIp, PORT);
             ret = vcl3CommProcess.QueryAllSystem(vecSys);
-            /*try {
-                vcl3CommProcess.ProcessCancel();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                Toast.makeText(getApplicationContext(),""+e,Toast.LENGTH_SHORT).show();
-            }*/
             if (!ret) {
                 //Toast.makeText(getApplicationContext(),R.string.error_network,Toast.LENGTH_SHORT).show();
                 return null;
@@ -316,16 +274,6 @@ public class VclordActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), R.string.error_no_system, Toast.LENGTH_SHORT).show();
             } else {
             }
-
-
-/*                //// TODO: 2017/11/22 test vecSys
-                SYS_INFO testSys = new SYS_INFO();
-                testSys.sysID=2;
-                testSys.uiRow=3;
-                testSys.uiCol=3;
-                vecSys.add(testSys);
-                //end test*/
-
             return null;
         }
 

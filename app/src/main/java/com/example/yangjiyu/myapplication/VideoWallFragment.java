@@ -1,9 +1,11 @@
 package com.example.yangjiyu.myapplication;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -16,7 +18,10 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import commprocess.VCL3CommProcess;
 
 
 public class VideoWallFragment extends Fragment {
@@ -41,6 +46,8 @@ public class VideoWallFragment extends Fragment {
     private SharedAppData sharedAppData=null;
     private boolean bRet=false;
     private Activity mActivity;
+
+    MyProgressDialog mProgressDialog;
 
     public  String[] StringSignal={"1-DVI_1","1-DVI_2","1-HDMI","1-DP",
             "2-DVI_1","2-DVI_2","2-HDMI","2-DP",
@@ -81,9 +88,9 @@ public class VideoWallFragment extends Fragment {
         }else if (mListIndex == 2){
             int powerOnOff = pos;
             if (powerOnOff == 0){
-                powerOnOff("power_on");
+                powerOnOff((byte)1/*"power_on"*/);
             }else if (powerOnOff == 1){
-                powerOnOff("power_off");
+                powerOnOff((byte)2/*"power_off"*/);
             }
         }
         mLastIndex =mListIndex;
@@ -96,6 +103,17 @@ public class VideoWallFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mProgressDialog = MyProgressDialog.createProgressDialog(getContext(), 5000, new MyProgressDialog.OnTimeOutListener() {
+            @Override
+            public void onTimeOut(ProgressDialog dialog) {
+                Toast.makeText(getContext(), "TimeOut", Toast.LENGTH_SHORT).show();
+            }
+        });
+        mProgressDialog.setTitle(getString(R.string.app_name));
+        String messageInfo = getString(R.string.progress_check_system);
+        mProgressDialog.setMessage(messageInfo);
+        mProgressDialog.setCancelable(true);
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
     }
 
     @Override
@@ -260,64 +278,9 @@ public class VideoWallFragment extends Fragment {
             Toast.makeText(getContext(), R.string.operation_failed, Toast.LENGTH_SHORT).show();
         }
     }
-    public void powerOnOff(String str) {
-        VCLCommThread vclCommThread=new VCLCommThread(sharedAppData.getVCLordIP(),VclordActivity.PORT);
-        vclCommThread.setSysRowCol(sharedAppData.getSystemInfo(1),sharedAppData.getSystemInfo(2));
-        //Log.d(TAG,"row="+sharedAppData.getSystemInfo(1)+",col="+sharedAppData.getSystemInfo(2));
-        vclCommThread.start();
-        vclCommThread.putMsgCmdInQue_TwoByte(str,(byte)0,(byte)0);
+    public void powerOnOff(byte type/*String str*/) {
+        VCLComm vclcom=new VCLComm(sharedAppData.getVCLordIP(),VclordActivity.PORT,sharedAppData.getSystemInfo(1),sharedAppData.getSystemInfo(2),mProgressDialog,getContext());
+        vclcom.execute(type);
+    }
 
-        //Log.d(TAG,"getbRet begin");
-        bRet=vclCommThread.getbRet();
-        //Log.d(TAG,"getbRet finished");
-        if (bRet) {
-            Toast.makeText(getContext(), R.string.operation_finished, Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(getContext(), R.string.operation_failed, Toast.LENGTH_SHORT).show();
-        }
-    }
-    public void closeWindow(byte winId, byte type, boolean bIsAll){
-        SharedPreferences preferences = getContext().getSharedPreferences(getContext().getString(R.string.pref_setting),Context.MODE_PRIVATE);
-        VclordActivity.vcl3CommProcess.CloseSignalWindow(winId,type);
-        if (bIsAll) {
-            winId=1;
-            ArrayList<SingleSceneCell> sceneCells = sharedAppData.getSceneCell(mVideoWallView.mLastSceneIndex);
-            for (SingleSceneCell scene_cell :sceneCells) {
-                mVideoWallView.drawCanvasRect(scene_cell.getM_startX(), scene_cell.getM_startY(), scene_cell.getM_endX(), scene_cell.getM_endY());
-                v.invalidate();
-            }
-        }
-        SharedPreferences.Editor editor=preferences.edit();
-        editor.putInt(getContext().getString(R.string.pref_signal_window_count),winId-1);
-        editor.commit();
-
-    }
-    public boolean openWindow(byte winId,byte inputId,byte sig,short posX,short posY,short widthX,short widthY,byte inputWinNum){
-        byte high_startX=(byte)(posX>>8);
-        byte low_startX= (byte)(posX & 0x00FF);
-        byte high_startY=(byte)(posY>>8);
-        byte low_startY=(byte)(posY & 0x00FF);
-        byte width_high_X=(byte)(widthX>>8);
-        byte width_low_X=(byte)(widthX & 0x00FF);
-        byte width_high_Y=(byte)(widthY>>8);
-        byte width_low_Y=(byte)(widthY & 0x00FF);
-        boolean ret =VclordActivity.vcl3CommProcess.OpenSignalWindow( winId, inputId, sig, high_startX, low_startX, high_startY, low_startY,width_high_X, width_low_X, width_high_Y, width_low_Y);
-        /*VCLComm vclComm= new VCLComm(mVclordIp,VclordActivity.PORT);
-        Boolean ret = null;
-        try {
-            ret = vclComm.execute((byte)1, winId, inputId, sig, high_startX, low_startX, high_startY, low_startY,width_high_X, width_low_X, width_high_Y, width_low_Y).get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }*/
-        //if (ret) {
-        SharedPreferences preferences = getContext().getSharedPreferences(getContext().getString(R.string.pref_setting), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt(getContext().getString(R.string.pref_signal_window_count), winId);
-        editor.putInt(getContext().getString(R.string.pref_signal_output_board_window_num_) + inputId, inputWinNum);
-        editor.commit();
-        //}
-        return ret;
-    }
 }

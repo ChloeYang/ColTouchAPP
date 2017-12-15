@@ -1,6 +1,8 @@
 package com.example.yangjiyu.myapplication;
 
+import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.IOException;
 
@@ -14,31 +16,60 @@ import commprocess.VCL3CommProcess;
 
 */
 public class VCLComm extends AsyncTask<Byte,Void,Boolean> {
+    private final static String TAG = SceneWall.class.getSimpleName();
+    private String mIp;
+    private int mPort;
+    private int m_cellRow;
+    private int m_cellCol;
+    private MyProgressDialog mProgressDialog;
+    Context mContext;
 
-    public String mIp;
-    public int mPort;
     VCL3CommProcess mVcl3CommProcess =null;
-    public VCLComm(String ip,int port){
+    public VCLComm(String ip, int port, int row, int col, MyProgressDialog myProgressDialog, Context context){
         mIp=ip;
         mPort=port;
+        m_cellRow=row;
+        m_cellCol=col;
+        mProgressDialog=myProgressDialog;
+        mContext=context;
     }
 
+
+    protected void onPreExecute() {
+        super.onPreExecute();
+        mProgressDialog.show();
+    }
 
     @Override
     protected Boolean doInBackground(Byte... FuncName) {
 
         mVcl3CommProcess = new VCL3CommProcess(mIp, mPort);
-        boolean ret=false;
+        boolean bRet=false;
         if (FuncName[0]==1){
-            ret = mVcl3CommProcess.OpenSignalWindow( FuncName[1], FuncName[2], FuncName[3], FuncName[4], FuncName[5], FuncName[6], FuncName[7],FuncName[8], FuncName[9], FuncName[10], FuncName[11]);
+            Log.i(TAG,"power_on ");
+            int type =0;
+            int broadcast=0;
+            short cubeId=0;
+            for (int i = 0;i<m_cellRow;i++){//setSysRowCol
+                for (int j=0;j<m_cellCol;j++){
+                    cubeId=(short)(i*VideoCell.CUBE_ROW_MAX+j);
+                    Log.i(TAG,"power_on cubeId= "+cubeId);
+                    bRet = mVcl3CommProcess.EngineOnOff(cubeId,type,broadcast) ;
+
+                }
+            }
         }
         else if (FuncName[0]==2){
-            if (FuncName[3]==1 &&FuncName[4]>=0){
-                for (int i =0;i<FuncName[4];i++){
-                    ret |= mVcl3CommProcess.CloseSignalWindow(FuncName[1], FuncName[2]);
+            Log.i(TAG,"power_off ");
+            int type =1;
+            int broadcast=0;
+            short cubeId=0;
+            for (int i = 0;i<m_cellRow;i++){//setSysRowCol
+                for (int j=0;j<m_cellCol;j++){
+                    cubeId=(short)(i*VideoCell.CUBE_ROW_MAX+j);
+                    Log.i(TAG,"power_off cubeId= "+cubeId);
+                    bRet = mVcl3CommProcess.EngineOnOff(cubeId,type,broadcast) ;
                 }
-            }else {
-                ret = mVcl3CommProcess.CloseSignalWindow(FuncName[1], FuncName[2]);
             }
         }
         //end
@@ -48,9 +79,19 @@ public class VCLComm extends AsyncTask<Byte,Void,Boolean> {
             e.printStackTrace();
         }
         mVcl3CommProcess =null;
-        return ret;
+
+        return bRet;
     }
 
+    @Override
+    protected void onProgressUpdate(Void... values) {
+        String messageInfo = mContext.getString(R.string.progress_check_system);
+        mProgressDialog.setMessage(messageInfo);
+    }
 
+    @Override
+    protected void onPostExecute(Boolean aBoolean) {
+        mProgressDialog.dismiss();
+    }
 }
 
