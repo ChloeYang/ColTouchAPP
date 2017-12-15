@@ -16,6 +16,8 @@ import java.util.ArrayList;
 
 import commprocess.VCL3CommProcess;
 
+import static android.graphics.Color.YELLOW;
+
 /**
  * Created by Howie on 2017/7/25.
  */
@@ -239,6 +241,19 @@ public class VideoWallView extends View {
         m_cellHeight=sharedAppData.getSystemInfo(4);
     }
 
+    public void drawInitCell(int color){
+        VideoWall videoWall = VideoWall.newInstance(WallWidth, WallHeight);
+        videoWall.layoutVideoCells(m_cellRow,m_cellCol);
+        ArrayList<VideoCell> videoCells = VideoWall.getmVideoCellCollections(m_cellRow,m_cellCol);
+        int i = 0;
+        for (VideoCell cell :
+                videoCells) {
+            CellPaint.setColor(color);
+            CellCanvas.drawRect(cell.getCellPositionTopLeftX(), cell.getCellPositionTopLeftY(),
+                    cell.getCellPositionTopLeftX() + cell.getCellWidth(),
+                    cell.getCellPositionTopLeftY() + cell.getCellHeight(), CellPaint);
+        }
+    }
     private void wholeSceneCell(){
         //getSystemInfo();
         CellBitmap = Bitmap.createBitmap(WallWidth, WallHeight, Bitmap.Config.ARGB_8888);

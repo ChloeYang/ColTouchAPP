@@ -87,25 +87,18 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             R.drawable.hdmi_offline,
             R.drawable.dp_offline,
             R.drawable.clear_normal};
+    int[] ImgPowerNormal = {R.drawable.poweron_normal,
+            R.drawable.poweroff_normal};
+    int[] ImgPowerPressed = {R.drawable.poweron_pressdown,
+            R.drawable.poweroff_pressdown};
 
     public Vector<String> StringScene=new Vector<>();
     public Vector<String> StringSignal=new Vector<>();
+    public Vector<String> StringPower=new Vector<>();
 
-    /*public String[] StringScene = {"整墙",
-            "H-二分",
-            "V-二分",
-            "单屏",
-            "自定义1",
-            "自定义2",
-            "清除",
-            "确认"};//"Whole","H-2Parts","V-2Parts", "Single","Define1","Define2","Clear","Defined-Confirm"
-    public String[] StringSignal={"1-DVI_1","1-DVI_2","1-HDMI","1-DP",
-            "2-DVI_1","2-DVI_2","2-HDMI","2-DP",
-            "3-DVI_1","3-DVI_2","3-HDMI","3-DP",
-            "4-DVI_1","4-DVI_2","4-HDMI","4-DP",
-            "清除"};*/
     private int mSceneNum=8;
     private int mSignalNum=12;
+    private int mPowerNum=2;
 
     public ViewHolder mViewHolder;
     private List<Boolean> isClicks =new ArrayList<>();
@@ -123,12 +116,13 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     private android.view.LayoutInflater mInflater;
     public java.util.List<Integer> mData;
 
-    public GalleryAdapter(Context context, List<Integer> data,Vector<String> Scene,Vector<String> Signal)
+    public GalleryAdapter(Context context, List<Integer> data,Vector<String> Scene,Vector<String> Signal,Vector<String> Power)
     {
         mInflater = LayoutInflater.from(context);
         mData = data;
         StringScene=Scene;
         StringSignal=Signal;
+        StringPower=Power;
     }
 
     public  class ViewHolder extends RecyclerView.ViewHolder
@@ -146,8 +140,10 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             if(mData.size()==mSceneNum){
                 mImg.setImageResource(ImgSceneNormal[sourceId]);
                 mTxt.setText(StringScene.get(sourceId));
-            }
-            else {
+            }else if (mData.size()==mPowerNum){
+                mImg.setImageResource(ImgPowerNormal[sourceId]);
+                mTxt.setText(StringPower.get(sourceId));
+            }else /*if(mData.size()==mSignalNum)*/{
                 mImg.setImageResource(ImgSignalNormal[sourceId]);
                 mTxt.setText(StringSignal.get(sourceId));
             }
@@ -175,8 +171,12 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             {
                 isClicks.add(false);
             }
-        }
-        else {
+        }else if (mData.size()==mPowerNum){
+            for (int ii = 0;ii<StringPower.size();ii++)
+            {
+                isClicks.add(false);
+            }
+        }else /*if (mData.size()==mSignalNum)*/{
             for (int ii = 0;ii<StringSignal.size();ii++)
             {
                 isClicks.add(false);
@@ -198,23 +198,27 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         viewHolder.bind(i);
         if (isClicks.get(i))
         {
-            if (mData.size()==mSceneNum)
-            {
+            if (mData.size()==mSceneNum){
                 viewHolder.mImg.setImageResource(ImgScenePressed[i]);
-            }else {
+            }else if (mData.size()==mPowerNum){
+                viewHolder.mImg.setImageResource(ImgPowerPressed[i]);
+            }else /*if (mData.size()==mSignalNum)*/{
                 viewHolder.mImg.setImageResource(ImgSignalPressed[i]);
             }
+
             viewHolder.mTxt.setTextColor(Color.parseColor("#500000"));
         }
         else {
-            if (mData.size()==mSceneNum)
-            {
+            if (mData.size()==mSceneNum){
                 viewHolder.mImg.setImageResource(ImgSceneNormal[i]);
-            }else {
+            }else if (mData.size()==mPowerNum){
+                viewHolder.mImg.setImageResource(ImgPowerNormal[i]);
+            }else/* if (mData.size()==mSignalNum)*/{
                 viewHolder.mImg.setImageResource(ImgSignalNormal[i]);
             }
             viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
         }
+
         //viewHolder.mImg.setImageResource(mData.get(i));//img unbind
         //// TODO: 2017/11/17 listener
         if (mOnItemClickListener!=null)
@@ -239,19 +243,21 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         viewHolder.bind(i);
         if (isClicks.get(i))
         {
-            if (mData.size()==mSceneNum)
-            {
+            if (mData.size()==mSceneNum){
                 viewHolder.mImg.setImageResource(ImgScenePressed[i]);
-            }else {
+            }else if (mData.size()==mPowerNum){
+                viewHolder.mImg.setImageResource(ImgPowerPressed[i]);
+            }else /*if (mData.size()==mSignalNum)*/{
                 viewHolder.mImg.setImageResource(ImgSignalPressed[i]);
             }
             viewHolder.mTxt.setTextColor(Color.parseColor("#500000"));
         }
         else {
-            if (mData.size()==mSceneNum)
-            {
+            if (mData.size()==mSceneNum){
                 viewHolder.mImg.setImageResource(ImgSceneNormal[i]);
-            }else {
+            }else if (mData.size()==mPowerNum){
+                viewHolder.mImg.setImageResource(ImgPowerNormal[i]);
+            }else /*if (mData.size()==mSignalNum)*/{
                 viewHolder.mImg.setImageResource(ImgSignalNormal[i]);
             }
             viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
@@ -277,8 +283,12 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             {
                 isClicks.add(false);
             }
-        }
-        else {
+        }else if (mData.size()==mPowerNum){
+            for (int ii = 0;ii<StringPower.size();ii++)
+            {
+                isClicks.add(false);
+            }
+        }else  /*if (mData.size()==mSignalNum)*/{
             for (int ii = 0;ii<StringSignal.size();ii++)
             {
                 isClicks.add(false);

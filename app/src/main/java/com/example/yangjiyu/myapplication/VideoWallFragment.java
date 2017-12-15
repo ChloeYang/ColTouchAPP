@@ -3,6 +3,7 @@ package com.example.yangjiyu.myapplication;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 
 public class VideoWallFragment extends Fragment {
 
+    private final static String TAG = SceneWall.class.getSimpleName();
     RelativeLayout mRelativeLayout;
     VideoWallView mVideoWallView;
     View v;
@@ -69,13 +71,19 @@ public class VideoWallFragment extends Fragment {
             mRelativeLayout.addView(mVideoWallView, new ViewGroup.LayoutParams(
                     RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT
             ));
-        }
-        else if (mListIndex == 1){
+        }else if (mListIndex == 1){
             mSignalIndex = pos;
             mVideoWallView. mSignalIndex = mSignalIndex;
             if (mSignalIndex==16){
                 closeAllWindow();
                 Toast.makeText(getContext(), R.string.operation_finished, Toast.LENGTH_SHORT).show();
+            }
+        }else if (mListIndex == 2){
+            int powerOnOff = pos;
+            if (powerOnOff == 0){
+                powerOnOff("power_on");
+            }else if (powerOnOff == 1){
+                powerOnOff("power_off");
             }
         }
         mLastIndex =mListIndex;
@@ -161,15 +169,16 @@ public class VideoWallFragment extends Fragment {
                                         //// TODO: 2017/12/13
                                         vclCommThread.start();
                                         vclCommThread.putMsgCmdInQue_OpenWindow("openWindow",openwin);
-                                        //bRet=vclCommThread.getbRet();
-                                        Toast.makeText(getContext(), R.string.operation_finished, Toast.LENGTH_SHORT).show();
-                                        /*if (bRet) {
+                                        bRet=vclCommThread.getbRet();
+                                        //Toast.makeText(getContext(), R.string.operation_finished, Toast.LENGTH_SHORT).show();
+                                        if (bRet) {
                                             Toast.makeText(getContext(), R.string.operation_finished, Toast.LENGTH_SHORT).show();
                                         } else {
                                             Toast.makeText(getContext(), R.string.error_open_signal_failed, Toast.LENGTH_SHORT).show();
-                                        }*/
+                                        }
                                     }
                                 }
+                                v.invalidate();
                             }
                         }
                         mSignalIndex=-1;
@@ -236,18 +245,36 @@ public class VideoWallFragment extends Fragment {
         VCLCommThread vclCommThread=new VCLCommThread(sharedAppData.getVCLordIP(),VclordActivity.PORT);
         vclCommThread.start();
         vclCommThread.putMsgCmdInQue_TwoByte("closeWindow",(byte)0,(byte)0);
+        //Log.d(TAG,"mLastSceneIndex="+mVideoWallView.mLastSceneIndex);
         ArrayList<SingleSceneCell> sceneCells = sharedAppData.getSceneCell(mVideoWallView.mLastSceneIndex);
         for (SingleSceneCell scene_cell :sceneCells) {
             mVideoWallView.drawCanvasRect(scene_cell.getM_startX(), scene_cell.getM_startY(),scene_cell.getM_endX(), scene_cell.getM_endY());
-            v.invalidate();
         }
-        Toast.makeText(getContext(), R.string.operation_finished, Toast.LENGTH_SHORT).show();
-        /*bRet=vclCommThread.getbRet();
+        v.invalidate();
+
+        bRet=vclCommThread.getbRet();
+        //Log.d(TAG,"getbRet finished");
         if (bRet) {
             Toast.makeText(getContext(), R.string.operation_finished, Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(getContext(), R.string.operation_failed, Toast.LENGTH_SHORT).show();
-        }*/
+        }
+    }
+    public void powerOnOff(String str) {
+        VCLCommThread vclCommThread=new VCLCommThread(sharedAppData.getVCLordIP(),VclordActivity.PORT);
+        vclCommThread.setSysRowCol(sharedAppData.getSystemInfo(1),sharedAppData.getSystemInfo(2));
+        //Log.d(TAG,"row="+sharedAppData.getSystemInfo(1)+",col="+sharedAppData.getSystemInfo(2));
+        vclCommThread.start();
+        vclCommThread.putMsgCmdInQue_TwoByte(str,(byte)0,(byte)0);
+
+        //Log.d(TAG,"getbRet begin");
+        bRet=vclCommThread.getbRet();
+        //Log.d(TAG,"getbRet finished");
+        if (bRet) {
+            Toast.makeText(getContext(), R.string.operation_finished, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getContext(), R.string.operation_failed, Toast.LENGTH_SHORT).show();
+        }
     }
     public void closeWindow(byte winId, byte type, boolean bIsAll){
         SharedPreferences preferences = getContext().getSharedPreferences(getContext().getString(R.string.pref_setting),Context.MODE_PRIVATE);

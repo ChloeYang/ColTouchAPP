@@ -55,6 +55,7 @@ public class SourceItemListFragment extends Fragment {
         StringSource.clear();
         StringSource.add(getString(R.string.scene_list));
         StringSource.add(getString(R.string.signal_list));
+        StringSource.add(getString(R.string.power_list));
     }
 
     @Override

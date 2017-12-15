@@ -29,6 +29,7 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
 
     public Vector<String> Scene=new Vector<>();
     public Vector<String> Signal=new Vector<>();
+    public Vector<String> Power=new Vector<>();
     int  nowIndex=0;
 
     //String[] StringSource = {"Whole","H-2Parts","V-2Parts", "Single"};
@@ -48,9 +49,13 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
             sceneData();
             textView.setText(getString(R.string.scene_list));
         }
-        else {
+        else if (pos==1){
             signalData();
             textView.setText(getString(R.string.signal_list));
+        }
+        else {
+            PowerData();
+            textView.setText(getString(R.string.power_list));
         }
     }
 
@@ -106,7 +111,7 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
 
         mRecyclerView.setLayoutManager(gridLayoutManager);//--linearLayoutManager
         //设置适配器
-        mAdapter = new GalleryAdapter(view.getContext(), mData,Scene,Signal);
+        mAdapter = new GalleryAdapter(view.getContext(), mData,Scene,Signal,Power);
         mAdapter.setOnItemClickListener(new GalleryAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -166,6 +171,9 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
         Signal.add(getString(R.string.HDMI_4));
         Signal.add(getString(R.string.DP_4));
         Signal.add(getString(R.string.clear));
+
+        Power.add(getString(R.string.power_on));
+        Power.add(getString(R.string.power_off));
     }
     private void sceneData()
     {
@@ -201,5 +209,11 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
                 R.drawable.clear_normal));
 
     }
+    private void PowerData()
+    {
+        mAdapter.mData = new ArrayList<>(Arrays.asList(
+                R.drawable.poweron_normal,
+                R.drawable.poweroff_normal));
 
+    }
 }
