@@ -126,7 +126,11 @@ public class MainActivity extends AppCompatActivity implements SourceItemListFra
             startActivity(intent);
             return true;
         }
-
+        /*if( id == R.id.menu_item_about ){
+            intent = new Intent(getApplicationContext(),AboutActivity.class);
+            startActivity(intent);
+            return true;
+        }*/
         return super.onOptionsItemSelected(item);
     }
 }

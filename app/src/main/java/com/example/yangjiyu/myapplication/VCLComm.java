@@ -3,6 +3,7 @@ package com.example.yangjiyu.myapplication;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -15,7 +16,7 @@ import commprocess.VCL3CommProcess;
 
 
 */
-public class VCLComm extends AsyncTask<Byte,Void,Boolean> {
+public class VCLComm extends AsyncTask<Byte,Void,byte[]> {
     private final static String TAG = SceneWall.class.getSimpleName();
     private String mIp;
     private int mPort;
@@ -41,7 +42,7 @@ public class VCLComm extends AsyncTask<Byte,Void,Boolean> {
     }
 
     @Override
-    protected Boolean doInBackground(Byte... FuncName) {
+    protected byte[] doInBackground(Byte... FuncName) {
 
         mVcl3CommProcess = new VCL3CommProcess(mIp, mPort);
         boolean bRet=false;
@@ -80,7 +81,14 @@ public class VCLComm extends AsyncTask<Byte,Void,Boolean> {
         }
         mVcl3CommProcess =null;
 
-        return bRet;
+        if (bRet) {
+            Toast.makeText(mContext, R.string.operation_finished, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(mContext, R.string.operation_failed, Toast.LENGTH_SHORT).show();
+        }
+        int resultLenth = 1;
+        byte[] result = new byte[resultLenth];
+        return result;
     }
 
     @Override
@@ -90,8 +98,9 @@ public class VCLComm extends AsyncTask<Byte,Void,Boolean> {
     }
 
     @Override
-    protected void onPostExecute(Boolean aBoolean) {
+    protected void onPostExecute(byte[] bytes) {
         mProgressDialog.dismiss();
     }
+
 }
 

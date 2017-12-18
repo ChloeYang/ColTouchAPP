@@ -20,6 +20,7 @@
     <string name="point">.</string>
     <string name="error_no_system">系统未知</string>
     <string name="error_network">网路连接错误</string>
+    <string name="about">关于</string>
     <string name="prf_generation">通用信息</string>
     <string name="prf_data">系统信息</string>
     <string name="pref_gen_default_display_name">admin@vtron.com</string>

@@ -19,6 +19,7 @@
     <string name="point">.</string>
     <string name="error_no_system">System is unknown</string>
     <string name="error_network">Network is error</string>
+    <string name="about">About</string>
     <string name="prf_generation">Generation</string>
     <string name="prf_data">Data</string>
     <string name="pref_gen_default_display_name">admin@vtron.com</string>
