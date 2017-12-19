@@ -6,8 +6,10 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.Vector;
 
 import commprocess.VCL3CommProcess;
+import engine.CpComm;
 
 
 /**
@@ -16,13 +18,15 @@ import commprocess.VCL3CommProcess;
 
 
 */
-public class VCLComm extends AsyncTask<Byte,Void,byte[]> {
+public class VCLComm extends AsyncTask<Byte,Void,Vector<Byte>> {
     private final static String TAG = SceneWall.class.getSimpleName();
     private String mIp;
     private int mPort;
     private int m_cellRow;
     private int m_cellCol;
     private MyProgressDialog mProgressDialog;
+    private CpComm.stuDlpQInterfaceVersion stuDlpQInterfaceVersionInfo;
+    private Vector vecResponse;
     Context mContext;
 
     VCL3CommProcess mVcl3CommProcess =null;
@@ -42,9 +46,11 @@ public class VCLComm extends AsyncTask<Byte,Void,byte[]> {
     }
 
     @Override
-    protected byte[] doInBackground(Byte... FuncName) {
+    protected Vector<Byte> doInBackground(Byte... FuncName) {
 
         mVcl3CommProcess = new VCL3CommProcess(mIp, mPort);
+        stuDlpQInterfaceVersionInfo=new CpComm.stuDlpQInterfaceVersion();
+        vecResponse = new Vector();
         boolean bRet=false;
         if (FuncName[0]==1){
             Log.i(TAG,"power_on ");
@@ -72,6 +78,13 @@ public class VCLComm extends AsyncTask<Byte,Void,byte[]> {
                     bRet = mVcl3CommProcess.EngineOnOff(cubeId,type,broadcast) ;
                 }
             }
+        }else if (FuncName[0]==3){
+            //// TODO: 2017/12/18 get interface version
+            try {
+                bRet = mVcl3CommProcess.GetInterfaceVersion(stuDlpQInterfaceVersionInfo,vecResponse) ;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         //end
         try {
@@ -81,14 +94,12 @@ public class VCLComm extends AsyncTask<Byte,Void,byte[]> {
         }
         mVcl3CommProcess =null;
 
-        if (bRet) {
+        /*if (bRet) {
             Toast.makeText(mContext, R.string.operation_finished, Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(mContext, R.string.operation_failed, Toast.LENGTH_SHORT).show();
-        }
-        int resultLenth = 1;
-        byte[] result = new byte[resultLenth];
-        return result;
+        }*/
+        return vecResponse;
     }
 
     @Override
@@ -98,7 +109,7 @@ public class VCLComm extends AsyncTask<Byte,Void,byte[]> {
     }
 
     @Override
-    protected void onPostExecute(byte[] bytes) {
+    protected void onPostExecute(Vector<Byte> bytes) {
         mProgressDialog.dismiss();
     }
 

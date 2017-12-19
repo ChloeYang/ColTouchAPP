@@ -8,5 +8,6 @@
         <color name="colorCellUnknown">#7bbeed</color>
         <color name="colorCellError">#5e5353</color>
         <color name="colorCellBusy">#e98636</color>
+        <color name="colorPray">#5e5e5e</color>
 
 </resources>

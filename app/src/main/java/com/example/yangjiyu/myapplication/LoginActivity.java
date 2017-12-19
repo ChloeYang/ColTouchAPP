@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -103,20 +104,35 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         //// TODO: 2017/12/13 disable HOME_KEY  在onCreate设置，此时home被拦截
         this.getWindow().setFlags(FLAG_HOMEKEY_DISPATCHED, FLAG_HOMEKEY_DISPATCHED);//关键代码
+        /*Handler mHandler = new Handler();
+        mHandler.postDelayed(mDisableHomeKeyRunnable,200);*/
 
     }
-    //// TODO: 2017/12/13 disable HOME_KEY
+    //// TODO: 2017/12/18 disable HOME_KEY
+    /*Runnable mDisableHomeKeyRunnable = new Runnable() {
+        @Override
+        public void run() {
+            disableHomeKey();
+        }
+    };
+    public void disableHomeKey()
+    {
+        this.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+    }*/
     public  boolean onKeyDown(int keyCode, KeyEvent event){
         switch (keyCode){
             case KeyEvent.KEYCODE_BACK:
                 return true;
             case KeyEvent.KEYCODE_HOME:
                 return true;
+            case KeyEvent.KEYCODE_MENU:
+                return true;
             default:
                 break;
         }
         return super.onKeyDown(keyCode,event);
     }
+    //end todo
 
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {

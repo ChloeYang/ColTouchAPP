@@ -1,5 +1,6 @@
 package com.example.yangjiyu.myapplication;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,9 +8,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.WindowManager;
 
 
 public class MainActivity extends AppCompatActivity implements SourceItemListFragment.OnSourceListSelectedListener ,SourceItemFragment.OnSourceSelectedListener,VideoWallView.onCleanDefineSceneClickListener {
@@ -61,6 +64,9 @@ public class MainActivity extends AppCompatActivity implements SourceItemListFra
         this.getWindow().setFlags(LoginActivity.FLAG_HOMEKEY_DISPATCHED, LoginActivity.FLAG_HOMEKEY_DISPATCHED);//关键代码
 
     }
+/*    //// TODO: 2017/12/18 disable HOME_KEY
+
+    //end todo*/
 
     public void initDefine1Scene()
     {
@@ -126,11 +132,18 @@ public class MainActivity extends AppCompatActivity implements SourceItemListFra
             startActivity(intent);
             return true;
         }
-        /*if( id == R.id.menu_item_about ){
+        if( id == R.id.menu_item_about ){
             intent = new Intent(getApplicationContext(),AboutActivity.class);
             startActivity(intent);
             return true;
-        }*/
+        }
+        if (id == R.id.menu_item_set_network){
+            if(android.os.Build.VERSION.SDK_INT > 10 ){
+                startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));
+            }else {
+                startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
+            }
+        }
         return super.onOptionsItemSelected(item);
     }
 }

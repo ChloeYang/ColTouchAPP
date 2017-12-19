@@ -19,7 +19,10 @@
     <string name="point">.</string>
     <string name="error_no_system">System is unknown</string>
     <string name="error_network">Network is error</string>
+    <string name="operation_signal_no_exist">Signal is not exist,change for another.</string>
     <string name="about">About</string>
+    <string name="CopyRightDescribe"></string>
+    <string name="ColTouchVersion">Col Touch V1.0</string>
     <string name="prf_generation">Generation</string>
     <string name="prf_data">Data</string>
     <string name="pref_gen_default_display_name">admin@vtron.com</string>
@@ -73,12 +76,15 @@
     <string name="pref_input_id_">input_board_id_</string>
     <string name="pref_input_all_sig_">input_all_sig_</string>
     <string name="pref_signal_output_board_window_num_">input_board_num_</string>
+    <string name="pref_signal_flag">signal_flag_</string>
+    <string name="pref_set_network">Network</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="scene_list">Scene List</string>
     <string name="signal_list">Signal List</string>
     <string name="power_list">Power OnOff</string>
+    <string name="getSystemInfo">System Info.</string>
     <string name="error_invalid_ip">Ip is incorrect</string>
     <string name="check_system"> </string>
     <string name="progress_check_system">Checking System Info.</string>
@@ -122,4 +128,8 @@
     <string name="confirm">Confirm</string>
     <string name="power_on">PowerOn</string>
     <string name="power_off">PowerOff</string>
+    <string name="get_interface_version">InterfaceVersion</string>
+    <string name="Ok">OK</string>
+    <string name="Cancel">Cancel</string>
+
 </resources>

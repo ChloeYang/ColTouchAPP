@@ -1,8 +1,10 @@
 package com.example.yangjiyu.myapplication;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -20,8 +22,11 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Vector;
+import java.util.concurrent.ExecutionException;
 
 import commprocess.VCL3CommProcess;
+import engine.CpComm;
 
 
 public class VideoWallFragment extends Fragment {
@@ -88,10 +93,13 @@ public class VideoWallFragment extends Fragment {
         }else if (mListIndex == 2){
             int powerOnOff = pos;
             if (powerOnOff == 0){
-                powerOnOff((byte)1/*"power_on"*/);
+                ComCommand((byte)1/*"power_on"*/);
             }else if (powerOnOff == 1){
-                powerOnOff((byte)2/*"power_off"*/);
+                ComCommand((byte)2/*"power_off"*/);
             }
+        }else if (mListIndex == 3){
+            byte type=(byte)(mListIndex+pos);
+            ComCommand(type);
         }
         mLastIndex =mListIndex;
     }
@@ -149,6 +157,12 @@ public class VideoWallFragment extends Fragment {
                         Log.i("TouchEvent","ACTION_DOWN start_x="+start_x+" start_y="+start_y);
 
                         sharedAppData=SharedAppData.newInstance(getContext());
+                        if (0==sharedAppData.getSignalFlag(mSignalIndex) && mSignalIndex<StringSignal.length){
+                            Toast.makeText(getContext(), R.string.operation_signal_no_exist, Toast.LENGTH_SHORT).show();
+                            mSignalIndex=-1;
+                            v.invalidate();
+                            return true;
+                        }
                         if (mSignalIndex>=0 && mSignalIndex<StringSignal.length /*&& mSignalIsChanged*/){
                             ArrayList<Integer> cubePix =sharedAppData.getCubePix();
                             ArrayList<SingleSceneCell> sceneCells = sharedAppData.getSceneCell(mVideoWallView.mLastSceneIndex);
@@ -278,9 +292,30 @@ public class VideoWallFragment extends Fragment {
             Toast.makeText(getContext(), R.string.operation_failed, Toast.LENGTH_SHORT).show();
         }
     }
-    public void powerOnOff(byte type/*String str*/) {
+    public void ComCommand(byte type/*String str*/) {
         VCLComm vclcom=new VCLComm(sharedAppData.getVCLordIP(),VclordActivity.PORT,sharedAppData.getSystemInfo(1),sharedAppData.getSystemInfo(2),mProgressDialog,getContext());
-        vclcom.execute(type);
+        CpComm.stuDlpQInterfaceVersion stInfo = new CpComm.stuDlpQInterfaceVersion();
+        Vector<Byte> vecResponse = new Vector<>();
+        if (mListIndex ==3){
+            try {
+                vecResponse = vclcom.execute(type).get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+            ComStruc.ExchangeInterfaceVersion version= new ComStruc.ExchangeInterfaceVersion();
+            try {
+                stInfo =version.ExchangeInterfaceVersion(vecResponse);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            DialogList dialogList = new DialogList(getContext());
+            dialogList.InterfaceVersion(stInfo);
+        }else {
+            vclcom.execute(type);
+        }
+        Toast.makeText(getContext(), R.string.operation_finished, Toast.LENGTH_SHORT).show();
     }
 
 }

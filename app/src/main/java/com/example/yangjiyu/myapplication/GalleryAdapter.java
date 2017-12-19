@@ -92,13 +92,18 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     int[] ImgPowerPressed = {R.drawable.poweron_pressdown,
             R.drawable.poweroff_pressdown};
 
+    int[] ImgSystemInfoNormal = {R.drawable.get_system_info_normal};
+    int[] ImgSystemInfoPressed = {R.drawable.get_system_info_pressdown};
+
     public Vector<String> StringScene=new Vector<>();
     public Vector<String> StringSignal=new Vector<>();
     public Vector<String> StringPower=new Vector<>();
+    public Vector<String> StringSystemInfo =new Vector<>();
 
     private int mSceneNum=8;
-    private int mSignalNum=12;
+    private int mSignalNum=17;
     private int mPowerNum=2;
+    private int mSystemInfoNum =1;
 
     public ViewHolder mViewHolder;
     private List<Boolean> isClicks =new ArrayList<>();
@@ -115,14 +120,17 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
 
     private android.view.LayoutInflater mInflater;
     public java.util.List<Integer> mData;
+    private SharedAppData sharedAppData;
 
-    public GalleryAdapter(Context context, List<Integer> data,Vector<String> Scene,Vector<String> Signal,Vector<String> Power)
+    public GalleryAdapter(Context context, List<Integer> data,Vector<String> Scene,Vector<String> Signal,Vector<String> Power,Vector<String>SystemInfo)
     {
+        sharedAppData=SharedAppData.newInstance(context);
         mInflater = LayoutInflater.from(context);
         mData = data;
         StringScene=Scene;
         StringSignal=Signal;
         StringPower=Power;
+        StringSystemInfo =SystemInfo;
     }
 
     public  class ViewHolder extends RecyclerView.ViewHolder
@@ -143,9 +151,19 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             }else if (mData.size()==mPowerNum){
                 mImg.setImageResource(ImgPowerNormal[sourceId]);
                 mTxt.setText(StringPower.get(sourceId));
+            }else if (mData.size()== mSystemInfoNum){
+                mImg.setImageResource(ImgSystemInfoNormal[sourceId]);
+                mTxt.setText(StringSystemInfo.get(sourceId));
             }else /*if(mData.size()==mSignalNum)*/{
-                mImg.setImageResource(ImgSignalNormal[sourceId]);
-                mTxt.setText(StringSignal.get(sourceId));
+                if (sharedAppData.getSignalFlag(sourceId)==1 || sourceId==(mSignalNum-1)) {
+                    mImg.setImageResource(ImgSignalNormal[sourceId]);
+                    mTxt.setText(StringSignal.get(sourceId));
+                    mTxt.setTextColor(Color.parseColor("#000000"));
+                }else {
+                    mImg.setImageResource(ImgSignalOffline[sourceId]);
+                    mTxt.setText(StringSignal.get(sourceId));
+                    mTxt.setTextColor(Color.parseColor("#5e5e5e"));
+                }
             }
         }
     }
@@ -200,23 +218,38 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         {
             if (mData.size()==mSceneNum){
                 viewHolder.mImg.setImageResource(ImgScenePressed[i]);
+                viewHolder.mTxt.setTextColor(Color.parseColor("#500000"));
             }else if (mData.size()==mPowerNum){
                 viewHolder.mImg.setImageResource(ImgPowerPressed[i]);
+                viewHolder.mTxt.setTextColor(Color.parseColor("#500000"));
+            }else if (mData.size()== mSystemInfoNum){
+                viewHolder.mImg.setImageResource(ImgSystemInfoPressed[i]);
+                viewHolder.mTxt.setTextColor(Color.parseColor("#500000"));
             }else /*if (mData.size()==mSignalNum)*/{
-                viewHolder.mImg.setImageResource(ImgSignalPressed[i]);
+                if (sharedAppData.getSignalFlag(i)==1 || i==(mSignalNum-1)) {
+                    viewHolder.mImg.setImageResource(ImgSignalPressed[i]);
+                    viewHolder.mTxt.setTextColor(Color.parseColor("#500000"));
+                }else {
+                }
             }
-
-            viewHolder.mTxt.setTextColor(Color.parseColor("#500000"));
         }
         else {
             if (mData.size()==mSceneNum){
                 viewHolder.mImg.setImageResource(ImgSceneNormal[i]);
+                viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
             }else if (mData.size()==mPowerNum){
                 viewHolder.mImg.setImageResource(ImgPowerNormal[i]);
+                viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
+            }else if (mData.size()== mSystemInfoNum){
+                viewHolder.mImg.setImageResource(ImgSystemInfoNormal[i]);
+                viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
             }else/* if (mData.size()==mSignalNum)*/{
-                viewHolder.mImg.setImageResource(ImgSignalNormal[i]);
+                if (sharedAppData.getSignalFlag(i)==1 || i==(mSignalNum-1)) {
+                    viewHolder.mImg.setImageResource(ImgSignalNormal[i]);
+                    viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
+                }else {
+                }
             }
-            viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
         }
 
         //viewHolder.mImg.setImageResource(mData.get(i));//img unbind
@@ -245,22 +278,38 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         {
             if (mData.size()==mSceneNum){
                 viewHolder.mImg.setImageResource(ImgScenePressed[i]);
+                viewHolder.mTxt.setTextColor(Color.parseColor("#500000"));
             }else if (mData.size()==mPowerNum){
                 viewHolder.mImg.setImageResource(ImgPowerPressed[i]);
+                viewHolder.mTxt.setTextColor(Color.parseColor("#500000"));
+            }else if (mData.size()== mSystemInfoNum){
+                viewHolder.mImg.setImageResource(ImgSystemInfoPressed[i]);
+                viewHolder.mTxt.setTextColor(Color.parseColor("#500000"));
             }else /*if (mData.size()==mSignalNum)*/{
-                viewHolder.mImg.setImageResource(ImgSignalPressed[i]);
+                if (sharedAppData.getSignalFlag(i)==1|| i==(mSignalNum-1)) {
+                    viewHolder.mImg.setImageResource(ImgSignalPressed[i]);
+                    viewHolder.mTxt.setTextColor(Color.parseColor("#500000"));
+                }else {
+                }
             }
-            viewHolder.mTxt.setTextColor(Color.parseColor("#500000"));
         }
         else {
             if (mData.size()==mSceneNum){
                 viewHolder.mImg.setImageResource(ImgSceneNormal[i]);
+                viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
             }else if (mData.size()==mPowerNum){
                 viewHolder.mImg.setImageResource(ImgPowerNormal[i]);
+                viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
+            }else if (mData.size()== mSystemInfoNum){
+                viewHolder.mImg.setImageResource(ImgSystemInfoNormal[i]);
+                viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
             }else /*if (mData.size()==mSignalNum)*/{
-                viewHolder.mImg.setImageResource(ImgSignalNormal[i]);
+                if (sharedAppData.getSignalFlag(i)==1|| i==(mSignalNum-1)) {
+                    viewHolder.mImg.setImageResource(ImgSignalPressed[i]);
+                    viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
+                }else {
+                }
             }
-            viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
         }
         //viewHolder.mImg.setImageResource(mData.get(i));//img unbind
         //// TODO: 2017/11/17 listener

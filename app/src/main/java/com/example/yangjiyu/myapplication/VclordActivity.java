@@ -8,8 +8,10 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -34,7 +36,7 @@ import static engine.CpComm.*;
 
 public class VclordActivity extends AppCompatActivity {
 
-    public int INPUT_BOARD_NUM = 4;
+    public static int INPUT_BOARD_NUM = 4;
     private Button mButton;
     private IPEditText mIpText;
     private Spinner mSpinner;
@@ -47,11 +49,10 @@ public class VclordActivity extends AppCompatActivity {
 
     Vector<SYS_INFO> vecSys = new Vector<>();
     //ProgressDialog mProgressDialog;
-    MyProgressDialog mProgressDialog;
-    private int iCount = 0;
-    private boolean ret = false;
+    private MyProgressDialog mProgressDialog;
+    private SharedAppData sharedAppData;
 
-    private static Context mInstance;
+    private boolean ret = false;
 
     public static VCL3CommProcess vcl3CommProcess;
     /**
@@ -66,6 +67,7 @@ public class VclordActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_vclord);
 
+        sharedAppData = SharedAppData.newInstance(this);
         mProgressDialog = MyProgressDialog.createProgressDialog(this, 5000, new MyProgressDialog.OnTimeOutListener() {
             @Override
             public void onTimeOut(ProgressDialog dialog) {
@@ -163,8 +165,6 @@ public class VclordActivity extends AppCompatActivity {
             }
         });
 
-
-        mInstance = getApplicationContext();
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -178,11 +178,9 @@ public class VclordActivity extends AppCompatActivity {
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
+/*    //// TODO: 2017/12/18 disable HOME_KEY
 
-    public static Context getVclordActivity() {
-        return mInstance;
-    }
-
+    //end todo*/
     private List<String> intData() {
         // TODO Auto-generated method stub
         List<String> datalist = new ArrayList<String>();
@@ -192,47 +190,18 @@ public class VclordActivity extends AppCompatActivity {
 
     private void saveSetting() {
 
-        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.pref_setting), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(getString(R.string.pref_data_vclordip), mVclordIp);
-        editor.putInt(getString(R.string.pref_data_sid), mCurSysInfo.sysID);
-        editor.putInt(getString(R.string.pref_data_row), mCurSysInfo.uiRow);
-        editor.putInt(getString(R.string.pref_data_col), mCurSysInfo.uiCol);
-        editor.commit();
-
+        sharedAppData.saveSystemInfo(mVclordIp,mCurSysInfo.sysID, mCurSysInfo.uiRow, mCurSysInfo.uiCol);
         mRow = (byte) mCurSysInfo.uiRow;
         mCol = (byte) mCurSysInfo.uiCol;
     }
 
-    private void saveSignal(int inputId, byte sigInfo) {
-
-        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.pref_setting), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        int dvi1, dvi2, hdmi, dp;
-/*0 、1  bit 分别表示 DVI0，DVI1
-2:     HDMI 信号
-3：DP 信号*/
-
-
-        dvi1 = sigInfo & 0x01;
-        dvi2 = sigInfo & 0x02;
-        hdmi = sigInfo & 0x04;
-        dp = sigInfo & 0x08;
-        editor.putInt(getString(R.string.pref_input_all_sig_) + (inputId * INPUT_BOARD_NUM + 0), dvi1);
-        editor.putInt(getString(R.string.pref_input_all_sig_) + (inputId * INPUT_BOARD_NUM + 1), dvi2);
-        editor.putInt(getString(R.string.pref_input_all_sig_) + (inputId * INPUT_BOARD_NUM + 2), hdmi);
-        editor.putInt(getString(R.string.pref_input_all_sig_) + (inputId * INPUT_BOARD_NUM + 3), dp);
-        editor.commit();
-    }
 
     private void saveSignalInfo(CpSignalInfo signalInfo) {
 
-        saveSignal(0, signalInfo.ucInput1);
-        saveSignal(1, signalInfo.ucInput2);
-        saveSignal(2, signalInfo.ucInput3);
-        saveSignal(3, signalInfo.ucInput4);
-        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.pref_setting), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
+        sharedAppData.setSignalFlag(0, signalInfo.ucInput1);
+        sharedAppData.setSignalFlag(1, signalInfo.ucInput2);
+        sharedAppData.setSignalFlag(2, signalInfo.ucInput3);
+        sharedAppData.setSignalFlag(3, signalInfo.ucInput4);
         int pixX, pixY;
         switch (signalInfo.ucPix) {
             case 0:
@@ -252,9 +221,7 @@ public class VclordActivity extends AppCompatActivity {
                 pixY = 768;
                 break;
         }
-        editor.putInt(getString(R.string.pref_pix_x), pixX);
-        editor.putInt(getString(R.string.pref_pix_y), pixY);
-        editor.commit();
+        sharedAppData.setCubePix( pixX, pixY);
     }
 
     private class GetSystemInfo extends AsyncTask<String, String, Void> {
@@ -311,7 +278,7 @@ public class VclordActivity extends AppCompatActivity {
             super.onPreExecute();
         }
 
-        protected Void doInBackground(String... phoneNumber) {
+        protected Void doInBackground(String... str) {
             VCL3CommProcess vcl3CommProcess = new VCL3CommProcess(mVclordIp, PORT);
             if (vcl3CommProcess != null) {
                 CpSignalInfo signalInfo = new CpSignalInfo();
@@ -321,6 +288,7 @@ public class VclordActivity extends AppCompatActivity {
                     return null;
                 }
                 saveSignalInfo(signalInfo);
+                //// TODO: 2017/12/18 set signal flag to deside which one is on or off
 
                 int outputNum = signalInfo.ucOutputNum;
                 Vector<Short> cubeID = new Vector<>();

@@ -15,7 +15,7 @@ public class SharedAppData {
     private static Context mContext=null ;
     private static SharedAppData sharedAppData=null;
 
-    private SharedAppData(Context context){
+    SharedAppData(Context context){
         this.mContext=context;
     }
 
@@ -55,6 +55,16 @@ public class SharedAppData {
                 break;
         }
         return value;
+    }
+    public static void saveSystemInfo(String VclordIp,int sysID, int uiRow, int uiCol){
+
+        SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.pref_setting), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(mContext.getString(R.string.pref_data_vclordip), VclordIp);
+        editor.putInt(mContext.getString(R.string.pref_data_sid), sysID);
+        editor.putInt(mContext.getString(R.string.pref_data_row), uiRow);
+        editor.putInt(mContext.getString(R.string.pref_data_col), uiCol);
+        editor.commit();
     }
 
     public static void saveVideoCellList(ArrayList<VideoCell> videoCells) {
@@ -284,4 +294,35 @@ public class SharedAppData {
         pixXY.add(preferences.getInt(mContext.getString(R.string.pref_pix_y),768));
         return pixXY;
     }
+    public static void setCubePix(int pixX,int pixY){
+
+        SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.pref_setting), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(mContext.getString(R.string.pref_pix_x), pixX);
+        editor.putInt(mContext.getString(R.string.pref_pix_y), pixY);
+        editor.commit();
+    }
+    public static void setSignalFlag(int inputId ,byte sigInfo){
+        SharedPreferences preferences = mContext.getSharedPreferences(mContext.getString(R.string.pref_setting),Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        int dvi1, dvi2, hdmi, dp;
+        /*0 、1  bit 分别表示 DVI0，DVI1
+        2:     HDMI 信号
+        3：DP 信号*/
+        dvi1 = sigInfo & 0x01;
+        dvi2 = sigInfo & 0x02;
+        hdmi = sigInfo & 0x04;
+        dp = sigInfo & 0x08;
+        editor.putInt(mContext.getString(R.string.pref_signal_flag) + (inputId * VclordActivity.INPUT_BOARD_NUM + 0), dvi1);
+        editor.putInt(mContext.getString(R.string.pref_signal_flag) + (inputId * VclordActivity.INPUT_BOARD_NUM + 1), dvi2);
+        editor.putInt(mContext.getString(R.string.pref_signal_flag) + (inputId * VclordActivity.INPUT_BOARD_NUM + 2), hdmi);
+        editor.putInt(mContext.getString(R.string.pref_signal_flag) + (inputId * VclordActivity.INPUT_BOARD_NUM + 3), dp);
+        editor.commit();
+    }
+    public static int getSignalFlag(int num ){
+        SharedPreferences preferences = mContext.getSharedPreferences(mContext.getString(R.string.pref_setting),Context.MODE_PRIVATE);
+        int flag = preferences.getInt(mContext.getString(R.string.pref_signal_flag)+num,0);
+        return flag;
+    }
+
 }

@@ -12,7 +12,9 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
+import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import java.util.List;
@@ -49,11 +51,6 @@ public class SettingPreference extends AppCompatPreferenceActivity {
         iCol=preferences.getInt(getString(R.string.pref_data_col),0);
     }
 
-/*    public void onBackPressed(){
-        Toast.makeText(getApplicationContext(),"You have pressed onBackPressed", Toast.LENGTH_LONG)
-                .show();
-       super.onBackPressed();
-    }*/
     /**
      * Set up the {@link android.app.ActionBar}, if the API is available.
      */

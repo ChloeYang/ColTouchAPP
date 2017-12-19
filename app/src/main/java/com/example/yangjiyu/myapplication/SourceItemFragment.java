@@ -30,6 +30,7 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
     public Vector<String> Scene=new Vector<>();
     public Vector<String> Signal=new Vector<>();
     public Vector<String> Power=new Vector<>();
+    public Vector<String> SystemInfo= new Vector<>();
     int  nowIndex=0;
 
     //String[] StringSource = {"Whole","H-2Parts","V-2Parts", "Single"};
@@ -44,18 +45,18 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
 
     }
     void getNewData(int pos){
-        if (pos==0)
-        {
+        if (pos==0){
             sceneData();
             textView.setText(getString(R.string.scene_list));
-        }
-        else if (pos==1){
+        }else if (pos==1){
             signalData();
             textView.setText(getString(R.string.signal_list));
-        }
-        else {
+        }else if(pos==2){
             PowerData();
             textView.setText(getString(R.string.power_list));
+        }else{
+            checkSystemData();
+            textView.setText(getString(R.string.getSystemInfo));
         }
     }
 
@@ -111,7 +112,7 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
 
         mRecyclerView.setLayoutManager(gridLayoutManager);//--linearLayoutManager
         //设置适配器
-        mAdapter = new GalleryAdapter(view.getContext(), mData,Scene,Signal,Power);
+        mAdapter = new GalleryAdapter(view.getContext(), mData,Scene,Signal,Power,SystemInfo);
         mAdapter.setOnItemClickListener(new GalleryAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -174,6 +175,9 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
 
         Power.add(getString(R.string.power_on));
         Power.add(getString(R.string.power_off));
+
+        SystemInfo.add(getString(R.string.get_interface_version));
+
     }
     private void sceneData()
     {
@@ -215,5 +219,9 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
                 R.drawable.poweron_normal,
                 R.drawable.poweroff_normal));
 
+    }
+    private void checkSystemData(){
+        mAdapter.mData = new ArrayList<>(Arrays.asList(
+                R.drawable.get_system_info_normal));
     }
 }
