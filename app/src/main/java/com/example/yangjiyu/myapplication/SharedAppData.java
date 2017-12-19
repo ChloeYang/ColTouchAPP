@@ -310,9 +310,9 @@ public class SharedAppData {
         2:     HDMI 信号
         3：DP 信号*/
         dvi1 = sigInfo & 0x01;
-        dvi2 = sigInfo & 0x02;
-        hdmi = sigInfo & 0x04;
-        dp = sigInfo & 0x08;
+        dvi2 = (sigInfo & 0x02)>>1;
+        hdmi = (sigInfo & 0x04)>>2;
+        dp = (sigInfo & 0x08)>>3;
         editor.putInt(mContext.getString(R.string.pref_signal_flag) + (inputId * VclordActivity.INPUT_BOARD_NUM + 0), dvi1);
         editor.putInt(mContext.getString(R.string.pref_signal_flag) + (inputId * VclordActivity.INPUT_BOARD_NUM + 1), dvi2);
         editor.putInt(mContext.getString(R.string.pref_signal_flag) + (inputId * VclordActivity.INPUT_BOARD_NUM + 2), hdmi);

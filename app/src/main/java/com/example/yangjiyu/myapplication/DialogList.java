@@ -61,14 +61,18 @@ public class DialogList {
     }
     public void InterfaceInfo(CpComm.stuDlpQInterfaceStatus stInfo){
         String fan="";
+        String humidity="";
         String power1=PowerStatus(stInfo.ucPower1);
         String power2=PowerStatus(stInfo.ucPower2);
         if (stInfo.usFan1>-1){
             fan = fan + stInfo.usFan1 + "转/分钟";
         }
+        if (stInfo.ucHumidity>0){
+            humidity=humidity+stInfo.ucHumidity;
+        }
 
         final String items[] = {"温度: "+stInfo.ucTemperature+"℃",
-                "湿度:  "+stInfo.ucHumidity,
+                "湿度:  "+humidity,
                 "风扇:  "+fan,
                 "电源1: "+power1,
                 "电源2: "+power2};

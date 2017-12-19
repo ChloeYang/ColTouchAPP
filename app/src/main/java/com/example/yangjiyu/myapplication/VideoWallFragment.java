@@ -151,6 +151,9 @@ public class VideoWallFragment extends Fragment {
                         Log.i("TouchEvent","ACTION_DOWN start_x="+start_x+" start_y="+start_y);
 
                         sharedAppData=SharedAppData.newInstance(getContext());
+                        if (2== mListIndex){
+                            return true;
+                        }
                         if (0==sharedAppData.getSignalFlag(mSignalIndex) && mSignalIndex<StringSignal.length){
                             Toast.makeText(getContext(), R.string.operation_signal_no_exist, Toast.LENGTH_SHORT).show();
                             mSignalIndex=-1;
@@ -171,6 +174,7 @@ public class VideoWallFragment extends Fragment {
                                     if (mSignalIndex!=StringSignal.length-1) {
                                         mVideoWallView.drawCanvasText(StringSignal[mSignalIndex],scene_cell.getM_startX(),scene_cell.getM_startY(),scene_cell.getM_endX(),scene_cell.getM_endY());
                                         scene_cell.setM_signal(mSignalIndex);
+
                                         //// TODO: 2017/12/4 save signal to sharedpreferences && send cmd to engine
                                         //byte winId=(byte)((mSignalWindowCount+1)&0xff);
                                         ComStruc.Stu_Open_Window openwin=new ComStruc.Stu_Open_Window();
@@ -204,10 +208,10 @@ public class VideoWallFragment extends Fragment {
                                         }
                                     }
                                 }
-                                v.invalidate();
+                                //v.invalidate();
                             }
                         }
-                        mSignalIndex=-1;
+                        mSignalIndex=-1;//touch once
                         v.invalidate();
                         return true;
                     case MotionEvent.ACTION_UP:
