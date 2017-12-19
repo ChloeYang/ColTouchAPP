@@ -151,7 +151,7 @@ public class VideoWallFragment extends Fragment {
                         Log.i("TouchEvent","ACTION_DOWN start_x="+start_x+" start_y="+start_y);
 
                         sharedAppData=SharedAppData.newInstance(getContext());
-                        if (2== mListIndex){
+                        if (2!= mListIndex){
                             return true;
                         }
                         if (0==sharedAppData.getSignalFlag(mSignalIndex) && mSignalIndex<StringSignal.length){
@@ -197,7 +197,7 @@ public class VideoWallFragment extends Fragment {
                                         openwin.setWidth_low_Y((byte)(heightY & 0x00FF));
 
                                         //// TODO: 2017/12/13
-                                        vclCommThread.start();
+                                        /*vclCommThread.start();
                                         vclCommThread.putMsgCmdInQue_OpenWindow("openWindow",openwin);
                                         bRet=vclCommThread.getbRet();
                                         //Toast.makeText(getContext(), R.string.operation_finished, Toast.LENGTH_SHORT).show();
@@ -205,7 +205,13 @@ public class VideoWallFragment extends Fragment {
                                             Toast.makeText(getContext(), R.string.operation_finished, Toast.LENGTH_SHORT).show();
                                         } else {
                                             Toast.makeText(getContext(), R.string.error_open_signal_failed, Toast.LENGTH_SHORT).show();
-                                        }
+                                        }*/
+                                        VCLComm vclcom=new VCLComm(sharedAppData.getVCLordIP(),VclordActivity.PORT,sharedAppData.getSystemInfo(1),sharedAppData.getSystemInfo(2),mProgressDialog,getContext());
+                                        byte type =12;
+                                        vclcom.execute(type,openwin.getWinId(),openwin.getInputId(),openwin.getSig(),
+                                                openwin.getHigh_startX(),openwin.getLow_startX(),openwin.getHigh_startY(),openwin.getLow_startY(),
+                                                openwin.getWidth_high_X(),openwin.getWidth_low_X(),openwin.getWidth_high_Y(),openwin.getWidth_low_Y());
+                                        Toast.makeText(getContext(), R.string.operation_finished, Toast.LENGTH_SHORT).show();
                                     }
                                 }
                                 //v.invalidate();
@@ -272,9 +278,9 @@ public class VideoWallFragment extends Fragment {
     }
     public void closeAllWindow(){
         //// TODO: 2017/12/13
-        VCLCommThread vclCommThread=new VCLCommThread(sharedAppData.getVCLordIP(),VclordActivity.PORT);
+        /*VCLCommThread vclCommThread=new VCLCommThread(sharedAppData.getVCLordIP(),VclordActivity.PORT);
         vclCommThread.start();
-        vclCommThread.putMsgCmdInQue_TwoByte("closeWindow",(byte)0,(byte)0);
+        vclCommThread.putMsgCmdInQue_TwoByte("closeWindow",(byte)0,(byte)0);*/
         //Log.d(TAG,"mLastSceneIndex="+mVideoWallView.mLastSceneIndex);
         ArrayList<SingleSceneCell> sceneCells = sharedAppData.getSceneCell(mVideoWallView.mLastSceneIndex);
         for (SingleSceneCell scene_cell :sceneCells) {
@@ -282,13 +288,17 @@ public class VideoWallFragment extends Fragment {
         }
         v.invalidate();
 
-        bRet=vclCommThread.getbRet();
+        /*bRet=vclCommThread.getbRet();
         //Log.d(TAG,"getbRet finished");
         if (bRet) {
             Toast.makeText(getContext(), R.string.operation_finished, Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(getContext(), R.string.operation_failed, Toast.LENGTH_SHORT).show();
-        }
+        }*/
+        VCLComm vclcom=new VCLComm(sharedAppData.getVCLordIP(),VclordActivity.PORT,sharedAppData.getSystemInfo(1),sharedAppData.getSystemInfo(2),mProgressDialog,getContext());
+        byte type =11;
+        vclcom.execute(type);
+        Toast.makeText(getContext(), R.string.operation_finished, Toast.LENGTH_SHORT).show();
     }
     public void ComCommand(byte type/*String str*/) {
         VCLComm vclcom=new VCLComm(sharedAppData.getVCLordIP(),VclordActivity.PORT,sharedAppData.getSystemInfo(1),sharedAppData.getSystemInfo(2),mProgressDialog,getContext());

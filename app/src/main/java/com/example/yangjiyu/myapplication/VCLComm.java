@@ -11,6 +11,8 @@ import java.util.Vector;
 import commprocess.VCL3CommProcess;
 import engine.CpComm;
 
+import static java.lang.Thread.sleep;
+
 
 /**
  * Created by yangjiyu on 2017/12/7.
@@ -94,6 +96,21 @@ public class VCLComm extends AsyncTask<Byte,Void,Vector<Byte>> {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }else if (FuncName[0]==11){
+            //// TODO: 2017/12/19 get interface status
+            bRet = mVcl3CommProcess.CloseSignalWindow((byte)0,(byte)0) ;
+
+        }else if (FuncName[0]==12){
+            //// TODO: 2017/12/19 get interface status
+            bRet = mVcl3CommProcess.CloseSignalWindow(FuncName[1],(byte)0) ;
+            try {
+                sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            bRet |= mVcl3CommProcess.OpenSignalWindow(FuncName[1],FuncName[2],FuncName[3],
+                    FuncName[4],FuncName[5],FuncName[6],FuncName[7],
+                    FuncName[8],FuncName[9],FuncName[10],FuncName[11]);
         }
         //end
         try {
