@@ -19,9 +19,9 @@ import java.util.Vector;
 
 class SourceItemListAdapter extends RecyclerView.Adapter<SourceItemListAdapter.SourceItemListViewHolder>{
 
-    int[] ImageSourceId = {R.drawable.scene, R.drawable.signal,R.drawable.poweron_normal,R.drawable.get_system_info_normal};
+    int[] ImageSourceId = {R.drawable.poweron_normal,R.drawable.scene, R.drawable.signal,R.drawable.get_system_info_normal};
 
-    int[] ImageClicked={R.drawable.scene_press,R.drawable.signal_press,R.drawable.poweron_pressdown,R.drawable.get_system_info_pressdown};
+    int[] ImageClicked={R.drawable.poweron_pressdown,R.drawable.scene_press,R.drawable.signal_press,R.drawable.get_system_info_pressdown};
 
     //public String[] StringSource = {"场景布局列表", "信号源列表"};//R.string.scene_list   R.string.signal_list
     public Vector<String> StringSource=new Vector<>();

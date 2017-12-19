@@ -53,9 +53,9 @@ public class SourceItemListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         StringSource.clear();
+        StringSource.add(getString(R.string.power_list));
         StringSource.add(getString(R.string.scene_list));
         StringSource.add(getString(R.string.signal_list));
-        StringSource.add(getString(R.string.power_list));
         StringSource.add(getString(R.string.getSystemInfo));
     }
 

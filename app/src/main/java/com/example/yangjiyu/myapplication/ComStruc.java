@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import engine.CpComm;
+import typeConversion.ByteUtil;
 
 /**
  * Created by yangjiyu on 2017/12/13.
@@ -125,6 +126,25 @@ public class ComStruc {
         private byte width_low_Y;
     }
 
+    public static class ExchangeInterfaceStatus{
+        public CpComm.stuDlpQInterfaceStatus ExchangeInterfaceStatus(Vector<Byte> vecResponse) throws IOException
+        {
+
+            CpComm.stuDlpQInterfaceStatus stInfo = new CpComm.stuDlpQInterfaceStatus();
+            Iterator<Byte> iterBegin = vecResponse.iterator();
+
+            stInfo.ucTemperature = iterBegin.next();
+            stInfo.ucHumidity = iterBegin.next();
+            byte []b=new byte[2];
+            b[0]=iterBegin.next();
+            b[1]=iterBegin.next();
+            stInfo.usFan1= ByteUtil.bntohs(b);
+            stInfo.ucPower1=iterBegin.next();
+            stInfo.ucPower2=iterBegin.next();
+
+            return stInfo;
+        }
+    }
     public static class ExchangeInterfaceVersion{
         private String GetVersion(int nM, int nS,int nModify)
         {

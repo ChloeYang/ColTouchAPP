@@ -1,13 +1,8 @@
 package com.example.yangjiyu.myapplication;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -25,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Vector;
 import java.util.concurrent.ExecutionException;
 
-import commprocess.VCL3CommProcess;
 import engine.CpComm;
 
 
@@ -72,7 +66,7 @@ public class VideoWallFragment extends Fragment {
     }
     public void upDataItem(int pos)
     {
-        if (mListIndex==0 || mListIndex==-1){
+        if (mListIndex==1 || mListIndex==-1){
             /*if (mLastIndex ==1){
                 mVideoWallView.closeWindow((byte)0,(byte)0,true);
             }*/
@@ -83,14 +77,14 @@ public class VideoWallFragment extends Fragment {
             mRelativeLayout.addView(mVideoWallView, new ViewGroup.LayoutParams(
                     RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT
             ));
-        }else if (mListIndex == 1){
+        }else if (mListIndex == 2){
             mSignalIndex = pos;
             mVideoWallView. mSignalIndex = mSignalIndex;
             if (mSignalIndex==16){
                 closeAllWindow();
                 Toast.makeText(getContext(), R.string.operation_finished, Toast.LENGTH_SHORT).show();
             }
-        }else if (mListIndex == 2){
+        }else if (mListIndex == 0){
             int powerOnOff = pos;
             if (powerOnOff == 0){
                 ComCommand((byte)1/*"power_on"*/);
@@ -294,9 +288,9 @@ public class VideoWallFragment extends Fragment {
     }
     public void ComCommand(byte type/*String str*/) {
         VCLComm vclcom=new VCLComm(sharedAppData.getVCLordIP(),VclordActivity.PORT,sharedAppData.getSystemInfo(1),sharedAppData.getSystemInfo(2),mProgressDialog,getContext());
-        CpComm.stuDlpQInterfaceVersion stInfo = new CpComm.stuDlpQInterfaceVersion();
         Vector<Byte> vecResponse = new Vector<>();
-        if (mListIndex ==3){
+        if (type ==3){
+            CpComm.stuDlpQInterfaceVersion stInfo = new CpComm.stuDlpQInterfaceVersion();
             try {
                 vecResponse = vclcom.execute(type).get();
             } catch (InterruptedException e) {
@@ -311,7 +305,24 @@ public class VideoWallFragment extends Fragment {
                 e.printStackTrace();
             }
             DialogList dialogList = new DialogList(getContext());
-            dialogList.InterfaceVersion(stInfo);
+            dialogList.InterfaceInfo(stInfo);
+        }else if (type ==4){
+            CpComm.stuDlpQInterfaceStatus stInfo = new CpComm.stuDlpQInterfaceStatus();
+            try {
+                vecResponse = vclcom.execute(type).get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+            ComStruc.ExchangeInterfaceStatus version= new ComStruc.ExchangeInterfaceStatus();
+            try {
+                stInfo =version.ExchangeInterfaceStatus(vecResponse);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            DialogList dialogList = new DialogList(getContext());
+            dialogList.InterfaceInfo(stInfo);
         }else {
             vclcom.execute(type);
         }

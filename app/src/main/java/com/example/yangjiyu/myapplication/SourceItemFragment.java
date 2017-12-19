@@ -4,13 +4,11 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,18 +43,20 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
 
     }
     void getNewData(int pos){
-        if (pos==0){
+        if (pos==1){
             sceneData();
             textView.setText(getString(R.string.scene_list));
-        }else if (pos==1){
+        }else if (pos==2){
             signalData();
             textView.setText(getString(R.string.signal_list));
-        }else if(pos==2){
-            PowerData();
+        }else if(pos==0){
+            powerData();
             textView.setText(getString(R.string.power_list));
+            mAdapter.bIsSystemData=false;
         }else{
             checkSystemData();
             textView.setText(getString(R.string.getSystemInfo));
+            mAdapter.bIsSystemData=true;
         }
     }
 
@@ -177,6 +177,7 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
         Power.add(getString(R.string.power_off));
 
         SystemInfo.add(getString(R.string.get_interface_version));
+        SystemInfo.add(getString(R.string.get_interface_status));
 
     }
     private void sceneData()
@@ -213,7 +214,7 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
                 R.drawable.clear_normal));
 
     }
-    private void PowerData()
+    private void powerData()
     {
         mAdapter.mData = new ArrayList<>(Arrays.asList(
                 R.drawable.poweron_normal,
@@ -222,6 +223,7 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
     }
     private void checkSystemData(){
         mAdapter.mData = new ArrayList<>(Arrays.asList(
+                R.drawable.get_system_info_normal,
                 R.drawable.get_system_info_normal));
     }
 }

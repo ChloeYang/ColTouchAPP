@@ -130,6 +130,7 @@
     <string name="power_on">整墙开机</string>
     <string name="power_off">整墙关机</string>
     <string name="get_interface_version">接口版本</string>
+    <string name="get_interface_status">接口状态</string>
     <string name="Ok">确定</string>
     <string name="Cancel">取消</string>
 

@@ -26,6 +26,7 @@ public class VCLComm extends AsyncTask<Byte,Void,Vector<Byte>> {
     private int m_cellCol;
     private MyProgressDialog mProgressDialog;
     private CpComm.stuDlpQInterfaceVersion stuDlpQInterfaceVersionInfo;
+    private CpComm.stuDlpQInterfaceStatus stuDlpQInterfaceStatusInfo;
     private Vector vecResponse;
     Context mContext;
 
@@ -50,6 +51,7 @@ public class VCLComm extends AsyncTask<Byte,Void,Vector<Byte>> {
 
         mVcl3CommProcess = new VCL3CommProcess(mIp, mPort);
         stuDlpQInterfaceVersionInfo=new CpComm.stuDlpQInterfaceVersion();
+        stuDlpQInterfaceStatusInfo=new CpComm.stuDlpQInterfaceStatus();
         vecResponse = new Vector();
         boolean bRet=false;
         if (FuncName[0]==1){
@@ -82,6 +84,13 @@ public class VCLComm extends AsyncTask<Byte,Void,Vector<Byte>> {
             //// TODO: 2017/12/18 get interface version
             try {
                 bRet = mVcl3CommProcess.GetInterfaceVersion(stuDlpQInterfaceVersionInfo,vecResponse) ;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else if (FuncName[0]==4){
+            //// TODO: 2017/12/19 get interface status
+            try {
+                bRet = mVcl3CommProcess.GetInterfaceStatus(stuDlpQInterfaceStatusInfo,vecResponse) ;
             } catch (IOException e) {
                 e.printStackTrace();
             }

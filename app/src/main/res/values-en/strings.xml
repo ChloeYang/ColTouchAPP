@@ -129,6 +129,7 @@
     <string name="power_on">PowerOn</string>
     <string name="power_off">PowerOff</string>
     <string name="get_interface_version">InterfaceVersion</string>
+    <string name="get_interface_status">InterfaceStatus</string>
     <string name="Ok">OK</string>
     <string name="Cancel">Cancel</string>
 
