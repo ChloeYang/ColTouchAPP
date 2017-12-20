@@ -24,15 +24,15 @@ import static android.graphics.Color.YELLOW;
 
 public class VideoWallView extends View {
     public static final int INPUT_BOARD_NUM=4;
-    public static final int OUTPUT_BOARD_NUM=3;
+    //public static final int OUTPUT_BOARD_NUM=3;
     public static final int WIN_INTER=12;
     private final static String TAG = SceneWall.class.getSimpleName();
-    private static final int  CELL_MAX_STATE_NUMBER = 4;
-    public static final int CELL_STATE_ERROR = -1;
-    public static final int CELL_STATE_UNKNOWN = 0;
-    private int CellState = CELL_STATE_UNKNOWN;
+    //private static final int  CELL_MAX_STATE_NUMBER = 4;
+    //public static final int CELL_STATE_ERROR = -1;
+    //public static final int CELL_STATE_UNKNOWN = 0;
+    //private int CellState = CELL_STATE_UNKNOWN;
 
-    private VideoWall mVideoWall;
+    //private VideoWall mVideoWall;
 
     private int m_cellRow=2;
     private int m_cellCol=3;
@@ -43,32 +43,32 @@ public class VideoWallView extends View {
     public int mSignalIndex=-1;
 
     public int mLastSceneIndex =-1;
-    private boolean mSceneIsChanged=false;
+    //private boolean mSceneIsChanged=false;
 
     private int mLastSignalIndex =-1;
-    private boolean mSignalIsChanged=false;
+    //private boolean mSignalIsChanged=false;
 
     private VCL3CommProcess mVcl3CommProces;
-    private int m_pixX=1024;
-    private int m_pixY=768;
+    //private int m_pixX=1024;
+    //private int m_pixY=768;
 
     private SharedAppData sharedAppData;
-    public int getCellState() {
+    /*public int getCellState() {
         return CellState;
-    }
+    }*/
 
     public interface onCleanDefineSceneClickListener {
         void onCleanDefineScene(int scene);
     }
     private onCleanDefineSceneClickListener mCleanDefineSceneClickListener;
 
-    public void setCellState(int cellState) {
+    /*public void setCellState(int cellState) {
 
         if( cellState < 0 || cellState > CELL_MAX_STATE_NUMBER )
             CellState = CELL_STATE_ERROR;
         else
             CellState = cellState;
-    }
+    }*/
 
 
     private int WallWidth;
@@ -80,10 +80,9 @@ public class VideoWallView extends View {
 
     private int mDefine1Flag;
     private int mDefine2Flag;
-    private int mDefine1Num;
-    private int mDefine2Num;
-    private ArrayList<SingleSceneCell> m_define1_sceneList=new ArrayList<>();
-    private ArrayList<SingleSceneCell> m_define2_sceneList=new ArrayList<>();
+    /*private int mDefine1Num;
+    private int mDefine2Num;*/
+
 
 
     public VideoWallView(Context context, int wallWidth, int wallHeight,int listIndex,int sceneIndex,int signalIndex) {
@@ -94,7 +93,7 @@ public class VideoWallView extends View {
 
         mCleanDefineSceneClickListener = (onCleanDefineSceneClickListener) context;
         if( wallHeight * wallWidth < 0 ) {
-            setCellState(CELL_STATE_ERROR);
+            //setCellState(CELL_STATE_ERROR);
             return;
         }
         else {
@@ -105,12 +104,12 @@ public class VideoWallView extends View {
             mSceneIndex=sceneIndex;
             mSignalIndex=signalIndex;
 
-            if (mSceneIndex != mLastSceneIndex){
+            /*if (mSceneIndex != mLastSceneIndex){
                 mSceneIsChanged=true;
             }
             else {
                 mSceneIsChanged=false;
-            }
+            }*/
 
         }
         if (mListIndex==-1 && mSceneIndex==-1){
@@ -178,7 +177,7 @@ public class VideoWallView extends View {
                         //// TODO: 2017/11/29 clear sharedpreferences
                         if (mLastSceneIndex==4 )
                         {
-                            mDefine1Num=0;
+                            //mDefine1Num=0;
                             Log.i(TAG,"initDefine1Scene");
                             sharedAppData.initDefine1Scene();
                             mCleanDefineSceneClickListener.onCleanDefineScene(mLastSceneIndex);
@@ -186,7 +185,7 @@ public class VideoWallView extends View {
                         }
                         if(mLastSceneIndex==5)
                         {
-                            mDefine2Num=0;
+                            //mDefine2Num=0;
                             Log.i(TAG,"initDefine2Scene");
                             sharedAppData.initDefine2Scene();
                             mCleanDefineSceneClickListener.onCleanDefineScene(mLastSceneIndex);
@@ -381,15 +380,6 @@ public class VideoWallView extends View {
         invalidate();
     }
 
-    public void stopVCL3Comm(){
-        try {
-            mVcl3CommProces.ProcessCancel();
-            mVcl3CommProces=null;
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            Toast.makeText(getContext(),""+e,Toast.LENGTH_SHORT).show();
-        }
-    }
 
 
 }

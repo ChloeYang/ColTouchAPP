@@ -2,12 +2,13 @@ package com.example.yangjiyu.myapplication;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
-public class AboutActivity extends Activity {
+public class AboutActivity extends AppCompatActivity {
 
 
    /* TextView mCompany, mCopyRight;*/

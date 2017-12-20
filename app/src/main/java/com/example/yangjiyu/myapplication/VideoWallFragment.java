@@ -26,17 +26,24 @@ import engine.CpComm;
 public class VideoWallFragment extends Fragment {
 
     private final static String TAG = SceneWall.class.getSimpleName();
-    RelativeLayout mRelativeLayout;
-    VideoWallView mVideoWallView;
-    View v;
+    private RelativeLayout mRelativeLayout;
+    private VideoWallView mVideoWallView;
+    private View v;
 
-    int start_x=0;
-    int start_y=0;
-    int end_x=0;
-    int end_y=0;
+    private int start_x=0;
+    private int start_y=0;
+    private int end_x=0;
+    private int end_y=0;
+    private int flag1=0;
+    private int flag2=0;
+    private short posX = 0;
+    private short posY = 0;
+    private short widthX =0;
+    private short heightY =0;
+    private ComStruc.Stu_Open_Window openwin;
 
-    int windowsWidth = 1585;//1585//2100
-    int windowsHeight = 610;//610//840
+    private int windowsWidth = 1585;//1585//2100
+    private int windowsHeight = 610;//610//840
 
     private int mListIndex=-1;
     private int mSceneIndex=-1;
@@ -46,9 +53,9 @@ public class VideoWallFragment extends Fragment {
     private boolean bRet=false;
     private Activity mActivity;
 
-    MyProgressDialog mProgressDialog;
+    private MyProgressDialog mProgressDialog;
 
-    public  String[] StringSignal={"1-DVI_1","1-DVI_2","1-HDMI","1-DP",
+    private  String[] StringSignal={"1-DVI_1","1-DVI_2","1-HDMI","1-DP",
             "2-DVI_1","2-DVI_2","2-HDMI","2-DP",
             "3-DVI_1","3-DVI_2","3-HDMI","3-DP",
             "4-DVI_1","4-DVI_2","4-HDMI","4-DP",
@@ -131,7 +138,9 @@ public class VideoWallFragment extends Fragment {
         Log.i("Checkout","display: width = " + display.getWidth() + ", height = " + display.getHeight());
         Log.i("Checkout","inflater: width = " + v.getMeasuredWidth() + ", height = " + v.getHeight());
 
+        openwin=new ComStruc.Stu_Open_Window();
         sharedAppData=SharedAppData.newInstance(mActivity);
+
         mVideoWallView = new VideoWallView(mActivity, windowsWidth, windowsHeight,mListIndex,mSceneIndex,mSignalIndex);
         mRelativeLayout = (RelativeLayout)v.findViewById(R.id.fragment_video_wall_view);
         mRelativeLayout.addView(mVideoWallView, new ViewGroup.LayoutParams(
@@ -140,9 +149,6 @@ public class VideoWallFragment extends Fragment {
         mVideoWallView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                int flag1=0;
-                int flag2=0;
-                byte winId;
                 switch (event.getAction())
                 {
                     case MotionEvent.ACTION_DOWN:
@@ -150,7 +156,6 @@ public class VideoWallFragment extends Fragment {
                         start_y = (int) Math.floor((int)event.getY()/mVideoWallView.m_cellHeight) * (mVideoWallView.m_cellHeight+ VideoWall.sVideoCellGap);
                         Log.i("TouchEvent","ACTION_DOWN start_x="+start_x+" start_y="+start_y);
 
-                        sharedAppData=SharedAppData.newInstance(getContext());
                         if (2!= mListIndex){
                             return true;
                         }
@@ -177,15 +182,14 @@ public class VideoWallFragment extends Fragment {
 
                                         //// TODO: 2017/12/4 save signal to sharedpreferences && send cmd to engine
                                         //byte winId=(byte)((mSignalWindowCount+1)&0xff);
-                                        ComStruc.Stu_Open_Window openwin=new ComStruc.Stu_Open_Window();
                                         openwin.setWinId((byte)(mVideoWallView.mLastSceneIndex*mVideoWallView.WIN_INTER+i));
                                         openwin.setInputId((byte) (mSignalIndex / mVideoWallView.INPUT_BOARD_NUM));
                                         openwin.setSig((byte) (mSignalIndex % mVideoWallView.INPUT_BOARD_NUM));
 
-                                        short posX = (short) ((scene_cell.getM_startX() / mVideoWallView.m_cellWidth) * cubePix.get(0));
-                                        short posY = (short) ((scene_cell.getM_startY() / mVideoWallView.m_cellHeight) * cubePix.get(1));
-                                        short widthX = (short) (((scene_cell.getM_endX() - scene_cell.getM_startX()) / mVideoWallView.m_cellWidth) * cubePix.get(0));
-                                        short heightY = (short) (((scene_cell.getM_endY() - scene_cell.getM_startY()) / mVideoWallView.m_cellHeight) * cubePix.get(1));
+                                        posX = (short) ((scene_cell.getM_startX() / mVideoWallView.m_cellWidth) * cubePix.get(0));
+                                        posY = (short) ((scene_cell.getM_startY() / mVideoWallView.m_cellHeight) * cubePix.get(1));
+                                        widthX = (short) (((scene_cell.getM_endX() - scene_cell.getM_startX()) / mVideoWallView.m_cellWidth) * cubePix.get(0));
+                                        heightY = (short) (((scene_cell.getM_endY() - scene_cell.getM_startY()) / mVideoWallView.m_cellHeight) * cubePix.get(1));
 
                                         openwin.setHigh_startX((byte)(posX>>8));
                                         openwin.setLow_startX((byte)(posX & 0x00FF));
@@ -200,12 +204,7 @@ public class VideoWallFragment extends Fragment {
                                         /*vclCommThread.start();
                                         vclCommThread.putMsgCmdInQue_OpenWindow("openWindow",openwin);
                                         bRet=vclCommThread.getbRet();
-                                        //Toast.makeText(getContext(), R.string.operation_finished, Toast.LENGTH_SHORT).show();
-                                        if (bRet) {
-                                            Toast.makeText(getContext(), R.string.operation_finished, Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(getContext(), R.string.error_open_signal_failed, Toast.LENGTH_SHORT).show();
-                                        }*/
+                                        */
                                         VCLComm vclcom=new VCLComm(sharedAppData.getVCLordIP(),VclordActivity.PORT,sharedAppData.getSystemInfo(1),sharedAppData.getSystemInfo(2),mProgressDialog,getContext());
                                         byte type =12;
                                         vclcom.execute(type,openwin.getWinId(),openwin.getInputId(),openwin.getSig(),
@@ -281,20 +280,11 @@ public class VideoWallFragment extends Fragment {
         /*VCLCommThread vclCommThread=new VCLCommThread(sharedAppData.getVCLordIP(),VclordActivity.PORT);
         vclCommThread.start();
         vclCommThread.putMsgCmdInQue_TwoByte("closeWindow",(byte)0,(byte)0);*/
-        //Log.d(TAG,"mLastSceneIndex="+mVideoWallView.mLastSceneIndex);
         ArrayList<SingleSceneCell> sceneCells = sharedAppData.getSceneCell(mVideoWallView.mLastSceneIndex);
         for (SingleSceneCell scene_cell :sceneCells) {
             mVideoWallView.drawCanvasRect(scene_cell.getM_startX(), scene_cell.getM_startY(),scene_cell.getM_endX(), scene_cell.getM_endY());
         }
         v.invalidate();
-
-        /*bRet=vclCommThread.getbRet();
-        //Log.d(TAG,"getbRet finished");
-        if (bRet) {
-            Toast.makeText(getContext(), R.string.operation_finished, Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(getContext(), R.string.operation_failed, Toast.LENGTH_SHORT).show();
-        }*/
         VCLComm vclcom=new VCLComm(sharedAppData.getVCLordIP(),VclordActivity.PORT,sharedAppData.getSystemInfo(1),sharedAppData.getSystemInfo(2),mProgressDialog,getContext());
         byte type =11;
         vclcom.execute(type);

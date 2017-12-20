@@ -60,22 +60,42 @@ public class DialogList {
         return power;
     }
     public void InterfaceInfo(CpComm.stuDlpQInterfaceStatus stInfo){
+        int icount=5;
+        int index=0;
         String fan="";
         String humidity="";
         String power1=PowerStatus(stInfo.ucPower1);
         String power2=PowerStatus(stInfo.ucPower2);
-        if (stInfo.usFan1>-1){
-            fan = fan + stInfo.usFan1 + "转/分钟";
-        }
+        /*//test
+        stInfo.ucHumidity=10;
+        stInfo.usFan1=3000;
+        //end test*/
         if (stInfo.ucHumidity>0){
             humidity=humidity+stInfo.ucHumidity;
-        }
+        }else {icount--;}
+        if (stInfo.usFan1>-1){
+            fan = fan + stInfo.usFan1 + "转/分钟";
+        }else { icount--;}
 
-        final String items[] = {"温度: "+stInfo.ucTemperature+"℃",
+        String[] items =  new String[icount];
+        items[index++]="温度: "+stInfo.ucTemperature+"℃";
+        if (humidity==""){
+            if (fan==""){}else {
+                items[index++]="风扇:  "+fan;
+            }
+        }else {
+            items[index++]="湿度:  "+humidity;
+            if (fan==""){}else {
+                items[index++]="风扇:  "+fan;
+            }
+        }
+        items[index++]="电源1: "+power1;
+        items[index++]="电源2: "+power2;
+        /*final String items[] = {"温度: "+stInfo.ucTemperature+"℃",
                 "湿度:  "+humidity,
                 "风扇:  "+fan,
                 "电源1: "+power1,
-                "电源2: "+power2};
+                "电源2: "+power2};*/
 
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext,1);
         builder.setTitle(mContext.getString(R.string.getSystemInfo));
