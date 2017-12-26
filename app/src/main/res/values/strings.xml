@@ -21,6 +21,7 @@
     <string name="error_no_system">系统未知</string>
     <string name="error_network">网路连接错误</string>
     <string name="operation_signal_no_exist">该信号源不存在，请切换其他信号源</string>
+    <string name="error_not_save_model_yet">还未保存该模式信息</string>
     <string name="about">关于</string>
     <string name="CopyRightDescribe"></string>
     <string name="ColTouchVersion">VTRON显控一体化系统管理软件 V1.0</string>
@@ -79,6 +80,8 @@
     <string name="pref_signal_output_board_window_num_">input_board_num_</string>
     <string name="pref_signal_flag">signal_flag_</string>
     <string name="pref_set_network">网络设置</string>
+    <string name="pref_defined_model_flag_">defined_model_flag_</string>
+    <string name="pref_defined_model_scene_">defined_model_scene_</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">黑色背景</string>
@@ -86,6 +89,7 @@
     <string name="signal_list">信号源列表</string>
     <string name="power_list">系统开关机</string>
     <string name="getSystemInfo">系统信息查询</string>
+    <string name="model_SceneAndSignal">模式设置</string>
     <string name="error_invalid_ip">IP地址不正确</string>
     <string name="check_system"> </string>
     <string name="progress_check_system">正在获取系统信息</string>
@@ -131,7 +135,11 @@
     <string name="power_off">整墙关机</string>
     <string name="get_interface_version">接口版本</string>
     <string name="get_interface_status">接口状态</string>
+    <string name="get_engine_version">机芯版本</string>
+    <string name="get_engine_status">机芯状态</string>
     <string name="Ok">确定</string>
     <string name="Cancel">取消</string>
+    <string name="model_define1">自定义模式1</string>
+    <string name="model_define2">自定义模式2</string>
 
 </resources>

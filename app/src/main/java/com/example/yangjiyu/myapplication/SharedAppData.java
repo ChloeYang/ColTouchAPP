@@ -146,6 +146,66 @@ public class SharedAppData {
         editor.putInt(mContext.getString(R.string.pref_define1_endY_)+num,end_y);
         editor.commit();
     }
+    public static void saveSceneSignal(int definedNum,int index,int signal){
+        SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.pref_define_scene), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        int num = index-1;
+        if (definedNum ==4 ) {
+            editor.putInt(mContext.getString(R.string.pref_define1_signal_) + num, signal);
+        }else if (definedNum == 5){
+            editor.putInt(mContext.getString(R.string.pref_define2_signal_) + num, signal);
+        }else {
+            String str="";
+            switch (definedNum){
+                case 0:
+                    str=mContext.getString(R.string.pref_whole_scene);
+                    break;
+                case 1:
+                    str=mContext.getString(R.string.pref_h2part_scene);
+                    break;
+                case 2:
+                    str=mContext.getString(R.string.pref_v2part_scene);
+                    break;
+                case 3:
+                    str=mContext.getString(R.string.pref_each_scene);
+                    break;
+                default:
+                    break;
+            }
+            editor.putInt(mContext.getString(R.string.pref_default_num) +str+"_"+num, signal);
+        }
+        editor.commit();
+    }
+    public static int getSceneSignal(int definedNum,int index){
+        SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.pref_define_scene), Context.MODE_PRIVATE);
+        int num = index-1;
+        int signal=0;
+        if (definedNum ==4 ) {
+            signal = sharedPref.getInt(mContext.getString(R.string.pref_define1_signal_) + num, 0);
+        }else if (definedNum == 5){
+            signal = sharedPref.getInt(mContext.getString(R.string.pref_define2_signal_) + num, 0);
+        }else {
+            String str="";
+            switch (definedNum){
+                case 0:
+                    str=mContext.getString(R.string.pref_whole_scene);
+                    break;
+                case 1:
+                    str=mContext.getString(R.string.pref_h2part_scene);
+                    break;
+                case 2:
+                    str=mContext.getString(R.string.pref_v2part_scene);
+                    break;
+                case 3:
+                    str=mContext.getString(R.string.pref_each_scene);
+                    break;
+                default:
+                    break;
+            }
+            signal = sharedPref.getInt(mContext.getString(R.string.pref_default_num) +str+"_"+num, 0);
+        }
+        return signal;
+    }
     public static void saveDefine2Scene(int flag,int numd, int start_x,int start_y,int end_x,int end_y){
         SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.pref_define_scene), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -324,5 +384,22 @@ public class SharedAppData {
         int flag = preferences.getInt(mContext.getString(R.string.pref_signal_flag)+num,0);
         return flag;
     }
+    public static void setSaveModelInfo(int num,int sceneIndex,int flag){
 
+        SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.pref_setting), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(mContext.getString(R.string.pref_defined_model_flag_)+num, flag);
+        editor.putInt(mContext.getString(R.string.pref_defined_model_scene_)+num, sceneIndex);
+        editor.commit();
+    }
+    public static int getSaveModelInfo_Flag(int num ){
+        SharedPreferences preferences = mContext.getSharedPreferences(mContext.getString(R.string.pref_setting),Context.MODE_PRIVATE);
+        int flag = preferences.getInt(mContext.getString(R.string.pref_defined_model_flag_)+num,0);
+        return flag;
+    }
+    public static int getSaveModelInfo_Scene(int num ){
+        SharedPreferences preferences = mContext.getSharedPreferences(mContext.getString(R.string.pref_setting),Context.MODE_PRIVATE);
+        int flag = preferences.getInt(mContext.getString(R.string.pref_defined_model_scene_)+num,0);
+        return flag;
+    }
 }

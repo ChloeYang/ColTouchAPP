@@ -96,12 +96,16 @@ public class VCLComm extends AsyncTask<Byte,Void,Vector<Byte>> {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }else if (FuncName[0]==5){
+            //// TODO: 2017/12/21 get engine status
+            short usDeviceID = (short)(FuncName[1]*VideoCell.CUBE_ROW_MAX + FuncName[2]);
+            bRet = mVcl3CommProcess.GetEngineStatusInfo(usDeviceID,vecResponse) ;
         }else if (FuncName[0]==11){
-            //// TODO: 2017/12/19 get interface status
+            //// TODO: 2017/12/19 close all signal windows
             bRet = mVcl3CommProcess.CloseSignalWindow((byte)0,(byte)0) ;
 
         }else if (FuncName[0]==12){
-            //// TODO: 2017/12/19 get interface status
+            //// TODO: 2017/12/19 open signal window ,then close first
             bRet = mVcl3CommProcess.CloseSignalWindow(FuncName[1],(byte)0) ;
             try {
                 sleep(1000);

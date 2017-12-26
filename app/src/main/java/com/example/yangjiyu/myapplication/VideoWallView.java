@@ -23,17 +23,8 @@ import static android.graphics.Color.YELLOW;
  */
 
 public class VideoWallView extends View {
-    public static final int INPUT_BOARD_NUM=4;
-    //public static final int OUTPUT_BOARD_NUM=3;
-    public static final int WIN_INTER=12;
+
     private final static String TAG = SceneWall.class.getSimpleName();
-    //private static final int  CELL_MAX_STATE_NUMBER = 4;
-    //public static final int CELL_STATE_ERROR = -1;
-    //public static final int CELL_STATE_UNKNOWN = 0;
-    //private int CellState = CELL_STATE_UNKNOWN;
-
-    //private VideoWall mVideoWall;
-
     private int m_cellRow=2;
     private int m_cellCol=3;
     public int m_cellWidth=0;
@@ -43,33 +34,13 @@ public class VideoWallView extends View {
     public int mSignalIndex=-1;
 
     public int mLastSceneIndex =-1;
-    //private boolean mSceneIsChanged=false;
-
-    private int mLastSignalIndex =-1;
-    //private boolean mSignalIsChanged=false;
-
-    private VCL3CommProcess mVcl3CommProces;
-    //private int m_pixX=1024;
-    //private int m_pixY=768;
-
     private SharedAppData sharedAppData;
-    /*public int getCellState() {
-        return CellState;
-    }*/
+
 
     public interface onCleanDefineSceneClickListener {
         void onCleanDefineScene(int scene);
     }
-    private onCleanDefineSceneClickListener mCleanDefineSceneClickListener;
-
-    /*public void setCellState(int cellState) {
-
-        if( cellState < 0 || cellState > CELL_MAX_STATE_NUMBER )
-            CellState = CELL_STATE_ERROR;
-        else
-            CellState = cellState;
-    }*/
-
+    public onCleanDefineSceneClickListener mCleanDefineSceneClickListener;
 
     private int WallWidth;
     private int WallHeight;
@@ -77,13 +48,6 @@ public class VideoWallView extends View {
     private Bitmap CellBitmap;
     private Canvas CellCanvas;
     private Paint CellPaint;
-
-    private int mDefine1Flag;
-    private int mDefine2Flag;
-    /*private int mDefine1Num;
-    private int mDefine2Num;*/
-
-
 
     public VideoWallView(Context context, int wallWidth, int wallHeight,int listIndex,int sceneIndex,int signalIndex) {
 
@@ -93,7 +57,6 @@ public class VideoWallView extends View {
 
         mCleanDefineSceneClickListener = (onCleanDefineSceneClickListener) context;
         if( wallHeight * wallWidth < 0 ) {
-            //setCellState(CELL_STATE_ERROR);
             return;
         }
         else {
@@ -103,13 +66,6 @@ public class VideoWallView extends View {
             mListIndex=listIndex;
             mSceneIndex=sceneIndex;
             mSignalIndex=signalIndex;
-
-            /*if (mSceneIndex != mLastSceneIndex){
-                mSceneIsChanged=true;
-            }
-            else {
-                mSceneIsChanged=false;
-            }*/
 
         }
         if (mListIndex==-1 && mSceneIndex==-1){
@@ -125,7 +81,7 @@ public class VideoWallView extends View {
         SharedPreferences setPref = getContext().getSharedPreferences(getContext().getString(R.string.pref_setting), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = setPref.edit();
         mLastSceneIndex=setPref.getInt(getContext().getString(R.string.pref_LastSceneIndex),-1);
-        mLastSignalIndex=setPref.getInt(getContext().getString(R.string.pref_LastSignalIndex),-1);
+        //mLastSignalIndex=setPref.getInt(getContext().getString(R.string.pref_LastSignalIndex),-1);
         if (true){
             m_cellRow=sharedAppData.getSystemInfo(1);
             m_cellCol=sharedAppData.getSystemInfo(2);
@@ -155,8 +111,8 @@ public class VideoWallView extends View {
                         break;
                     case 4:
                         //// TODO: 2017/11/29 get sharedpreferences
-                        mDefine1Flag=defineShared.getInt(getContext().getString(R.string.pref_define1_flag),0);
-                        if (mDefine1Flag==0){
+                        //mDefine1Flag=defineShared.getInt(getContext().getString(R.string.pref_define1_flag),0);
+                        if (defineShared.getInt(getContext().getString(R.string.pref_define1_flag),0)==0){
                             initCell();
                         }else {
                             sharedAppData.getDefine1Scene();
@@ -165,8 +121,8 @@ public class VideoWallView extends View {
                         break;
                     case 5:
                         //// TODO: 2017/11/29 get sharedpreferences
-                        mDefine2Flag=defineShared.getInt(getContext().getString(R.string.pref_define2_flag),0);
-                        if (mDefine2Flag==0){
+                        //mDefine2Flag=defineShared.getInt(getContext().getString(R.string.pref_define2_flag),0);
+                        if (defineShared.getInt(getContext().getString(R.string.pref_define2_flag),0)==0){
                             initCell();
                         }else {
                             sharedAppData.getDefine2Scene();
@@ -240,19 +196,6 @@ public class VideoWallView extends View {
         m_cellHeight=sharedAppData.getSystemInfo(4);
     }
 
-    public void drawInitCell(int color){
-        VideoWall videoWall = VideoWall.newInstance(WallWidth, WallHeight);
-        videoWall.layoutVideoCells(m_cellRow,m_cellCol);
-        ArrayList<VideoCell> videoCells = VideoWall.getmVideoCellCollections(m_cellRow,m_cellCol);
-        int i = 0;
-        for (VideoCell cell :
-                videoCells) {
-            CellPaint.setColor(color);
-            CellCanvas.drawRect(cell.getCellPositionTopLeftX(), cell.getCellPositionTopLeftY(),
-                    cell.getCellPositionTopLeftX() + cell.getCellWidth(),
-                    cell.getCellPositionTopLeftY() + cell.getCellHeight(), CellPaint);
-        }
-    }
     private void wholeSceneCell(){
         //getSystemInfo();
         CellBitmap = Bitmap.createBitmap(WallWidth, WallHeight, Bitmap.Config.ARGB_8888);
@@ -349,7 +292,7 @@ public class VideoWallView extends View {
     public void drawCanvasText(String str,int start_X,int start_Y,int end_X,int end_Y){
         CellPaint.setColor(Color.WHITE);
         CellPaint.setTextSize(30);
-        CellCanvas.drawText("   " + str + "   ", (start_X + end_X) / 2, (start_Y + end_Y) / 2-10, CellPaint);
+        CellCanvas.drawText("   " + str + "   ", (start_X + end_X) / 2, (start_Y + end_Y) / 2-30, CellPaint);
 
     }
     public void drawCanvasRect(int start_X,int start_Y,int end_X,int end_Y){
@@ -379,7 +322,4 @@ public class VideoWallView extends View {
         }else{}
         invalidate();
     }
-
-
-
 }

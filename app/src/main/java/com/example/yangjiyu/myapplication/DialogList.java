@@ -5,7 +5,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.util.Vector;
+import java.util.concurrent.ExecutionException;
+
+import commprocess.ExchangeStuct;
 import engine.CpComm;
+
+import static java.lang.Thread.sleep;
 
 /**
  * Created by yangjiyu on 2017/12/19.
@@ -116,5 +123,133 @@ public class DialogList {
             }
         });
         builder.create().show();
+    }
+    private String EnginePowerStatus(byte type){
+        String power ="";
+        if (type==3){
+            power = power + "正常";
+        }else if (type ==1){
+            power = power + "异常";
+        }else {
+            power = power + "不在位";
+        }
+        return power;
+    }
+    private String LedStatus(byte type){
+        String string = "";
+        if (type==1){
+            string = string + "点亮";
+        }else {
+            string = string + "熄灭";
+        }
+        return string;
+    }
+    public void EngineInfo(final VCLComm vclcom, final byte type, final int row, int col){
+        int iSysCount = row*col;
+        String [] strings = new String[iSysCount];
+        int index=0;
+        for (int i=0;i<row;i++){
+            for (int j=0;j<col;j++){
+                strings[index++]="单元 "+i+"-"+j;
+            }
+        }
+        final AlertDialog.Builder builder = new AlertDialog.Builder(mContext,1);
+        builder.setTitle(mContext.getString(R.string.getSystemInfo));
+        builder.setIcon(R.mipmap.ic_launcher);
+        builder.setSingleChoiceItems(strings, 0, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                Vector<Byte> vecResponse = new Vector<>();
+                CpComm.stuDlpQEngineStatusInfo stInfo = new CpComm.stuDlpQEngineStatusInfo();
+                try {
+                    //sleep(500);
+                    vecResponse = vclcom.execute(type,(byte)(which/row),(byte)(which%row)).get();
+                    stInfo = ExchangeStuct.ExchangeEngineStatusInfo(vecResponse);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                //// TODO: 2017/12/21  add info to view
+                String power1 = EnginePowerStatus(stInfo.ucPower1);
+                String power2 = EnginePowerStatus(stInfo.ucPower2);
+                String power3 = EnginePowerStatus(stInfo.ucPower3);
+                String power4 = EnginePowerStatus(stInfo.ucPower4);
+                String Ledstatus = LedStatus(stInfo.LedSta);
+                final String items[] = {"光源工作 "+stInfo.uiLampTime+"小时",
+                        "投影机工作 "+stInfo.uiEngineTime+"小时",
+                        "DMD温度 "+stInfo.ucDMDTemp+"℃",
+                        "灯泡R温度 "+stInfo.ucLedRTemp+"℃",
+                        "灯泡G温度 "+stInfo.ucLedGTemp+"℃",
+                        "灯泡B温度 "+stInfo.ucLedBTemp+"℃",
+                        "环境温度 "+stInfo.ucEnvTemp+"℃",
+                        "DMD风扇 "+stInfo.usDMDFan+"转/分",
+                        "RG间风扇 "+stInfo.usLedFan1+"转/分",
+                        "GB间风扇 "+stInfo.usLedFan2+"转/分",
+                        "过滤器风扇 "+stInfo.usFliterFan+"转/分",
+                        "Driver1风扇 "+stInfo.usDriverFan1+"转/分",
+                        "Driver2风扇 "+stInfo.usDriverFan2+"转/分",
+                        "电源风扇 "+stInfo.usPowerFan+"转/分",
+                        "电源1状态 "+power1,
+                        "电源2状态 "+power2,
+                        "电源3状态 "+power3,
+                        "电源4状态 "+power4,
+                        "光源状态 "+Ledstatus
+                };
+
+                AlertDialog.Builder inter_builder = new AlertDialog.Builder(mContext,1);
+                inter_builder.setTitle(mContext.getString(R.string.getSystemInfo));
+                inter_builder.setIcon(R.mipmap.ic_launcher);
+                inter_builder.setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface inter_dialog, int which) {
+                        inter_dialog.dismiss();
+                    }
+                });
+                inter_builder.setPositiveButton(mContext.getString(R.string.Ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface inter_dialog, int which) {
+                        inter_dialog.dismiss();
+                    }
+                });
+                inter_builder.create().show();
+                //end // TODO: 2017/12/21
+                dialog.dismiss();
+            }
+        });
+        builder.setPositiveButton(mContext.getString(R.string.Cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
+
+    }
+    public int SetModelSave(){
+        final int[] index = {0};
+        String [] strings = {"自定义模式1","自定义模式2"};
+        final AlertDialog.Builder builder = new AlertDialog.Builder(mContext,1);
+        builder.setTitle(mContext.getString(R.string.getSystemInfo));
+        builder.setIcon(R.mipmap.ic_launcher);
+        builder.setSingleChoiceItems(strings, 0, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                index[0] = which;
+                //end // TODO: 2017/12/21
+                dialog.dismiss();
+            }
+        });
+        builder.setPositiveButton(mContext.getString(R.string.Ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
+        return index[0];
     }
 }

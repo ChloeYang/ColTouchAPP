@@ -20,12 +20,15 @@ import java.util.ArrayList;
 import java.util.Vector;
 import java.util.concurrent.ExecutionException;
 
+import commprocess.ExchangeStuct;
 import engine.CpComm;
 
 
 public class VideoWallFragment extends Fragment {
 
     private final static String TAG = SceneWall.class.getSimpleName();
+    public static final int INPUT_BOARD_NUM=4;
+    public static final int WIN_INTER=12;
     private RelativeLayout mRelativeLayout;
     private VideoWallView mVideoWallView;
     private View v;
@@ -49,10 +52,9 @@ public class VideoWallFragment extends Fragment {
     private int mSceneIndex=-1;
     private int mSignalIndex=-1;
     private int mLastIndex =-1;
+    private boolean m_bIsCloseAllWindows=false;
     private SharedAppData sharedAppData=null;
-    private boolean bRet=false;
     private Activity mActivity;
-
     private MyProgressDialog mProgressDialog;
 
     private  String[] StringSignal={"1-DVI_1","1-DVI_2","1-HDMI","1-DP",
@@ -84,6 +86,7 @@ public class VideoWallFragment extends Fragment {
             mRelativeLayout.addView(mVideoWallView, new ViewGroup.LayoutParams(
                     RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT
             ));
+            mSignalIndex=-1;
         }else if (mListIndex == 2){
             mSignalIndex = pos;
             mVideoWallView. mSignalIndex = mSignalIndex;
@@ -98,11 +101,27 @@ public class VideoWallFragment extends Fragment {
             }else if (powerOnOff == 1){
                 ComCommand((byte)2/*"power_off"*/);
             }
+            mSignalIndex=-1;
         }else if (mListIndex == 3){
             byte type=(byte)(mListIndex+pos);
             ComCommand(type);
+            mSignalIndex=-1;
+        }else if (mListIndex == 4){
+            //// TODO: 2017/12/26 model scene+signal
+            if (pos == 2){
+                //// TODO: 2017/12/26 save model
+                SetModelSave();
+            }else {
+                //// TODO: 2017/12/26 Exchange
+                ExchangeSceneAndSignal(pos);
+            }
+        }
+
+        if (mListIndex ==2 && mLastIndex == 1){
+            m_bIsCloseAllWindows=true;
         }
         mLastIndex =mListIndex;
+
     }
 
     public void onAttach(Activity activity) {
@@ -159,7 +178,7 @@ public class VideoWallFragment extends Fragment {
                         if (2!= mListIndex){
                             return true;
                         }
-                        if (0==sharedAppData.getSignalFlag(mSignalIndex) && mSignalIndex<StringSignal.length){
+                        if (mSignalIndex>=0 && 0==sharedAppData.getSignalFlag(mSignalIndex) && mSignalIndex<StringSignal.length){
                             Toast.makeText(getContext(), R.string.operation_signal_no_exist, Toast.LENGTH_SHORT).show();
                             mSignalIndex=-1;
                             v.invalidate();
@@ -169,7 +188,14 @@ public class VideoWallFragment extends Fragment {
                             ArrayList<Integer> cubePix =sharedAppData.getCubePix();
                             ArrayList<SingleSceneCell> sceneCells = sharedAppData.getSceneCell(mVideoWallView.mLastSceneIndex);
                             //// TODO: 2017/12/13
-                            VCLCommThread vclCommThread= new VCLCommThread(sharedAppData.getVCLordIP(),VclordActivity.PORT);
+                            //VCLCommThread vclCommThread= new VCLCommThread(sharedAppData.getVCLordIP(),VclordActivity.PORT);
+                            //// TODO: 2017/12/25 close all windows
+                            if (m_bIsCloseAllWindows){
+                                byte type =11;
+                                VCLComm vclcom=new VCLComm(sharedAppData.getVCLordIP(),VclordActivity.PORT,sharedAppData.getSystemInfo(1),sharedAppData.getSystemInfo(2),mProgressDialog,getContext());
+                                vclcom.execute(type);
+                                m_bIsCloseAllWindows=false;
+                            }
                             int i=0;
                             for (SingleSceneCell scene_cell :sceneCells){
                                 i++;
@@ -179,12 +205,13 @@ public class VideoWallFragment extends Fragment {
                                     if (mSignalIndex!=StringSignal.length-1) {
                                         mVideoWallView.drawCanvasText(StringSignal[mSignalIndex],scene_cell.getM_startX(),scene_cell.getM_startY(),scene_cell.getM_endX(),scene_cell.getM_endY());
                                         scene_cell.setM_signal(mSignalIndex);
+                                        sharedAppData.saveSceneSignal(mVideoWallView.mLastSceneIndex,i,mSignalIndex);
 
                                         //// TODO: 2017/12/4 save signal to sharedpreferences && send cmd to engine
                                         //byte winId=(byte)((mSignalWindowCount+1)&0xff);
-                                        openwin.setWinId((byte)(mVideoWallView.mLastSceneIndex*mVideoWallView.WIN_INTER+i));
-                                        openwin.setInputId((byte) (mSignalIndex / mVideoWallView.INPUT_BOARD_NUM));
-                                        openwin.setSig((byte) (mSignalIndex % mVideoWallView.INPUT_BOARD_NUM));
+                                        openwin.setWinId((byte)(mVideoWallView.mLastSceneIndex*WIN_INTER+i));
+                                        openwin.setInputId((byte) (mSignalIndex / INPUT_BOARD_NUM));
+                                        openwin.setSig((byte) (mSignalIndex % INPUT_BOARD_NUM));
 
                                         posX = (short) ((scene_cell.getM_startX() / mVideoWallView.m_cellWidth) * cubePix.get(0));
                                         posY = (short) ((scene_cell.getM_startY() / mVideoWallView.m_cellHeight) * cubePix.get(1));
@@ -216,7 +243,7 @@ public class VideoWallFragment extends Fragment {
                                 //v.invalidate();
                             }
                         }
-                        mSignalIndex=-1;//touch once
+                        //mSignalIndex=-1;//touch once
                         v.invalidate();
                         return true;
                     case MotionEvent.ACTION_UP:
@@ -302,9 +329,8 @@ public class VideoWallFragment extends Fragment {
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
-            ComStruc.ExchangeInterfaceVersion version= new ComStruc.ExchangeInterfaceVersion();
             try {
-                stInfo =version.ExchangeInterfaceVersion(vecResponse);
+                stInfo = ExchangeStuct.ExchangeInterfaceVersion(vecResponse);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -319,18 +345,36 @@ public class VideoWallFragment extends Fragment {
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
-            ComStruc.ExchangeInterfaceStatus version= new ComStruc.ExchangeInterfaceStatus();
             try {
-                stInfo =version.ExchangeInterfaceStatus(vecResponse);
+                stInfo =ExchangeStuct.ExchangeInterfaceStatus(vecResponse);
             } catch (IOException e) {
                 e.printStackTrace();
             }
             DialogList dialogList = new DialogList(getContext());
             dialogList.InterfaceInfo(stInfo);
+        }else if (type ==5){
+            DialogList dialogList = new DialogList(getContext());
+            dialogList.EngineInfo(vclcom,type,sharedAppData.getSystemInfo(1),sharedAppData.getSystemInfo(2));
         }else {
             vclcom.execute(type);
         }
         Toast.makeText(getContext(), R.string.operation_finished, Toast.LENGTH_SHORT).show();
     }
 
+    private void SetModelSave(){
+        DialogList dialogList = new DialogList(getContext());
+        int index = dialogList.SetModelSave();
+        sharedAppData.setSaveModelInfo(index,mVideoWallView.mLastSceneIndex,1);
+    }
+    private void ExchangeSceneAndSignal(int pos){
+        int flag =sharedAppData.getSaveModelInfo_Flag(pos);
+        if (flag==0){
+            Toast.makeText(getContext(), R.string.error_not_save_model_yet, Toast.LENGTH_SHORT).show();
+        }else {
+            int sceneIndex = sharedAppData.getSaveModelInfo_Scene(pos);
+            ModelAsyncTask model=new ModelAsyncTask(sharedAppData.getVCLordIP(),VclordActivity.PORT,mVideoWallView.m_cellWidth,mVideoWallView.m_cellHeight,mProgressDialog,getContext());
+            model.execute((byte)1,(byte)sceneIndex);
+            Toast.makeText(getContext(), R.string.operation_finished, Toast.LENGTH_SHORT).show();
+        }
+    }
 }

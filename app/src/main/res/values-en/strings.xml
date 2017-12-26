@@ -20,6 +20,7 @@
     <string name="error_no_system">System is unknown</string>
     <string name="error_network">Network is error</string>
     <string name="operation_signal_no_exist">Signal is not exist,change for another.</string>
+    <string name="error_not_save_model_yet">Not save model yet.</string>
     <string name="about">About</string>
     <string name="CopyRightDescribe"></string>
     <string name="ColTouchVersion">Col Touch V1.0</string>
@@ -78,6 +79,8 @@
     <string name="pref_signal_output_board_window_num_">input_board_num_</string>
     <string name="pref_signal_flag">signal_flag_</string>
     <string name="pref_set_network">Network</string>
+    <string name="pref_defined_model_flag_">defined_model_flag_</string>
+    <string name="pref_defined_model_scene_">defined_model_scene_</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -85,6 +88,7 @@
     <string name="signal_list">Signal List</string>
     <string name="power_list">Power OnOff</string>
     <string name="getSystemInfo">System Info.</string>
+    <string name="model_SceneAndSignal">Model Set</string>
     <string name="error_invalid_ip">Ip is incorrect</string>
     <string name="check_system"> </string>
     <string name="progress_check_system">Checking System Info.</string>
@@ -130,7 +134,11 @@
     <string name="power_off">PowerOff</string>
     <string name="get_interface_version">InterfaceVersion</string>
     <string name="get_interface_status">InterfaceStatus</string>
+    <string name="get_engine_version">EngineVersion</string>
+    <string name="get_engine_status">EngineStatus</string>
     <string name="Ok">OK</string>
     <string name="Cancel">Cancel</string>
+    <string name="model_define1">Model_Define1</string>
+    <string name="model_define2">Model_Define2</string>
 
 </resources>

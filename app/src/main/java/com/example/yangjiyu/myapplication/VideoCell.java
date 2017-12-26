@@ -70,7 +70,7 @@ public class VideoCell {
         if( posX * posY < 0 ){
             return sFailure;
         }else {
-            Log.i(TAG,"VideoCell position: x = " + posX + ", y = " + posY);
+            //Log.i(TAG,"VideoCell position: x = " + posX + ", y = " + posY);
         }
         mCellPositionTopLeftX = posX;
         mCellPositionTopLeftY = posY;

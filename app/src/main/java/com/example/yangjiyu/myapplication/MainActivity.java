@@ -14,6 +14,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.WindowManager;
 
+import com.example.yangjiyu.myapplication.utils.PollingUtils;
+
 
 public class MainActivity extends AppCompatActivity implements SourceItemListFragment.OnSourceListSelectedListener ,SourceItemFragment.OnSourceSelectedListener,VideoWallView.onCleanDefineSceneClickListener {
 
@@ -63,6 +65,10 @@ public class MainActivity extends AppCompatActivity implements SourceItemListFra
         //// TODO: 2017/12/13 disable HOME_KEY  在onCreate设置，此时home被拦截
         this.getWindow().setFlags(LoginActivity.FLAG_HOMEKEY_DISPATCHED, LoginActivity.FLAG_HOMEKEY_DISPATCHED);//关键代码
 
+        //PollingUtils.startPollingService(this, 5, PollingService.class, PollingService.ACTION);
+        SharedAppData sharedAppData = SharedAppData.newInstance(this);
+        MonitorThread  monitorThread = new MonitorThread( sharedAppData.getVCLordIP(),VclordActivity.PORT, this);
+        monitorThread.start();
     }
 /*    //// TODO: 2017/12/18 disable HOME_KEY
 
@@ -145,6 +151,13 @@ public class MainActivity extends AppCompatActivity implements SourceItemListFra
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //Stop polling service
+        PollingUtils.stopPollingService(this, PollingService.class, PollingService.ACTION);
     }
 }
 

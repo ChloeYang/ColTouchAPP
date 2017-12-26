@@ -72,6 +72,8 @@ public class VclordActivity extends AppCompatActivity {
             @Override
             public void onTimeOut(ProgressDialog dialog) {
                 Toast.makeText(getApplicationContext(), "TimeOut", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
             }
         });
         mProgressDialog.setTitle(getString(R.string.app_name));
@@ -196,7 +198,7 @@ public class VclordActivity extends AppCompatActivity {
     }
 
 
-    private void saveSignalInfo(CpSignalInfo signalInfo) {
+    public void saveSignalInfo(CpSignalInfo signalInfo) {
 
         sharedAppData.setSignalFlag(0, signalInfo.ucInput1);
         sharedAppData.setSignalFlag(1, signalInfo.ucInput2);
@@ -252,6 +254,8 @@ public class VclordActivity extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             //super.onPostExecute(aVoid);
             if (!ret) {
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
                 return;
             }
             adapter.clear();
@@ -290,7 +294,7 @@ public class VclordActivity extends AppCompatActivity {
                 saveSignalInfo(signalInfo);
                 //// TODO: 2017/12/18 set signal flag to deside which one is on or off
 
-                int outputNum = signalInfo.ucOutputNum;
+                /*int outputNum = signalInfo.ucOutputNum;
                 Vector<Short> cubeID = new Vector<>();
                 for (int irow = 0; irow < mRow; irow++) {
                     for (int icol = 0; icol < mCol; icol++) {
@@ -325,7 +329,7 @@ public class VclordActivity extends AppCompatActivity {
                 if (!ret) {
                     //Toast.makeText(getApplicationContext(),R.string.error_network,Toast.LENGTH_SHORT).show();
                     return null;
-                }
+                }*/
                 try {
                     vcl3CommProcess.ProcessCancel();
                 } catch (IOException e) {

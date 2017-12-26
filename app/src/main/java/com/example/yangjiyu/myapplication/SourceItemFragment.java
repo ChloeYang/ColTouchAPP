@@ -29,6 +29,7 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
     public Vector<String> Signal=new Vector<>();
     public Vector<String> Power=new Vector<>();
     public Vector<String> SystemInfo= new Vector<>();
+    public Vector<String> ModelInfo= new Vector<>();
     int  nowIndex=0;
 
     //String[] StringSource = {"Whole","H-2Parts","V-2Parts", "Single"};
@@ -53,9 +54,13 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
             powerData();
             textView.setText(getString(R.string.power_list));
             mAdapter.bIsSystemData=false;
-        }else{
+        }else if(pos==3){
             checkSystemData();
             textView.setText(getString(R.string.getSystemInfo));
+            mAdapter.bIsSystemData=true;
+        }else{
+            checkModelData();
+            textView.setText(getString(R.string.model_SceneAndSignal));
             mAdapter.bIsSystemData=true;
         }
     }
@@ -112,7 +117,7 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
 
         mRecyclerView.setLayoutManager(gridLayoutManager);//--linearLayoutManager
         //设置适配器
-        mAdapter = new GalleryAdapter(view.getContext(), mData,Scene,Signal,Power,SystemInfo);
+        mAdapter = new GalleryAdapter(view.getContext(), mData,Scene,Signal,Power,SystemInfo,ModelInfo);
         mAdapter.setOnItemClickListener(new GalleryAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -178,7 +183,11 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
 
         SystemInfo.add(getString(R.string.get_interface_version));
         SystemInfo.add(getString(R.string.get_interface_status));
+        SystemInfo.add(getString(R.string.get_engine_status));
 
+        ModelInfo.add(getString(R.string.model_define1));
+        ModelInfo.add(getString(R.string.model_define2));
+        ModelInfo.add(getString(R.string.confirm));
     }
     private void sceneData()
     {
@@ -224,6 +233,14 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
     private void checkSystemData(){
         mAdapter.mData = new ArrayList<>(Arrays.asList(
                 R.drawable.get_system_info_normal,
+                R.drawable.get_system_info_normal,
                 R.drawable.get_system_info_normal));
+    }
+
+    private void checkModelData(){
+        mAdapter.mData = new ArrayList<>(Arrays.asList(
+                R.drawable.model_normal,
+                R.drawable.model_normal,
+                R.drawable.scene_confirm));
     }
 }
