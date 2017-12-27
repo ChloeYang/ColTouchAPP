@@ -2,6 +2,7 @@ package com.example.yangjiyu.myapplication;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 
 import java.util.ArrayList;
@@ -117,8 +118,10 @@ public class SharedAppData {
         editor.putInt(mContext.getString(R.string.pref_default_startY_)+str+"_"+num,start_y);
         editor.putInt(mContext.getString(R.string.pref_default_endX_)+str+"_"+num,end_x);
         editor.putInt(mContext.getString(R.string.pref_default_endY_)+str+"_"+num,end_y);
+        //editor.putInt(mContext.getString(R.string.pref_default_signal_)+str+"_"+num,1);
         editor.commit();
     }
+
     public static ArrayList<SingleSceneCell> getDefaultScene(String str){
         ArrayList<SingleSceneCell> cells = new ArrayList<>();
         SharedPreferences defineShared = mContext.getSharedPreferences(mContext.getString(R.string.pref_define_scene),Context.MODE_PRIVATE);
@@ -172,7 +175,9 @@ public class SharedAppData {
                 default:
                     break;
             }
-            editor.putInt(mContext.getString(R.string.pref_default_num) +str+"_"+num, signal);
+
+            //Log.d("saveSceneSignal ","signal =  "+signal);
+            editor.putInt(mContext.getString(R.string.pref_default_signal_) +str+"_"+num, signal);
         }
         editor.commit();
     }
@@ -202,7 +207,7 @@ public class SharedAppData {
                 default:
                     break;
             }
-            signal = sharedPref.getInt(mContext.getString(R.string.pref_default_num) +str+"_"+num, 0);
+            signal = sharedPref.getInt(mContext.getString(R.string.pref_default_signal_) +str+"_"+num, 0);
         }
         return signal;
     }
@@ -399,7 +404,71 @@ public class SharedAppData {
     }
     public static int getSaveModelInfo_Scene(int num ){
         SharedPreferences preferences = mContext.getSharedPreferences(mContext.getString(R.string.pref_setting),Context.MODE_PRIVATE);
-        int flag = preferences.getInt(mContext.getString(R.string.pref_defined_model_scene_)+num,0);
-        return flag;
+        int scene = preferences.getInt(mContext.getString(R.string.pref_defined_model_scene_)+num,0);
+        return scene;
+    }
+    public static void saveModelSignal(int definedNum,int index){
+        SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.pref_define_scene), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        int num = index-1;
+        int signal=getSceneSignal(definedNum,index);
+        //Log.d("getSceneSignal ","signal =  "+signal);
+        if (definedNum ==4 ) {
+            editor.putInt(mContext.getString(R.string.pref_define1_model_signal_) + num, signal);
+        }else if (definedNum == 5){
+            editor.putInt(mContext.getString(R.string.pref_define2_model_signal_) + num, signal);
+        }else {
+            String str="";
+            switch (definedNum){
+                case 0:
+                    str=mContext.getString(R.string.pref_whole_scene);
+                    break;
+                case 1:
+                    str=mContext.getString(R.string.pref_h2part_scene);
+                    break;
+                case 2:
+                    str=mContext.getString(R.string.pref_v2part_scene);
+                    break;
+                case 3:
+                    str=mContext.getString(R.string.pref_each_scene);
+                    break;
+                default:
+                    break;
+            }
+            //Log.d("saveModelSignal ","signal =  "+signal);
+            editor.putInt(mContext.getString(R.string.pref_default_model_signal_) +str+"_"+num, signal);
+        }
+        editor.commit();
+    }
+    public static int getModelSignal(int definedNum,int index){
+        SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.pref_define_scene), Context.MODE_PRIVATE);
+        int num = index-1;
+        int signal=0;
+        if (definedNum ==4 ) {
+            signal = sharedPref.getInt(mContext.getString(R.string.pref_define1_model_signal_) + num, 0);
+        }else if (definedNum == 5){
+            signal = sharedPref.getInt(mContext.getString(R.string.pref_define2_model_signal_) + num, 0);
+        }else {
+            String str="";
+            switch (definedNum){
+                case 0:
+                    str=mContext.getString(R.string.pref_whole_scene);
+                    break;
+                case 1:
+                    str=mContext.getString(R.string.pref_h2part_scene);
+                    break;
+                case 2:
+                    str=mContext.getString(R.string.pref_v2part_scene);
+                    break;
+                case 3:
+                    str=mContext.getString(R.string.pref_each_scene);
+                    break;
+                default:
+                    break;
+            }
+            signal = sharedPref.getInt(mContext.getString(R.string.pref_default_model_signal_) +str+"_"+num, 0);
+            //Log.d("getModelSignal ","signal =  "+signal);
+        }
+        return signal;
     }
 }

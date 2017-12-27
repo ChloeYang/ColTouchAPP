@@ -3,6 +3,10 @@ package com.example.yangjiyu.myapplication;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -57,7 +61,7 @@ public class VideoWallFragment extends Fragment {
     private Activity mActivity;
     private MyProgressDialog mProgressDialog;
 
-    private  String[] StringSignal={"1-DVI_1","1-DVI_2","1-HDMI","1-DP",
+    public static   String[] StringSignal={"1-DVI_1","1-DVI_2","1-HDMI","1-DP",
             "2-DVI_1","2-DVI_2","2-HDMI","2-DP",
             "3-DVI_1","3-DVI_2","3-HDMI","3-DP",
             "4-DVI_1","4-DVI_2","4-HDMI","4-DP",
@@ -102,11 +106,11 @@ public class VideoWallFragment extends Fragment {
                 ComCommand((byte)2/*"power_off"*/);
             }
             mSignalIndex=-1;
-        }else if (mListIndex == 3){
-            byte type=(byte)(mListIndex+pos);
+        }else if (mListIndex == 4){
+            byte type=(byte)(3+pos);
             ComCommand(type);
             mSignalIndex=-1;
-        }else if (mListIndex == 4){
+        }else if (mListIndex == 3){
             //// TODO: 2017/12/26 model scene+signal
             if (pos == 2){
                 //// TODO: 2017/12/26 save model
@@ -204,7 +208,8 @@ public class VideoWallFragment extends Fragment {
 
                                     if (mSignalIndex!=StringSignal.length-1) {
                                         mVideoWallView.drawCanvasText(StringSignal[mSignalIndex],scene_cell.getM_startX(),scene_cell.getM_startY(),scene_cell.getM_endX(),scene_cell.getM_endY());
-                                        scene_cell.setM_signal(mSignalIndex);
+                                        /*scene_cell.setM_signal(mSignalIndex);*/
+                                        //Log.d("scene_cell ","= "+mSignalIndex);
                                         sharedAppData.saveSceneSignal(mVideoWallView.mLastSceneIndex,i,mSignalIndex);
 
                                         //// TODO: 2017/12/4 save signal to sharedpreferences && send cmd to engine
@@ -363,8 +368,10 @@ public class VideoWallFragment extends Fragment {
 
     private void SetModelSave(){
         DialogList dialogList = new DialogList(getContext());
-        int index = dialogList.SetModelSave();
-        sharedAppData.setSaveModelInfo(index,mVideoWallView.mLastSceneIndex,1);
+        dialogList.SetModelSave(sharedAppData,mVideoWallView.mLastSceneIndex,1);
+        /*int index = dialogList.getIndex();
+        Log.d("SetModelSave Fragment","index =  "+index);
+        sharedAppData.setSaveModelInfo(index,mVideoWallView.mLastSceneIndex,1);*/
     }
     private void ExchangeSceneAndSignal(int pos){
         int flag =sharedAppData.getSaveModelInfo_Flag(pos);
@@ -374,6 +381,17 @@ public class VideoWallFragment extends Fragment {
             int sceneIndex = sharedAppData.getSaveModelInfo_Scene(pos);
             ModelAsyncTask model=new ModelAsyncTask(sharedAppData.getVCLordIP(),VclordActivity.PORT,mVideoWallView.m_cellWidth,mVideoWallView.m_cellHeight,mProgressDialog,getContext());
             model.execute((byte)1,(byte)sceneIndex);
+
+            mVideoWallView.drawCanvasBase();
+            int i=0;
+            ArrayList<SingleSceneCell> sceneCells = sharedAppData.getSceneCell(sceneIndex);
+            for (SingleSceneCell scene_cell :sceneCells) {
+                i++;
+                mVideoWallView.drawCanvasRect(scene_cell.getM_startX(), scene_cell.getM_startY(),scene_cell.getM_endX(), scene_cell.getM_endY());
+                //Log.d("ExchangeSceneAndSignal ","= "+sharedAppData.getModelSignal(sceneIndex,i));
+                mVideoWallView.drawCanvasText(StringSignal[sharedAppData.getModelSignal(sceneIndex,i)],scene_cell.getM_startX(),scene_cell.getM_startY(),scene_cell.getM_endX(),scene_cell.getM_endY());
+            }
+
             Toast.makeText(getContext(), R.string.operation_finished, Toast.LENGTH_SHORT).show();
         }
     }

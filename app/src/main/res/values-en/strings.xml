@@ -58,6 +58,9 @@
     <string name="pref_default_signal_">default_signal_</string>
     <string name="pref_define1_signal_">define1_signal_</string>
     <string name="pref_define2_signal_">define2_signal_</string>
+    <string name="pref_default_model_signal_">default_model_signal_</string>
+    <string name="pref_define1_model_signal_">define1_model_signal_</string>
+    <string name="pref_define2_model_signal_">define2_model_signal_</string>
     <string name="pref_video_cell_list">VideoCellList</string>
     <string name="pref_cubeNum">cubeNum</string>
     <string name="pref_cubeId">cubeId</string>
@@ -140,5 +143,6 @@
     <string name="Cancel">Cancel</string>
     <string name="model_define1">Model_Define1</string>
     <string name="model_define2">Model_Define2</string>
+    <string name="model_save">SaveToModel</string>
 
 </resources>

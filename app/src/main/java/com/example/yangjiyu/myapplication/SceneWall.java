@@ -88,6 +88,7 @@ public class SceneWall {
                 singleSceneCell.setM_startY(posY);
                 singleSceneCell.setM_endX(posX+VideoCellWidth);
                 singleSceneCell.setM_endY(posY+VideoCellHeight);
+                singleSceneCell.setM_signal(1);
                 singleSceneCells.add(singleSceneCell);
                 //Log.i(TAG,"Add scene cell: x = " + posX + ", y = " + posY);
             }
@@ -117,6 +118,7 @@ public class SceneWall {
         singleSceneCell.setM_startY(0);
         singleSceneCell.setM_endX(posX);
         singleSceneCell.setM_endY(posY);
+        singleSceneCell.setM_signal(1);
         singleSceneCells.add(singleSceneCell);
 
         posY = upNum * (VideoCellHeight + sVideoCellGap);
@@ -125,6 +127,7 @@ public class SceneWall {
         singleSceneCell.setM_startY(posY);
         singleSceneCell.setM_endX(posX);
         singleSceneCell.setM_endY(sceneWall.getWallHeight());
+        singleSceneCell.setM_signal(1);
         singleSceneCells.add(singleSceneCell);
 
 
@@ -150,6 +153,7 @@ public class SceneWall {
         singleSceneCell.setM_startY(0);
         singleSceneCell.setM_endX(posX);
         singleSceneCell.setM_endY(posY);
+        singleSceneCell.setM_signal(1);
         singleSceneCells.add(singleSceneCell);
 
         posX = leftNum * (VideoCellWidth + sVideoCellGap);
@@ -158,6 +162,7 @@ public class SceneWall {
         singleSceneCell.setM_startY(0);
         singleSceneCell.setM_endX(sceneWall.getWallWidth());
         singleSceneCell.setM_endY(posY);
+        singleSceneCell.setM_signal(1);
         singleSceneCells.add(singleSceneCell);
 
 

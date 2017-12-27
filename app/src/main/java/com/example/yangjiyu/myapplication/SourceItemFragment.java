@@ -54,14 +54,14 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
             powerData();
             textView.setText(getString(R.string.power_list));
             mAdapter.bIsSystemData=false;
-        }else if(pos==3){
+        }else if(pos==4){
             checkSystemData();
             textView.setText(getString(R.string.getSystemInfo));
             mAdapter.bIsSystemData=true;
-        }else{
+        }else if(pos==3){
             checkModelData();
             textView.setText(getString(R.string.model_SceneAndSignal));
-            mAdapter.bIsSystemData=true;
+            mAdapter.bIsSystemData=false;
         }
     }
 
@@ -187,7 +187,7 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
 
         ModelInfo.add(getString(R.string.model_define1));
         ModelInfo.add(getString(R.string.model_define2));
-        ModelInfo.add(getString(R.string.confirm));
+        ModelInfo.add(getString(R.string.model_save));
     }
     private void sceneData()
     {

@@ -6,11 +6,11 @@ package com.example.yangjiyu.myapplication;
 
 public class SingleSceneCell {
 
-    private int m_startX;
-    private int m_startY;
-    private int m_endX;
-    private int m_endY;
-    private int m_signal;
+    private int m_startX=0;
+    private int m_startY=0;
+    private int m_endX=0;
+    private int m_endY=0;
+    private int m_signal=1;
 
     public int getM_startX() {
         return m_startX;

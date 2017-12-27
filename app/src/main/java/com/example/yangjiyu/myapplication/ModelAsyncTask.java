@@ -2,6 +2,7 @@ package com.example.yangjiyu.myapplication;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -62,7 +63,8 @@ public class ModelAsyncTask extends AsyncTask<Byte,Void,Vector<Byte>>  {
             ArrayList<SingleSceneCell> sceneCells = sharedAppData.getSceneCell(FuncName[1]);
             for (SingleSceneCell scene_cell :sceneCells) {
                 i++;
-                signal = sharedAppData.getSceneSignal(FuncName[1],i);
+                signal = sharedAppData.getModelSignal(FuncName[1],i);
+                Log.d("ModelAsyncTask ","= "+scene_cell.getM_signal());
                 //// TODO: 2017/12/4 save signal to sharedpreferences && send cmd to engine
                 //byte winId=(byte)((mSignalWindowCount+1)&0xff);
                 winId=(byte) (FuncName[1] * VideoWallFragment.WIN_INTER + i);

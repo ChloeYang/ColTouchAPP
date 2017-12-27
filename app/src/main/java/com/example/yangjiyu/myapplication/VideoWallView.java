@@ -42,6 +42,14 @@ public class VideoWallView extends View {
     }
     public onCleanDefineSceneClickListener mCleanDefineSceneClickListener;
 
+    public int getWallWidth() {
+        return WallWidth;
+    }
+
+    public int getWallHeight() {
+        return WallHeight;
+    }
+
     private int WallWidth;
     private int WallHeight;
 
@@ -292,8 +300,11 @@ public class VideoWallView extends View {
     public void drawCanvasText(String str,int start_X,int start_Y,int end_X,int end_Y){
         CellPaint.setColor(Color.WHITE);
         CellPaint.setTextSize(30);
-        CellCanvas.drawText("   " + str + "   ", (start_X + end_X) / 2, (start_Y + end_Y) / 2-30, CellPaint);
+        CellCanvas.drawText("   " + str + "   ", (start_X + end_X) / 2-40, (start_Y + end_Y) / 2-20, CellPaint);
 
+    }
+    public void drawCanvasBase() {
+        initCell();
     }
     public void drawCanvasRect(int start_X,int start_Y,int end_X,int end_Y){
         CellPaint.setColor(Color.BLUE);

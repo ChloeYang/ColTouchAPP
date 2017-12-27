@@ -3,9 +3,10 @@ package com.example.yangjiyu.myapplication;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.widget.Toast;
+import android.util.Log;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Vector;
 import java.util.concurrent.ExecutionException;
 
@@ -229,8 +230,15 @@ public class DialogList {
         builder.create().show();
 
     }
-    public int SetModelSave(){
-        final int[] index = {0};
+    private int index=0;
+    private SharedAppData mSharedAppData;
+    private int mLastSceneIndex=0;
+    private int mFlag=1;
+    public int SetModelSave(SharedAppData sharedAppData,int LastSceneIndex,int flag){
+
+        mSharedAppData =sharedAppData;
+        mLastSceneIndex=LastSceneIndex;
+        mFlag=flag;
         String [] strings = {"自定义模式1","自定义模式2"};
         final AlertDialog.Builder builder = new AlertDialog.Builder(mContext,1);
         builder.setTitle(mContext.getString(R.string.getSystemInfo));
@@ -238,18 +246,32 @@ public class DialogList {
         builder.setSingleChoiceItems(strings, 0, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                index[0] = which;
+                index = which;
+
                 //end // TODO: 2017/12/21
-                dialog.dismiss();
+                //dialog.dismiss();
             }
         });
         builder.setPositiveButton(mContext.getString(R.string.Ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                Log.d("SetModelSave onClick","index =  "+index);
+                mSharedAppData.setSaveModelInfo(index,mLastSceneIndex,mFlag);
+                ArrayList<SingleSceneCell> sceneCells = mSharedAppData.getSceneCell(mLastSceneIndex);
+                int i=0;
+                for (SingleSceneCell scene_cell :sceneCells) {
+                    i++;
+                    Log.d("SetModelSave onClick","i =  "+i);
+                    mSharedAppData.saveModelSignal(mLastSceneIndex,i);
+                }
                 dialog.dismiss();
             }
         });
         builder.create().show();
-        return index[0];
+        Log.d("SetModelSave return","index =  "+index);
+        return index;
+    }
+    public int getIndex(){
+        return this.index;
     }
 }
