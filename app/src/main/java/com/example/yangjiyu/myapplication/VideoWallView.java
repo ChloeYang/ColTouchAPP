@@ -193,7 +193,8 @@ public class VideoWallView extends View {
                     cell.getCellPositionTopLeftX() + cell.getCellWidth(),
                     cell.getCellPositionTopLeftY() + cell.getCellHeight(), CellPaint);
             CellPaint.setColor(Color.WHITE);
-            CellCanvas.drawText("   " + i++ +"   ",cell.getCellPositionTopLeftX() + cell.getCellWidth()/2+i,
+            CellPaint.setTextSize(16);
+            CellCanvas.drawText("   " + ++i +"   ",cell.getCellPositionTopLeftX() + cell.getCellWidth()/2+i,
                     cell.getCellPositionTopLeftY() + cell.getCellHeight()/2+i,CellPaint);
             CellPaint.setColor(Color.BLACK);
         }
