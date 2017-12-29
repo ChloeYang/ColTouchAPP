@@ -16,7 +16,7 @@
     <string name="error_field_required">请输入有效信息</string>
     <string name="permission_rationale">请提供完整Email，或使用有效信息</string>
     <string name="setting">设置</string>
-    <string name="action_vclord_connect">VCLORD服务连接</string>
+    <string name="action_vclord_connect">获取系统信息</string>
     <string name="point">.</string>
     <string name="error_no_system">系统未知</string>
     <string name="error_network">网路连接错误</string>
@@ -85,6 +85,7 @@
     <string name="pref_set_network">网络设置</string>
     <string name="pref_defined_model_flag_">defined_model_flag_</string>
     <string name="pref_defined_model_scene_">defined_model_scene_</string>
+    <string name="pref_color_mode_name_">color_mode_name_</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">黑色背景</string>
@@ -145,5 +146,6 @@
     <string name="model_define1">自定义模式1</string>
     <string name="model_define2">自定义模式2</string>
     <string name="model_save">保存至模式</string>
+    <string name="color_mode">光学模式切换</string>
 
 </resources>

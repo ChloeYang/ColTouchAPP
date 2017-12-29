@@ -98,17 +98,25 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
 
     int[] ImgModelInfoNormal = {R.drawable.model_normal,R.drawable.model_normal,R.drawable.scene_confirm};
     int[] ImgModelInfoPressed = {R.drawable.model_pressdown,R.drawable.model_pressdown,R.drawable.scene_confirm};
+
+    int[] ImgColorModeNormal = {R.drawable.color_mode_normal,R.drawable.color_mode_normal,R.drawable.color_mode_normal,
+            R.drawable.color_mode_normal,R.drawable.color_mode_normal,R.drawable.color_mode_normal};
+    int[] ImgColorModePressed = {R.drawable.color_mode_pressed,R.drawable.color_mode_pressed,R.drawable.color_mode_pressed,
+            R.drawable.color_mode_pressed,R.drawable.color_mode_pressed,R.drawable.color_mode_pressed};
+
     public Vector<String> StringScene=new Vector<>();
     public Vector<String> StringSignal=new Vector<>();
     public Vector<String> StringPower=new Vector<>();
     public Vector<String> StringSystemInfo =new Vector<>();
     public Vector<String> StringModelInfo =new Vector<>();
+    public Vector<String> StringColorMode =new Vector<>();
 
     private int mSceneNum=8;
     private int mSignalNum=17;
     private int mPowerNum=2;
     private int mSystemInfoNum =3;
     private int mModelInfoNum=3;
+    private int mColorModeNum=6;
 
     public ViewHolder mViewHolder;
     private List<Boolean> isClicks =new ArrayList<>();
@@ -127,7 +135,12 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     public java.util.List<Integer> mData;
     private SharedAppData sharedAppData;
 
-    public GalleryAdapter(Context context, List<Integer> data,Vector<String> Scene,Vector<String> Signal,Vector<String> Power,Vector<String>SystemInfo,Vector<String>ModelInfo)
+    public GalleryAdapter(Context context, List<Integer> data,Vector<String> Scene,
+                          Vector<String> Signal,
+                          Vector<String> Power,
+                          Vector<String>SystemInfo,
+                          Vector<String>ModelInfo,
+                          Vector<String>ColorMode)
     {
         sharedAppData=SharedAppData.newInstance(context);
         mInflater = LayoutInflater.from(context);
@@ -137,6 +150,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         StringPower=Power;
         StringSystemInfo =SystemInfo;
         StringModelInfo=ModelInfo;
+        StringColorMode = ColorMode;
     }
 
     public  class ViewHolder extends RecyclerView.ViewHolder
@@ -163,7 +177,10 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             }else if (mData.size()== mModelInfoNum && bIsSystemData==false){
                 mImg.setImageResource(ImgModelInfoNormal[sourceId]);
                 mTxt.setText(StringModelInfo.get(sourceId));
-            }else /*if(mData.size()==mSignalNum)*/{
+            }else if (mData.size()==mColorModeNum) {
+                mImg.setImageResource(ImgColorModeNormal[sourceId]);
+                mTxt.setText(sharedAppData.getColorMode((byte)sourceId));
+            }else/*if(mData.size()==mSignalNum)*/{
                 if (sharedAppData.getSignalFlag(sourceId)==1 || sourceId==(mSignalNum-1)) {
                     mImg.setImageResource(ImgSignalNormal[sourceId]);
                     mTxt.setText(StringSignal.get(sourceId));
@@ -213,6 +230,11 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             {
                 isClicks.add(false);
             }
+        }else if (mData.size()==mColorModeNum) {
+            for (int ii = 0;ii<StringColorMode.size();ii++)
+            {
+                isClicks.add(false);
+            }
         }else/*if (mData.size()==mSignalNum)*/{
             for (int ii = 0;ii<StringSignal.size();ii++)
             {
@@ -247,6 +269,9 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             }else if (mData.size()== mModelInfoNum && bIsSystemData==false){
                 viewHolder.mImg.setImageResource(ImgModelInfoPressed[i]);
                 viewHolder.mTxt.setTextColor(Color.parseColor("#500000"));
+            }else if (mData.size()== mColorModeNum){
+                viewHolder.mImg.setImageResource(ImgColorModePressed[i]);
+                viewHolder.mTxt.setTextColor(Color.parseColor("#500000"));
             }else /*if (mData.size()==mSignalNum)*/{
                 if (sharedAppData.getSignalFlag(i)==1 || i==(mSignalNum-1)) {
                     viewHolder.mImg.setImageResource(ImgSignalPressed[i]);
@@ -267,6 +292,9 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
                 viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
             }else if (mData.size()== mModelInfoNum && bIsSystemData==false){
                 viewHolder.mImg.setImageResource(ImgModelInfoNormal[i]);
+                viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
+            }else if (mData.size()== mColorModeNum){
+                viewHolder.mImg.setImageResource(ImgColorModeNormal[i]);
                 viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
             }else/* if (mData.size()==mSignalNum)*/{
                 if (sharedAppData.getSignalFlag(i)==1 || i==(mSignalNum-1)) {
@@ -313,6 +341,9 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             }else if (mData.size()== mModelInfoNum && bIsSystemData==false){
                 viewHolder.mImg.setImageResource(ImgModelInfoPressed[i]);
                 viewHolder.mTxt.setTextColor(Color.parseColor("#500000"));
+            }else if (mData.size()== mColorModeNum){
+                viewHolder.mImg.setImageResource(ImgColorModePressed[i]);
+                viewHolder.mTxt.setTextColor(Color.parseColor("#500000"));
             }else /*if (mData.size()==mSignalNum)*/{
                 if (sharedAppData.getSignalFlag(i)==1|| i==(mSignalNum-1)) {
                     viewHolder.mImg.setImageResource(ImgSignalPressed[i]);
@@ -333,6 +364,9 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
                 viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
             }else if (mData.size()== mModelInfoNum && bIsSystemData==false){
                 viewHolder.mImg.setImageResource(ImgModelInfoNormal[i]);
+                viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
+            }else if (mData.size()== mColorModeNum){
+                viewHolder.mImg.setImageResource(ImgColorModeNormal[i]);
                 viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
             }else /*if (mData.size()==mSignalNum)*/{
                 if (sharedAppData.getSignalFlag(i)==1|| i==(mSignalNum-1)) {
@@ -375,6 +409,11 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             }
         }else if (mData.size()==mModelInfoNum && bIsSystemData==false) {
             for (int ii = 0;ii<StringModelInfo.size();ii++)
+            {
+                isClicks.add(false);
+            }
+        }else if (mData.size()==mColorModeNum) {
+            for (int ii = 0;ii<StringColorMode.size();ii++)
             {
                 isClicks.add(false);
             }

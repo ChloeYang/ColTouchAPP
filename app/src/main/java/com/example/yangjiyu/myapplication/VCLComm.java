@@ -115,6 +115,20 @@ public class VCLComm extends AsyncTask<Byte,Void,Vector<Byte>> {
             bRet |= mVcl3CommProcess.OpenSignalWindow(FuncName[1],FuncName[2],FuncName[3],
                     FuncName[4],FuncName[5],FuncName[6],FuncName[7],
                     FuncName[8],FuncName[9],FuncName[10],FuncName[11]);
+        }else if (FuncName[0]>=13 && FuncName[0]<=18){
+            byte type = (byte)(FuncName[0] - 8);
+            short cubeId;
+            for (int i = 0;i<m_cellRow;i++){//setSysRowCol
+                for (int j=0;j<m_cellCol;j++){
+                    cubeId=(short)(i*VideoCell.CUBE_ROW_MAX+j);
+                    Log.i(TAG,"color mode switch cubeId= "+cubeId);
+                    try {
+                        bRet = mVcl3CommProcess.ColorModeSwitch(cubeId,type) ;
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         }
         //end
         try {

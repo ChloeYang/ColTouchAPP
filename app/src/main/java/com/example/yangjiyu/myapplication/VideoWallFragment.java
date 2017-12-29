@@ -66,12 +66,6 @@ public class VideoWallFragment extends Fragment {
             "3-DVI_1","3-DVI_2","3-HDMI","3-DP",
             "4-DVI_1","4-DVI_2","4-HDMI","4-DP",
             "清除"};
-    /*{getContext().getString(R.string.DVI_1_1),getContext().getString(R.string.DVI_1_2),getContext().getString(R.string.HDMI_1),getContext().getString(R.string.DP_1),
-            getContext().getString(R.string.DVI_2_1),getContext().getString(R.string.DVI_2_2),getContext().getString(R.string.HDMI_2),getContext().getString(R.string.DP_2),
-            getContext().getString(R.string.DVI_3_1),getContext().getString(R.string.DVI_3_2),getContext().getString(R.string.HDMI_3),getContext().getString(R.string.DP_3),
-            getContext().getString(R.string.DVI_4_1),getContext().getString(R.string.DVI_4_2),getContext().getString(R.string.HDMI_4),getContext().getString(R.string.DP_4),
-            getContext().getString(R.string.clear)};*/
-
     public void upDataList(int pos)
     {
         mListIndex=pos;
@@ -106,11 +100,11 @@ public class VideoWallFragment extends Fragment {
                 ComCommand((byte)2/*"power_off"*/);
             }
             mSignalIndex=-1;
-        }else if (mListIndex == 4){
+        }else if (mListIndex == 5){//version && status
             byte type=(byte)(3+pos);
             ComCommand(type);
             mSignalIndex=-1;
-        }else if (mListIndex == 3){
+        }else if (mListIndex == 3){//scene and signal to model
             //// TODO: 2017/12/26 model scene+signal
             if (pos == 2){
                 //// TODO: 2017/12/26 save model
@@ -119,6 +113,9 @@ public class VideoWallFragment extends Fragment {
                 //// TODO: 2017/12/26 Exchange
                 ExchangeSceneAndSignal(pos);
             }
+        }else if (mListIndex == 4){//color mode
+            byte type=(byte)(13+pos);
+            ComCommand(type);
         }
 
         if (mListIndex ==2 && mLastIndex == 1){
@@ -369,9 +366,6 @@ public class VideoWallFragment extends Fragment {
     private void SetModelSave(){
         DialogList dialogList = new DialogList(getContext());
         dialogList.SetModelSave(sharedAppData,mVideoWallView.mLastSceneIndex,1);
-        /*int index = dialogList.getIndex();
-        Log.d("SetModelSave Fragment","index =  "+index);
-        sharedAppData.setSaveModelInfo(index,mVideoWallView.mLastSceneIndex,1);*/
     }
     private void ExchangeSceneAndSignal(int pos){
         int flag =sharedAppData.getSaveModelInfo_Flag(pos);

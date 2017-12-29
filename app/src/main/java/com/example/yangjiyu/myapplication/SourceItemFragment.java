@@ -30,6 +30,7 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
     public Vector<String> Power=new Vector<>();
     public Vector<String> SystemInfo= new Vector<>();
     public Vector<String> ModelInfo= new Vector<>();
+    public Vector<String> ColorMode= new Vector<>();
     int  nowIndex=0;
 
     //String[] StringSource = {"Whole","H-2Parts","V-2Parts", "Single"};
@@ -54,13 +55,17 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
             powerData();
             textView.setText(getString(R.string.power_list));
             mAdapter.bIsSystemData=false;
-        }else if(pos==4){
+        }else if(pos==5){
             checkSystemData();
             textView.setText(getString(R.string.getSystemInfo));
             mAdapter.bIsSystemData=true;
         }else if(pos==3){
             checkModelData();
             textView.setText(getString(R.string.model_SceneAndSignal));
+            mAdapter.bIsSystemData=false;
+        } else if(pos==4){
+            checkColorModeData();
+            textView.setText(getString(R.string.color_mode));
             mAdapter.bIsSystemData=false;
         }
     }
@@ -117,7 +122,7 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
 
         mRecyclerView.setLayoutManager(gridLayoutManager);//--linearLayoutManager
         //设置适配器
-        mAdapter = new GalleryAdapter(view.getContext(), mData,Scene,Signal,Power,SystemInfo,ModelInfo);
+        mAdapter = new GalleryAdapter(view.getContext(), mData,Scene,Signal,Power,SystemInfo,ModelInfo,ColorMode);
         mAdapter.setOnItemClickListener(new GalleryAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -188,6 +193,13 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
         ModelInfo.add(getString(R.string.model_define1));
         ModelInfo.add(getString(R.string.model_define2));
         ModelInfo.add(getString(R.string.model_save));
+
+        ColorMode.add(getString(R.string.color_mode)+1);
+        ColorMode.add(getString(R.string.color_mode)+2);
+        ColorMode.add(getString(R.string.color_mode)+3);
+        ColorMode.add(getString(R.string.color_mode)+4);
+        ColorMode.add(getString(R.string.color_mode)+5);
+        ColorMode.add(getString(R.string.color_mode)+6);
     }
     private void sceneData()
     {
@@ -242,5 +254,14 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
                 R.drawable.model_normal,
                 R.drawable.model_normal,
                 R.drawable.scene_confirm));
+    }
+    private void checkColorModeData(){
+        mAdapter.mData = new ArrayList<>(Arrays.asList(
+                R.drawable.color_mode_normal,
+                R.drawable.color_mode_normal,
+                R.drawable.color_mode_normal,
+                R.drawable.color_mode_normal,
+                R.drawable.color_mode_normal,
+                R.drawable.color_mode_normal));
     }
 }

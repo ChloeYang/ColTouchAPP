@@ -30,6 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import commprocess.ExchangeStuct;
 import commprocess.VCL3CommProcess;
 
 import static engine.CpComm.*;
@@ -108,24 +109,6 @@ public class VclordActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 mVclordIp = mIpText.getText();
-                //Toast.makeText(getApplicationContext(),""+mVclordIp+":"+mPort,Toast.LENGTH_SHORT).show();
-
-
-                //getSystemInfo.execute();
-                /*if (vecSys.isEmpty()) {
-                    mButton.setEnabled(false);
-                    Toast.makeText(getApplicationContext(),R.string.error_no_system,Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    adapter.clear();
-                    adapter.add(getString(R.string.check_system));
-                    Iterator<SYS_INFO> iterator= vecSys.iterator();
-                    SYS_INFO sys_info;
-                    while (iterator.hasNext()) {
-                        sys_info=iterator.next();
-                        adapter.add(getString(R.string.system_id)+""+sys_info.sysID+" :"+sys_info.uiRow+getString(R.string.system_row)+" "+sys_info.uiCol+getString(R.string.system_col));
-                    }
-                }*/
 
                 String strItem = (String) mSpinner.getSelectedItem();
                 if (strItem != "") {
@@ -158,12 +141,10 @@ public class VclordActivity extends AppCompatActivity {
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
-
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 
@@ -292,44 +273,23 @@ public class VclordActivity extends AppCompatActivity {
                     return null;
                 }
                 saveSignalInfo(signalInfo);
-                //// TODO: 2017/12/18 set signal flag to deside which one is on or off
-
-                /*int outputNum = signalInfo.ucOutputNum;
-                Vector<Short> cubeID = new Vector<>();
-                for (int irow = 0; irow < mRow; irow++) {
-                    for (int icol = 0; icol < mCol; icol++) {
-                        short deviceID = (short) (irow * VideoCell.CUBE_ROW_MAX + icol);
-                        cubeID.add(deviceID);
+                //// TODO: 2017/12/28 get color mode name 6 num
+                Vector<Byte> res=new Vector<>();
+                String modeName;
+                for (byte mode=0;mode<6;mode++){
+                    try {
+                        ret = vcl3CommProcess.ColorModeGetName((short)0,(byte)(mode+5),res);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        sharedAppData.saveColorMode(mode,getString(R.string.color_mode)+mode);
+                    }
+                    if (ret){
+                        modeName= ExchangeStuct.ExchangeModelName(res);
+                        sharedAppData.saveColorMode(mode,modeName);
+                    }else {
+                        sharedAppData.saveColorMode(mode,getString(R.string.color_mode)+mode);
                     }
                 }
-                short s1 = 0, s2 = 0, s3 = 0, s4 = 0;
-                for (int i = 0; i < outputNum; i++) {
-                    if (i * INPUT_BOARD_NUM >= cubeID.size()) {
-                        s1 = 0xff;
-                    } else {
-                        s1 = cubeID.get(i * INPUT_BOARD_NUM);
-                    }
-                    if ((i * INPUT_BOARD_NUM + 1) >= cubeID.size()) {
-                        s2 = 0xff;
-                    } else {
-                        s2 = cubeID.get(i * INPUT_BOARD_NUM + 1);
-                    }
-                    if ((i * INPUT_BOARD_NUM + 2) >= cubeID.size()) {
-                        s3 = 0xff;
-                    } else {
-                        s3 = cubeID.get(i * INPUT_BOARD_NUM + 2);
-                    }
-                    if ((i * INPUT_BOARD_NUM + 3) >= cubeID.size()) {
-                        s4 = 0xff;
-                    } else {
-                        s4 = cubeID.get(i * INPUT_BOARD_NUM + 3);
-                    }
-                    ret = vcl3CommProcess.SetSignalPosition((byte) i, s1, s2, s3, s4, mRow, mCol);
-                }
-                if (!ret) {
-                    //Toast.makeText(getApplicationContext(),R.string.error_network,Toast.LENGTH_SHORT).show();
-                    return null;
-                }*/
                 try {
                     vcl3CommProcess.ProcessCancel();
                 } catch (IOException e) {
@@ -337,12 +297,10 @@ public class VclordActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "" + e, Toast.LENGTH_SHORT).show();
                 }
             }
-
             return null;
         }
 
         protected void onProgressUpdate(String... values) {
-
         }
 
         @Override
@@ -351,7 +309,6 @@ public class VclordActivity extends AppCompatActivity {
             if (!ret) {
                 return;
             }
-
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
         }

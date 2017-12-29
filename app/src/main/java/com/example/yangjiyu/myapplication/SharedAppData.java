@@ -19,7 +19,6 @@ public class SharedAppData {
     SharedAppData(Context context){
         this.mContext=context;
     }
-
     public static SharedAppData newInstance(Context context){
         if (sharedAppData==null){
             if (context==null)
@@ -32,10 +31,7 @@ public class SharedAppData {
         }
     }
 
-
-
-    public static int getSystemInfo(int type)
-    {
+    public static int getSystemInfo(int type){
         SharedPreferences preferences = mContext.getSharedPreferences(mContext.getString(R.string.pref_setting), Context.MODE_PRIVATE);
         int value=0;
         switch (type)
@@ -58,7 +54,6 @@ public class SharedAppData {
         return value;
     }
     public static void saveSystemInfo(String VclordIp,int sysID, int uiRow, int uiCol){
-
         SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.pref_setting), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(mContext.getString(R.string.pref_data_vclordip), VclordIp);
@@ -67,7 +62,6 @@ public class SharedAppData {
         editor.putInt(mContext.getString(R.string.pref_data_col), uiCol);
         editor.commit();
     }
-
     public static void saveVideoCellList(ArrayList<VideoCell> videoCells) {
         SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.pref_video_cell_list), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -109,7 +103,6 @@ public class SharedAppData {
         }
         return videoCells;
     }
-
     public static void saveDefaultScene(String str,int num, int start_x,int start_y,int end_x,int end_y){
         SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.pref_define_scene), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -121,7 +114,6 @@ public class SharedAppData {
         //editor.putInt(mContext.getString(R.string.pref_default_signal_)+str+"_"+num,1);
         editor.commit();
     }
-
     public static ArrayList<SingleSceneCell> getDefaultScene(String str){
         ArrayList<SingleSceneCell> cells = new ArrayList<>();
         SharedPreferences defineShared = mContext.getSharedPreferences(mContext.getString(R.string.pref_define_scene),Context.MODE_PRIVATE);
@@ -277,8 +269,7 @@ public class SharedAppData {
         int mDefine2Flag = defineShared.getInt(mContext.getString(R.string.pref_define2_flag), 0);
         return mDefine2Flag;
     }
-    public static void initDefine1Scene()
-    {
+    public static void initDefine1Scene(){
         SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.pref_define_scene), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt(mContext.getString(R.string.pref_define1_flag),0);
@@ -293,8 +284,7 @@ public class SharedAppData {
         }
         editor.commit();
     }
-    public static void initDefine2Scene()
-    {
+    public static void initDefine2Scene(){
         SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.pref_define_scene), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt(mContext.getString(R.string.pref_define2_flag),0);
@@ -325,7 +315,6 @@ public class SharedAppData {
         String vclordIp=preferences.getString(mContext.getString(R.string.pref_data_vclordip),"");
         return vclordIp;
     }
-
     public static ArrayList<SingleSceneCell> getSceneCell(int mLastSceneIndex){
         ArrayList<SingleSceneCell> sceneCells = new ArrayList<>();
         switch (mLastSceneIndex){
@@ -470,5 +459,17 @@ public class SharedAppData {
             //Log.d("getModelSignal ","signal =  "+signal);
         }
         return signal;
+    }
+    public static void saveColorMode(byte mode,String modeName){
+        SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.pref_setting), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(mContext.getString(R.string.pref_color_mode_name_)+mode, modeName);
+        editor.commit();
+    }
+    public static String getColorMode(byte mode){
+        String string;
+        SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.pref_setting), Context.MODE_PRIVATE);
+        string = sharedPref.getString(mContext.getString(R.string.pref_color_mode_name_)+mode , mContext.getString(R.string.color_mode)+mode );
+        return string;
     }
 }

@@ -57,6 +57,7 @@ public class SourceItemListFragment extends Fragment {
         StringSource.add(getString(R.string.scene_list));
         StringSource.add(getString(R.string.signal_list));
         StringSource.add(getString(R.string.model_SceneAndSignal));
+        StringSource.add(getString(R.string.color_mode));
         StringSource.add(getString(R.string.getSystemInfo));
     }
 
