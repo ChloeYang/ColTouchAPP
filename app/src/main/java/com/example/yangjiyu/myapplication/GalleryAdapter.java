@@ -124,6 +124,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     public interface OnItemClickListener
     {
         void onItemClick(View view,int position);
+        void onItemLongClick(View view, int index,int type);
     }
     private OnItemClickListener mOnItemClickListener;
 
@@ -176,18 +177,18 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
                 mTxt.setText(StringSystemInfo.get(sourceId));
             }else if (mData.size()== mModelInfoNum && bIsSystemData==false){
                 mImg.setImageResource(ImgModelInfoNormal[sourceId]);
-                mTxt.setText(StringModelInfo.get(sourceId));
+                mTxt.setText(sharedAppData.getSignalModelName((byte)sourceId));
             }else if (mData.size()==mColorModeNum) {
                 mImg.setImageResource(ImgColorModeNormal[sourceId]);
-                mTxt.setText(sharedAppData.getColorMode((byte)sourceId));
+                mTxt.setText(sharedAppData.getColorModeName((byte)sourceId));
             }else/*if(mData.size()==mSignalNum)*/{
                 if (sharedAppData.getSignalFlag(sourceId)==1 || sourceId==(mSignalNum-1)) {
                     mImg.setImageResource(ImgSignalNormal[sourceId]);
-                    mTxt.setText(StringSignal.get(sourceId));
+                    mTxt.setText(sharedAppData.getSignalName(sourceId));//StringSignal.get(sourceId)
                     mTxt.setTextColor(Color.parseColor("#000000"));
                 }else {
                     mImg.setImageResource(ImgSignalOffline[sourceId]);
-                    mTxt.setText(StringSignal.get(sourceId));
+                    mTxt.setText(sharedAppData.getSignalName(sourceId));
                     mTxt.setTextColor(Color.parseColor("#5e5e5e"));
                 }
             }
@@ -319,6 +320,19 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
                     isClicks.set(i, true);
                     notifyDataSetChanged();
                     mOnItemClickListener.onItemClick(viewHolder.itemView,i);
+                }
+            });
+            viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    int type=0;
+                    if (mData.size() == mModelInfoNum) {
+                        type=3;//model scene+signal
+                    }else if (mData.size()==mColorModeNum){
+                        type=4;//color mode
+                    }
+                    mOnItemClickListener.onItemLongClick(viewHolder.itemView,i,type);
+                    return false;
                 }
             });
         }

@@ -460,16 +460,96 @@ public class SharedAppData {
         }
         return signal;
     }
-    public static void saveColorMode(byte mode,String modeName){
+    public static void saveColorModeName(byte mode, String modeName){
         SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.pref_setting), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(mContext.getString(R.string.pref_color_mode_name_)+mode, modeName);
         editor.commit();
     }
-    public static String getColorMode(byte mode){
+    public static String getColorModeName(byte mode){
         String string;
         SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.pref_setting), Context.MODE_PRIVATE);
         string = sharedPref.getString(mContext.getString(R.string.pref_color_mode_name_)+mode , mContext.getString(R.string.color_mode)+mode );
+        return string;
+    }
+    public static void saveSignalModelName(byte mode, String modeName){
+        SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.pref_setting), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(mContext.getString(R.string.pref_model_scene_signal_name_)+mode, modeName);
+        editor.commit();
+    }
+    public static String getSignalModelName(byte mode){
+        String string;
+        SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.pref_setting), Context.MODE_PRIVATE);
+        if (mode<2) {
+            string = sharedPref.getString(mContext.getString(R.string.pref_model_scene_signal_name_) + mode, mContext.getString(R.string.model_define) + mode);
+        }else {
+            string = sharedPref.getString(mContext.getString(R.string.pref_model_scene_signal_name_) + mode, mContext.getString(R.string.confirm));
+        }
+        return string;
+    }
+    public static void saveSignalName(int num, String strName){
+        SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.pref_setting), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(mContext.getString(R.string.pref_signal_name_)+num, strName);
+        editor.commit();
+    }
+    public static String getSignalName(int num){
+        String string="";
+        SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.pref_setting), Context.MODE_PRIVATE);
+        switch (num){
+            case 0:
+                string = sharedPref.getString(mContext.getString(R.string.pref_signal_name_)+num , mContext.getString(R.string.DVI_1_1) );
+                break;
+            case 1:
+                string = sharedPref.getString(mContext.getString(R.string.pref_signal_name_)+num , mContext.getString(R.string.DVI_1_2) );
+                break;
+            case 2:
+                string = sharedPref.getString(mContext.getString(R.string.pref_signal_name_)+num , mContext.getString(R.string.HDMI_1) );
+                break;
+            case 3:
+                string = sharedPref.getString(mContext.getString(R.string.pref_signal_name_)+num , mContext.getString(R.string.DP_1) );
+                break;
+            case 4:
+                string = sharedPref.getString(mContext.getString(R.string.pref_signal_name_)+num , mContext.getString(R.string.DVI_2_1) );
+                break;
+            case 5:
+                string = sharedPref.getString(mContext.getString(R.string.pref_signal_name_)+num , mContext.getString(R.string.DVI_2_2) );
+                break;
+            case 6:
+                string = sharedPref.getString(mContext.getString(R.string.pref_signal_name_)+num , mContext.getString(R.string.HDMI_2) );
+                break;
+            case 7:
+                string = sharedPref.getString(mContext.getString(R.string.pref_signal_name_)+num , mContext.getString(R.string.DP_2) );
+                break;
+            case 8:
+                string = sharedPref.getString(mContext.getString(R.string.pref_signal_name_)+num , mContext.getString(R.string.DVI_3_1) );
+                break;
+            case 9:
+                string = sharedPref.getString(mContext.getString(R.string.pref_signal_name_)+num , mContext.getString(R.string.DVI_3_2) );
+                break;
+            case 10:
+                string = sharedPref.getString(mContext.getString(R.string.pref_signal_name_)+num , mContext.getString(R.string.HDMI_3) );
+                break;
+            case 11:
+                string = sharedPref.getString(mContext.getString(R.string.pref_signal_name_)+num , mContext.getString(R.string.DP_3) );
+                break;
+            case 12:
+                string = sharedPref.getString(mContext.getString(R.string.pref_signal_name_)+num , mContext.getString(R.string.DVI_4_1) );
+                break;
+            case 13:
+                string = sharedPref.getString(mContext.getString(R.string.pref_signal_name_)+num , mContext.getString(R.string.DVI_4_2) );
+                break;
+            case 14:
+                string = sharedPref.getString(mContext.getString(R.string.pref_signal_name_)+num , mContext.getString(R.string.HDMI_4) );
+                break;
+            case 15:
+                string = sharedPref.getString(mContext.getString(R.string.pref_signal_name_)+num , mContext.getString(R.string.DP_4) );
+                break;
+            default:
+                string = sharedPref.getString(mContext.getString(R.string.pref_signal_name_)+num , mContext.getString(R.string.clear) );
+                break;
+        }
         return string;
     }
 }

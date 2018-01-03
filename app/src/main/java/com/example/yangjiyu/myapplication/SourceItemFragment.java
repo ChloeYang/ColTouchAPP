@@ -129,6 +129,10 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
                 //Toast.makeText(view.getContext(),position+"",Toast.LENGTH_SHORT).show();
                 mOnSourceSelectedListener.onSourceSelected(position);
             }
+            public void onItemLongClick(View view, int position,int type){
+                DialogRename dialogRename=new DialogRename(getContext(),type);
+                dialogRename.Rename(type,position);
+            }
         });
 
         mRecyclerView.setAdapter(mAdapter);

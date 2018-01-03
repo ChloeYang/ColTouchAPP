@@ -74,9 +74,6 @@ public class VideoWallFragment extends Fragment {
     public void upDataItem(int pos)
     {
         if (mListIndex==1 || mListIndex==-1){
-            /*if (mLastIndex ==1){
-                mVideoWallView.closeWindow((byte)0,(byte)0,true);
-            }*/
             mSceneIndex=pos;
             mVideoWallView.mSceneIndex = mSceneIndex;
             mVideoWallView = new VideoWallView(getContext(), windowsWidth, windowsHeight, mListIndex, mSceneIndex, mSignalIndex);
@@ -204,7 +201,7 @@ public class VideoWallFragment extends Fragment {
                                     mVideoWallView.drawCanvasRect(scene_cell.getM_startX(), scene_cell.getM_startY(),scene_cell.getM_endX(), scene_cell.getM_endY());
 
                                     if (mSignalIndex!=StringSignal.length-1) {
-                                        mVideoWallView.drawCanvasText(StringSignal[mSignalIndex],scene_cell.getM_startX(),scene_cell.getM_startY(),scene_cell.getM_endX(),scene_cell.getM_endY());
+                                        mVideoWallView.drawCanvasText(sharedAppData.getSignalName(mSignalIndex),scene_cell.getM_startX(),scene_cell.getM_startY(),scene_cell.getM_endX(),scene_cell.getM_endY());
                                         /*scene_cell.setM_signal(mSignalIndex);*/
                                         //Log.d("scene_cell ","= "+mSignalIndex);
                                         sharedAppData.saveSceneSignal(mVideoWallView.mLastSceneIndex,i,mSignalIndex);
@@ -383,7 +380,7 @@ public class VideoWallFragment extends Fragment {
                 i++;
                 mVideoWallView.drawCanvasRect(scene_cell.getM_startX(), scene_cell.getM_startY(),scene_cell.getM_endX(), scene_cell.getM_endY());
                 //Log.d("ExchangeSceneAndSignal ","= "+sharedAppData.getModelSignal(sceneIndex,i));
-                mVideoWallView.drawCanvasText(StringSignal[sharedAppData.getModelSignal(sceneIndex,i)],scene_cell.getM_startX(),scene_cell.getM_startY(),scene_cell.getM_endX(),scene_cell.getM_endY());
+                mVideoWallView.drawCanvasText(sharedAppData.getSignalName(sharedAppData.getModelSignal(sceneIndex,i)),scene_cell.getM_startX(),scene_cell.getM_startY(),scene_cell.getM_endX(),scene_cell.getM_endY());
             }
 
             Toast.makeText(getContext(), R.string.operation_finished, Toast.LENGTH_SHORT).show();

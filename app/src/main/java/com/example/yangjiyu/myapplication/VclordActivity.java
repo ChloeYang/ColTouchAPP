@@ -4,23 +4,18 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.io.IOException;
@@ -274,22 +269,22 @@ public class VclordActivity extends AppCompatActivity {
                 }
                 saveSignalInfo(signalInfo);
                 //// TODO: 2017/12/28 get color mode name 6 num
-                Vector<Byte> res=new Vector<>();
+                /*Vector<Byte> res=new Vector<>();
                 String modeName;
                 for (byte mode=0;mode<6;mode++){
                     try {
                         ret = vcl3CommProcess.ColorModeGetName((short)0,(byte)(mode+5),res);
                     } catch (Exception e) {
                         e.printStackTrace();
-                        sharedAppData.saveColorMode(mode,getString(R.string.color_mode)+mode);
+                        sharedAppData.saveColorModeName(mode,getString(R.string.color_mode)+mode);
                     }
                     if (ret){
                         modeName= ExchangeStuct.ExchangeModelName(res);
-                        sharedAppData.saveColorMode(mode,modeName);
+                        sharedAppData.saveColorModeName(mode,modeName);
                     }else {
-                        sharedAppData.saveColorMode(mode,getString(R.string.color_mode)+mode);
-                    }
-                }
+                        sharedAppData.saveColorModeName(mode,getString(R.string.color_mode)+mode);
+                    /*}
+                }*/
                 try {
                     vcl3CommProcess.ProcessCancel();
                 } catch (IOException e) {

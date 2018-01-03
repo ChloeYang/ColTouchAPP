@@ -14,10 +14,25 @@ public class MonitorThread extends Thread{
     private String mIp="";
     private int mPort=5800;
     private SharedAppData sharedAppData;
-    public   MonitorThread (String ip, int port, Context context){
+    private static MonitorThread m_monitorThread=null;
+    private static boolean bIsStarted=false;
+    private MonitorThread (String ip, int port, Context context){
         mIp=ip;
         mPort=port;
         sharedAppData = SharedAppData.newInstance(context);
+    }
+    public static MonitorThread newInstance(String ip, int port, Context context){
+        if (m_monitorThread==null){
+            m_monitorThread = new MonitorThread(ip,port,context);
+            bIsStarted = false;
+            return m_monitorThread;
+        }else {
+            bIsStarted = true;
+            return m_monitorThread;
+        }
+    }
+    public static boolean getIsStarted(){
+        return bIsStarted;
     }
     public void saveSignalInfo(CpComm.CpSignalInfo signalInfo) {
 
@@ -49,6 +64,7 @@ public class MonitorThread extends Thread{
 
     @Override
     public void run() {
+
         VCL3CommProcess vcl3CommProcess = new VCL3CommProcess(mIp, mPort);
         CpComm.CpSignalInfo signalInfo = new CpComm.CpSignalInfo();
         while (true){
