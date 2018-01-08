@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -18,7 +19,11 @@ import android.widget.Toast;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -253,7 +258,33 @@ public class VclordActivity extends AppCompatActivity {
         }
     }
 
+
     private class VclordConnect extends AsyncTask<String, String, Void> {
+
+        private String getModelName(Vector<Byte>res) {
+            byte[] bytes =new byte[res.size()];
+            for (int i=0;i<res.size();i++){
+                bytes[i]=res.get(i);
+            }
+            char[] buf_get = new char[res.size()];
+            try {
+                /*BufferedReader tmp_get = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(bytes), "GBK"));
+                int number = tmp_get.read(buf_get);
+                char[] result = new char[number];
+                System.arraycopy(buf_get, 0, result, 0, number);
+                tmp_get.close();
+                return String.valueOf(result);*/
+                String string = new String(bytes,"GBK");
+                return string;
+
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+                return null;
+            } /*catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }*/
+        }
         protected void onPreExecute() {
             super.onPreExecute();
         }
@@ -269,22 +300,25 @@ public class VclordActivity extends AppCompatActivity {
                 }
                 saveSignalInfo(signalInfo);
                 //// TODO: 2017/12/28 get color mode name 6 num
-                /*Vector<Byte> res=new Vector<>();
                 String modeName;
-                for (byte mode=0;mode<6;mode++){
+                for (byte mode=0;mode<2;mode++){
+                    Vector<Byte> res=new Vector<>();
                     try {
-                        ret = vcl3CommProcess.ColorModeGetName((short)0,(byte)(mode+5),res);
+                        Log.d("mode",":"+mode);
+                        ret = vcl3CommProcess.ColorModeGetName((short)0,(byte)(mode+9),res);
                     } catch (Exception e) {
                         e.printStackTrace();
                         sharedAppData.saveColorModeName(mode,getString(R.string.color_mode)+mode);
                     }
                     if (ret){
-                        modeName= ExchangeStuct.ExchangeModelName(res);
+                        //modeName= ExchangeStuct.ExchangeModelName(res);
+                        modeName = getModelName(res);
+                        Log.d("mode-name",":"+modeName);
                         sharedAppData.saveColorModeName(mode,modeName);
                     }else {
                         sharedAppData.saveColorModeName(mode,getString(R.string.color_mode)+mode);
-                    /*}
-                }*/
+                    }
+                }
                 try {
                     vcl3CommProcess.ProcessCancel();
                 } catch (IOException e) {

@@ -45,28 +45,36 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
 
     }
     void getNewData(int pos){
-        if (pos==1){
+        if (pos==2){
             sceneData();
             textView.setText(getString(R.string.scene_list));
-        }else if (pos==2){
+            mAdapter.bIsSystemData=false;
+            mAdapter.bIsPowerOnOff=false;
+        }else if (pos==3){
             signalData();
             textView.setText(getString(R.string.signal_list));
+            mAdapter.bIsSystemData=false;
+            mAdapter.bIsPowerOnOff=false;
         }else if(pos==0){
             powerData();
             textView.setText(getString(R.string.power_list));
             mAdapter.bIsSystemData=false;
+            mAdapter.bIsPowerOnOff=true;
         }else if(pos==5){
             checkSystemData();
             textView.setText(getString(R.string.getSystemInfo));
             mAdapter.bIsSystemData=true;
-        }else if(pos==3){
+            mAdapter.bIsPowerOnOff=false;
+        }else if(pos==1){
             checkModelData();
             textView.setText(getString(R.string.model_SceneAndSignal));
             mAdapter.bIsSystemData=false;
+            mAdapter.bIsPowerOnOff=false;
         } else if(pos==4){
             checkColorModeData();
             textView.setText(getString(R.string.color_mode));
             mAdapter.bIsSystemData=false;
+            mAdapter.bIsPowerOnOff=false;
         }
     }
 
@@ -200,10 +208,10 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
 
         ColorMode.add(getString(R.string.color_mode)+1);
         ColorMode.add(getString(R.string.color_mode)+2);
-        ColorMode.add(getString(R.string.color_mode)+3);
+        /*ColorMode.add(getString(R.string.color_mode)+3);
         ColorMode.add(getString(R.string.color_mode)+4);
         ColorMode.add(getString(R.string.color_mode)+5);
-        ColorMode.add(getString(R.string.color_mode)+6);
+        ColorMode.add(getString(R.string.color_mode)+6);*/
     }
     private void sceneData()
     {
@@ -261,10 +269,10 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
     }
     private void checkColorModeData(){
         mAdapter.mData = new ArrayList<>(Arrays.asList(
+                /*R.drawable.color_mode_normal,
                 R.drawable.color_mode_normal,
                 R.drawable.color_mode_normal,
-                R.drawable.color_mode_normal,
-                R.drawable.color_mode_normal,
+                R.drawable.color_mode_normal,*/
                 R.drawable.color_mode_normal,
                 R.drawable.color_mode_normal));
     }

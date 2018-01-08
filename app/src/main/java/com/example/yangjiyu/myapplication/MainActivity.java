@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements SourceItemListFra
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         SharedPreferences sharedPref = getSharedPreferences(getString(R.string.pref_define_scene), Context.MODE_PRIVATE);
         int Define1Flag=sharedPref.getInt(getString(R.string.pref_define1_flag),0);
         int Define2Flag=sharedPref.getInt(getString(R.string.pref_define2_flag),0);

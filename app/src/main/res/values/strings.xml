@@ -91,11 +91,11 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">黑色背景</string>
-    <string name="scene_list">场景布局列表</string>
-    <string name="signal_list">信号源列表</string>
-    <string name="power_list">系统开关机</string>
-    <string name="getSystemInfo">系统信息查询</string>
-    <string name="model_SceneAndSignal">模式设置</string>
+    <string name="scene_list">显示布局</string>
+    <string name="signal_list">信号列表</string>
+    <string name="power_list">系统开关</string>
+    <string name="getSystemInfo">信息查询</string>
+    <string name="model_SceneAndSignal">场景模式</string>
     <string name="error_invalid_ip">IP地址不正确</string>
     <string name="check_system"> </string>
     <string name="progress_check_system">正在获取系统信息</string>
@@ -139,8 +139,8 @@
     <string name="confirm">确认</string>
     <string name="power_on">整墙开机</string>
     <string name="power_off">整墙关机</string>
-    <string name="get_interface_version">接口版本</string>
-    <string name="get_interface_status">接口状态</string>
+    <string name="get_interface_version">控制盒版本</string>
+    <string name="get_interface_status">控制盒状态</string>
     <string name="get_engine_version">机芯版本</string>
     <string name="get_engine_status">机芯状态</string>
     <string name="Ok">确定</string>
@@ -148,7 +148,7 @@
     <string name="model_define1">自定义模式1</string>
     <string name="model_define2">自定义模式2</string>
     <string name="model_save">保存至模式</string>
-    <string name="color_mode">光学模式切换</string>
+    <string name="color_mode">亮度模式</string>
     <string name="model_define">自定义模式</string>
     <string name="rename_dialog">重命名</string>
 

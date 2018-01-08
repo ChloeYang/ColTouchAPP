@@ -28,7 +28,7 @@ public class DialogRename {
                 SignalModelRename(position);
                 break;
             case 4:
-                ColorModeRename(position);
+                //ColorModeRename(position);
                 break;
             default:
                 break;
@@ -38,7 +38,7 @@ public class DialogRename {
         final EditText editText = new EditText(mContext);
         final AlertDialog.Builder builder = new AlertDialog.Builder(mContext,3);
         builder.setTitle(mContext.getString(R.string.rename_dialog));
-        builder.setIcon(R.mipmap.ic_launcher);
+        builder.setIcon(R.mipmap.ic_launcher_self);
         builder.setView(editText);
         builder.setPositiveButton(mContext.getString(R.string.Ok), new DialogInterface.OnClickListener() {
             @Override
@@ -59,7 +59,7 @@ public class DialogRename {
         final EditText editText = new EditText(mContext);
         final AlertDialog.Builder builder = new AlertDialog.Builder(mContext,3);
         builder.setTitle(mContext.getString(R.string.rename_dialog));
-        builder.setIcon(R.mipmap.ic_launcher);
+        builder.setIcon(R.mipmap.ic_launcher_self);
         builder.setView(editText);
         builder.setPositiveButton(mContext.getString(R.string.Ok), new DialogInterface.OnClickListener() {
             @Override

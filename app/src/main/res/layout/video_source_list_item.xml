@@ -8,20 +8,22 @@
 
         <ImageView
             android:id="@+id/iv_source_list"
-            android:layout_width="30dp"
-            android:layout_height="50dp"
+            android:layout_width="45dp"
+            android:layout_height="60dp"
             android:layout_marginLeft="50dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="20dp"
             android:src="@drawable/desktop_red_"/>
         <TextView
             android:id="@+id/tv_source_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:gravity="center"
+            android:layout_marginTop="5dp"
             android:layout_toRightOf="@+id/iv_source_list"
             android:layout_alignTop="@+id/iv_source_list"
             android:layout_alignBottom="@+id/iv_source_list"
             android:textSize="33sp"
             android:textStyle="bold"
-            android:text="信号源列表"/>
+            android:layout_centerInParent="true"
+            android:text="信号列表"/>
     </RelativeLayout>

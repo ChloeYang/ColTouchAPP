@@ -145,7 +145,7 @@ public class DialogList {
         }
         return string;
     }
-    public void EngineInfo(final VCLComm vclcom, final byte type, final int row, int col){
+    public void EngineInfo(final VCLComm vclcom, final byte type, final int row, final int col){
         int iSysCount = row*col;
         String [] strings = new String[iSysCount];
         int index=0;
@@ -165,7 +165,7 @@ public class DialogList {
                 CpComm.stuDlpQEngineStatusInfo stInfo = new CpComm.stuDlpQEngineStatusInfo();
                 try {
                     //sleep(500);
-                    vecResponse = vclcom.execute(type,(byte)(which/row),(byte)(which%row)).get();
+                    vecResponse = vclcom.execute(type,(byte)(which/col),(byte)(which%col)).get();
                     stInfo = ExchangeStuct.ExchangeEngineStatusInfo(vecResponse);
                 } catch (InterruptedException e) {
                     e.printStackTrace();

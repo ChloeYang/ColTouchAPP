@@ -73,7 +73,7 @@ public class VideoWallFragment extends Fragment {
     }
     public void upDataItem(int pos)
     {
-        if (mListIndex==1 || mListIndex==-1){
+        if (mListIndex==2 || mListIndex==-1){
             mSceneIndex=pos;
             mVideoWallView.mSceneIndex = mSceneIndex;
             mVideoWallView = new VideoWallView(getContext(), windowsWidth, windowsHeight, mListIndex, mSceneIndex, mSignalIndex);
@@ -82,7 +82,7 @@ public class VideoWallFragment extends Fragment {
                     RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT
             ));
             mSignalIndex=-1;
-        }else if (mListIndex == 2){
+        }else if (mListIndex == 3){
             mSignalIndex = pos;
             mVideoWallView. mSignalIndex = mSignalIndex;
             if (mSignalIndex==16){
@@ -101,7 +101,7 @@ public class VideoWallFragment extends Fragment {
             byte type=(byte)(3+pos);
             ComCommand(type);
             mSignalIndex=-1;
-        }else if (mListIndex == 3){//scene and signal to model
+        }else if (mListIndex == 1){//scene and signal to model
             //// TODO: 2017/12/26 model scene+signal
             if (pos == 2){
                 //// TODO: 2017/12/26 save model
@@ -173,7 +173,7 @@ public class VideoWallFragment extends Fragment {
                         start_y = (int) Math.floor((int)event.getY()/mVideoWallView.m_cellHeight) * (mVideoWallView.m_cellHeight+ VideoWall.sVideoCellGap);
                         Log.i("TouchEvent","ACTION_DOWN start_x="+start_x+" start_y="+start_y);
 
-                        if (2!= mListIndex){
+                        if (3!= mListIndex){
                             return true;
                         }
                         if (mSignalIndex>=0 && 0==sharedAppData.getSignalFlag(mSignalIndex) && mSignalIndex<StringSignal.length){
