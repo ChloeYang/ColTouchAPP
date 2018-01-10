@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.yangjiyu.myapplication.SourceItemListFragment"
-    android:background="@layout/bg_fragment">
+    android:background="#161616">
 
     <!-- TODO: Update blank fragment layout -->
     <android.support.v7.widget.RecyclerView

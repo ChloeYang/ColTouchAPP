@@ -1,9 +1,11 @@
 package com.example.yangjiyu.myapplication;
 
+import android.app.ActionBar;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.Window;
 import android.view.WindowManager;
 
 import com.example.yangjiyu.myapplication.utils.PollingUtils;
@@ -32,8 +35,9 @@ public class MainActivity extends AppCompatActivity implements SourceItemListFra
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_LEFT_ICON);
         setContentView(R.layout.activity_main);
-
+        getWindow().setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.scene);
 
         SharedPreferences sharedPref = getSharedPreferences(getString(R.string.pref_define_scene), Context.MODE_PRIVATE);
         int Define1Flag=sharedPref.getInt(getString(R.string.pref_define1_flag),0);

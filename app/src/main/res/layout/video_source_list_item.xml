@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/video_source_list_item"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="35dp"
-                    android:background="@layout/bg_fragment">
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/item_normal">
 
         <ImageView
             android:id="@+id/iv_source_list"
             android:layout_width="45dp"
             android:layout_height="60dp"
             android:layout_marginLeft="50dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginRight="0dp"
             android:src="@drawable/desktop_red_"/>
         <TextView
             android:id="@+id/tv_source_list"
@@ -24,6 +25,7 @@
             android:layout_alignBottom="@+id/iv_source_list"
             android:textSize="33sp"
             android:textStyle="bold"
+            android:textColor="#ffffff"
             android:layout_centerInParent="true"
             android:text="信号列表"/>
     </RelativeLayout>

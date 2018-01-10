@@ -192,7 +192,7 @@ public class VideoWallView extends View {
             CellCanvas.drawRect(cell.getCellPositionTopLeftX(), cell.getCellPositionTopLeftY(),
                     cell.getCellPositionTopLeftX() + cell.getCellWidth(),
                     cell.getCellPositionTopLeftY() + cell.getCellHeight(), CellPaint);
-            CellPaint.setColor(Color.WHITE);
+            CellPaint.setColor(Color.DKGRAY);
             CellPaint.setTextSize(16);
             CellCanvas.drawText("   " + ++i +"   ",cell.getCellPositionTopLeftX() + cell.getCellWidth()/2+i,
                     cell.getCellPositionTopLeftY() + cell.getCellHeight()/2+i,CellPaint);
@@ -211,7 +211,7 @@ public class VideoWallView extends View {
         CellBitmap.eraseColor(getResources().getColor(R.color.colorCellUnknown));
         CellCanvas = new Canvas(CellBitmap);
         CellPaint = new Paint(Paint.DITHER_FLAG);
-        CellPaint.setColor(Color.BLUE);
+        CellPaint.setColor(Color.LTGRAY);
         VideoWall videoWall = VideoWall.newInstance(WallWidth, WallHeight);
         videoWall.layoutVideoCells(1,1);
         ArrayList<VideoCell> videoCells = VideoWall.getmVideoCellCollections(1,1);
@@ -220,7 +220,7 @@ public class VideoWallView extends View {
             CellCanvas.drawRect(cell.getCellPositionTopLeftX(), cell.getCellPositionTopLeftY(),
                     cell.getCellPositionTopLeftX() + cell.getCellWidth(),
                     cell.getCellPositionTopLeftY() + cell.getCellHeight(), CellPaint);
-            CellPaint.setColor(Color.BLUE);
+            CellPaint.setColor(Color.LTGRAY);
             sharedAppData.saveDefaultScene(getContext().getString(R.string.pref_whole_scene),i, cell.getCellPositionTopLeftX(), cell.getCellPositionTopLeftY(),
                     cell.getCellPositionTopLeftX() + cell.getCellWidth(),
                     cell.getCellPositionTopLeftY() + cell.getCellHeight());
@@ -234,13 +234,13 @@ public class VideoWallView extends View {
         CellBitmap.eraseColor(getResources().getColor(R.color.colorCellUnknown));
         CellCanvas = new Canvas(CellBitmap);
         CellPaint = new Paint(Paint.DITHER_FLAG);
-        CellPaint.setColor(Color.BLUE);
+        CellPaint.setColor(Color.LTGRAY);
         int i=0;
         SceneWall sceneWall = SceneWall.newInstance(WallWidth, WallHeight);
         ArrayList<SingleSceneCell> singleSceneCells=sceneWall.getEchSceneCellCollections(m_cellRow,m_cellCol);
         for (SingleSceneCell cell:singleSceneCells){
             CellCanvas.drawRect(cell.getM_startX(), cell.getM_startY(),cell.getM_endX(),cell.getM_endY(), CellPaint);
-            CellPaint.setColor(Color.BLUE);
+            CellPaint.setColor(Color.LTGRAY);
             sharedAppData.saveDefaultScene(getContext().getString(R.string.pref_each_scene),i, cell.getM_startX(), cell.getM_startY(),cell.getM_endX(),cell.getM_endY());
             i=i+1;
         }
@@ -252,13 +252,13 @@ public class VideoWallView extends View {
         CellBitmap.eraseColor(getResources().getColor(R.color.colorCellUnknown));
         CellCanvas = new Canvas(CellBitmap);
         CellPaint = new Paint(Paint.DITHER_FLAG);
-        CellPaint.setColor(Color.BLUE);
+        CellPaint.setColor(Color.LTGRAY);
         int i=0;
         SceneWall sceneWall = SceneWall.newInstance(WallWidth, WallHeight);
         ArrayList<SingleSceneCell> singleSceneCells=sceneWall.getH2PartSceneCellCollections(m_cellRow,m_cellCol);
         for (SingleSceneCell cell:singleSceneCells){
             CellCanvas.drawRect(cell.getM_startX(), cell.getM_startY(),cell.getM_endX(),cell.getM_endY(), CellPaint);
-            CellPaint.setColor(Color.BLUE);
+            CellPaint.setColor(Color.LTGRAY);
             sharedAppData.saveDefaultScene(getContext().getString(R.string.pref_h2part_scene),i, cell.getM_startX(), cell.getM_startY(),cell.getM_endX(),cell.getM_endY());
             i=i+1;
         }
@@ -269,13 +269,13 @@ public class VideoWallView extends View {
         CellBitmap.eraseColor(getResources().getColor(R.color.colorCellUnknown));
         CellCanvas = new Canvas(CellBitmap);
         CellPaint = new Paint(Paint.DITHER_FLAG);
-        CellPaint.setColor(Color.BLUE);
+        CellPaint.setColor(Color.LTGRAY);
         int i=0;
         SceneWall sceneWall = SceneWall.newInstance(WallWidth, WallHeight);
         ArrayList<SingleSceneCell> singleSceneCells=sceneWall.getV2PartSceneCellCollections(m_cellRow,m_cellCol);
         for (SingleSceneCell cell:singleSceneCells){
             CellCanvas.drawRect(cell.getM_startX(), cell.getM_startY(),cell.getM_endX(),cell.getM_endY(), CellPaint);
-            CellPaint.setColor(Color.BLUE);
+            CellPaint.setColor(Color.LTGRAY);
             sharedAppData.saveDefaultScene(getContext().getString(R.string.pref_v2part_scene),i, cell.getM_startX(), cell.getM_startY(),cell.getM_endX(),cell.getM_endY());
             i=i+1;
         }
@@ -299,16 +299,16 @@ public class VideoWallView extends View {
     }
 
     public void drawCanvasText(String str,int start_X,int start_Y,int end_X,int end_Y){
-        CellPaint.setColor(Color.WHITE);
+        CellPaint.setColor(Color.DKGRAY);
         CellPaint.setTextSize(30);
-        CellCanvas.drawText("   " + str + "   ", (start_X + end_X) / 2-40, (start_Y + end_Y) / 2-20, CellPaint);
+        CellCanvas.drawText("   " + str + "   ", (start_X + end_X) / 2-50, (start_Y + end_Y) / 2-10, CellPaint);
 
     }
     public void drawCanvasBase() {
         initCell();
     }
     public void drawCanvasRect(int start_X,int start_Y,int end_X,int end_Y){
-        CellPaint.setColor(Color.BLUE);
+        CellPaint.setColor(Color.LTGRAY);
         CellCanvas.drawRect(start_X, start_Y,end_X, end_Y, CellPaint);
     }
 
@@ -321,13 +321,13 @@ public class VideoWallView extends View {
         initCell();
         if (sceneIndex==4){
             for (SingleSceneCell cell:sharedAppData.getDefine1Scene()){
-                CellPaint.setColor(Color.BLUE);
+                CellPaint.setColor(Color.LTGRAY);
                 CellCanvas.drawRect(cell.getM_startX(), cell.getM_startY(),
                         cell.getM_endX(), cell.getM_endY(), CellPaint);
             }
         }else if (sceneIndex==5){
             for (SingleSceneCell cell:sharedAppData.getDefine2Scene()){
-                CellPaint.setColor(Color.BLUE);
+                CellPaint.setColor(Color.LTGRAY);
                 CellCanvas.drawRect(cell.getM_startX(), cell.getM_startY(),
                         cell.getM_endX(), cell.getM_endY(), CellPaint);
             }

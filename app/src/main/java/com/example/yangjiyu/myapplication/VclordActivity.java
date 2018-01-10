@@ -1,10 +1,12 @@
 package com.example.yangjiyu.myapplication;
 
+import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -65,16 +67,19 @@ public class VclordActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().requestFeature(Window.FEATURE_LEFT_ICON);
         setContentView(R.layout.activity_vclord);
+        getWindow().setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.scene);
+
 
         sharedAppData = SharedAppData.newInstance(this);
         mProgressDialog = MyProgressDialog.createProgressDialog(this, 5000, new MyProgressDialog.OnTimeOutListener() {
             @Override
             public void onTimeOut(ProgressDialog dialog) {
                 Toast.makeText(getApplicationContext(), "TimeOut", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(intent);
+                /*Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);*/
             }
         });
         mProgressDialog.setTitle(getString(R.string.app_name));
@@ -220,10 +225,10 @@ public class VclordActivity extends AppCompatActivity {
                 //Toast.makeText(getApplicationContext(),R.string.error_network,Toast.LENGTH_SHORT).show();
                 return null;
             }
-            if (vecSys.isEmpty()) {
+            /*if (vecSys.isEmpty()) {
                 Toast.makeText(getApplicationContext(), R.string.error_no_system, Toast.LENGTH_SHORT).show();
             } else {
-            }
+            }*/
             return null;
         }
 
@@ -235,26 +240,31 @@ public class VclordActivity extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             //super.onPostExecute(aVoid);
             if (!ret) {
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(intent);
+                Toast.makeText(getApplicationContext(),R.string.error_network,Toast.LENGTH_SHORT).show();
+                /*Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);*/
                 return;
             }
-            adapter.clear();
-            adapter.add(getString(R.string.check_system));
-            Iterator<SYS_INFO> iterator = vecSys.iterator();
-            SYS_INFO sys_info;
-            while (iterator.hasNext()) {
-                sys_info = iterator.next();
-                adapter.add(getString(R.string.system_id) + "" + sys_info.sysID + " :" + sys_info.uiRow + getString(R.string.system_row) + " " + sys_info.uiCol + getString(R.string.system_col));
+            if (vecSys.isEmpty()) {
+                Toast.makeText(getApplicationContext(), R.string.error_no_system, Toast.LENGTH_SHORT).show();
+            } else {
+                adapter.clear();
+                adapter.add(getString(R.string.check_system));
+                Iterator<SYS_INFO> iterator = vecSys.iterator();
+                SYS_INFO sys_info;
+                while (iterator.hasNext()) {
+                    sys_info = iterator.next();
+                    adapter.add(getString(R.string.system_id) + "" + sys_info.sysID + " :" + sys_info.uiRow + getString(R.string.system_row) + " " + sys_info.uiCol + getString(R.string.system_col));
+                }
+                mProgressDialog.dismiss();
+                mSpinner.setSelection(1);
+                Iterator<SYS_INFO> itor = vecSys.iterator();
+                if (itor.hasNext()) {
+                    mCurSysInfo = itor.next();
+                }
+                mButton.setEnabled(true);
+                saveSetting();
             }
-            mProgressDialog.dismiss();
-            mSpinner.setSelection(1);
-            Iterator<SYS_INFO> itor = vecSys.iterator();
-            if (itor.hasNext()) {
-                mCurSysInfo = itor.next();
-            }
-            mButton.setEnabled(true);
-            saveSetting();
         }
     }
 
@@ -287,10 +297,27 @@ public class VclordActivity extends AppCompatActivity {
         }
         protected void onPreExecute() {
             super.onPreExecute();
+            mVclordIp = mIpText.getText();
         }
 
         protected Void doInBackground(String... str) {
+
             VCL3CommProcess vcl3CommProcess = new VCL3CommProcess(mVclordIp, PORT);
+            if (mVclordIp != sharedAppData.getVCLordIP()) {
+
+                ret = vcl3CommProcess.QueryAllSystem(vecSys);
+                if (!ret) {
+                    ret = false;
+                    return null;
+                } else {
+                    Iterator<SYS_INFO> itor = vecSys.iterator();
+                    if (itor.hasNext()) {
+                        mCurSysInfo = itor.next();
+                    }
+                    saveSetting();
+                }
+            }
+
             if (vcl3CommProcess != null) {
                 CpSignalInfo signalInfo = new CpSignalInfo();
                 ret = vcl3CommProcess.GetSignalInfo(signalInfo);
@@ -336,6 +363,7 @@ public class VclordActivity extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             //super.onPostExecute(aVoid);
             if (!ret) {
+                Toast.makeText(getApplicationContext(),R.string.error_network,Toast.LENGTH_SHORT).show();
                 return;
             }
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);

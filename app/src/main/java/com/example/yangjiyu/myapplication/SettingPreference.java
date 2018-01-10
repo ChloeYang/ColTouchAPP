@@ -14,6 +14,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -43,6 +44,8 @@ public class SettingPreference extends AppCompatPreferenceActivity {
         if( actionBar != null ){
             actionBar.setDisplayHomeAsUpEnabled( true );
         }
+        getWindow().requestFeature(Window.FEATURE_LEFT_ICON);
+        getWindow().setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.scene);
 
         SharedPreferences preferences = getSharedPreferences(getString(R.string.pref_setting),Context.MODE_PRIVATE);
         strIp=preferences.getString(getString(R.string.pref_data_vclordip),"");

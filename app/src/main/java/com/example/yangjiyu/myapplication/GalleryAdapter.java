@@ -186,11 +186,11 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
                 if (sharedAppData.getSignalFlag(sourceId)==1 || sourceId==(mSignalNum-1)) {
                     mImg.setImageResource(ImgSignalNormal[sourceId]);
                     mTxt.setText(sharedAppData.getSignalName(sourceId));//StringSignal.get(sourceId)
-                    mTxt.setTextColor(Color.parseColor("#000000"));
+                    mTxt.setTextColor(Color.parseColor("#ffffff"));
                 }else {
                     mImg.setImageResource(ImgSignalOffline[sourceId]);
                     mTxt.setText(sharedAppData.getSignalName(sourceId));
-                    mTxt.setTextColor(Color.parseColor("#5e5e5e"));
+                    mTxt.setTextColor(Color.parseColor("#303030"));
                 }
             }
         }
@@ -261,23 +261,23 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         {
             if (mData.size()==mSceneNum){
                 viewHolder.mImg.setImageResource(ImgScenePressed[i]);
-                viewHolder.mTxt.setTextColor(Color.parseColor("#500000"));
+                viewHolder.mTxt.setTextColor(Color.parseColor("#ff0000"));
             }else if (mData.size()==mPowerNum && bIsSystemData==false  && true==bIsPowerOnOff){
                 viewHolder.mImg.setImageResource(ImgPowerPressed[i]);
-                viewHolder.mTxt.setTextColor(Color.parseColor("#500000"));
+                viewHolder.mTxt.setTextColor(Color.parseColor("#ff0000"));
             }else if (mData.size()== mSystemInfoNum && bIsSystemData==true){
                 viewHolder.mImg.setImageResource(ImgSystemInfoPressed[i]);
-                viewHolder.mTxt.setTextColor(Color.parseColor("#500000"));
+                viewHolder.mTxt.setTextColor(Color.parseColor("#ff0000"));
             }else if (mData.size()== mModelInfoNum && bIsSystemData==false){
                 viewHolder.mImg.setImageResource(ImgModelInfoPressed[i]);
-                viewHolder.mTxt.setTextColor(Color.parseColor("#500000"));
+                viewHolder.mTxt.setTextColor(Color.parseColor("#ff0000"));
             }else if (mData.size()== mColorModeNum && false==bIsPowerOnOff){
                 viewHolder.mImg.setImageResource(ImgColorModePressed[i]);
-                viewHolder.mTxt.setTextColor(Color.parseColor("#500000"));
+                viewHolder.mTxt.setTextColor(Color.parseColor("#ff0000"));
             }else /*if (mData.size()==mSignalNum)*/{
                 if (sharedAppData.getSignalFlag(i)==1 || i==(mSignalNum-1)) {
                     viewHolder.mImg.setImageResource(ImgSignalPressed[i]);
-                    viewHolder.mTxt.setTextColor(Color.parseColor("#500000"));
+                    viewHolder.mTxt.setTextColor(Color.parseColor("#ff0000"));
                 }else {
                 }
             }
@@ -285,23 +285,23 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         else {
             if (mData.size()==mSceneNum){
                 viewHolder.mImg.setImageResource(ImgSceneNormal[i]);
-                viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
+                viewHolder.mTxt.setTextColor(Color.parseColor("#ffffff"));
             }else if (mData.size()==mPowerNum && bIsSystemData==false  && true==bIsPowerOnOff){
                 viewHolder.mImg.setImageResource(ImgPowerNormal[i]);
-                viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
+                viewHolder.mTxt.setTextColor(Color.parseColor("#ffffff"));
             }else if (mData.size()== mSystemInfoNum && bIsSystemData==true){
                 viewHolder.mImg.setImageResource(ImgSystemInfoNormal[i]);
-                viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
+                viewHolder.mTxt.setTextColor(Color.parseColor("#ffffff"));
             }else if (mData.size()== mModelInfoNum && bIsSystemData==false){
                 viewHolder.mImg.setImageResource(ImgModelInfoNormal[i]);
-                viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
+                viewHolder.mTxt.setTextColor(Color.parseColor("#ffffff"));
             }else if (mData.size()== mColorModeNum  && false==bIsPowerOnOff){
                 viewHolder.mImg.setImageResource(ImgColorModeNormal[i]);
-                viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
+                viewHolder.mTxt.setTextColor(Color.parseColor("#ffffff"));
             }else/* if (mData.size()==mSignalNum)*/{
                 if (sharedAppData.getSignalFlag(i)==1 || i==(mSignalNum-1)) {
                     viewHolder.mImg.setImageResource(ImgSignalNormal[i]);
-                    viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
+                    viewHolder.mTxt.setTextColor(Color.parseColor("#ffffff"));
                 }else {
                 }
             }
@@ -334,6 +334,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
                     }else if (mData.size()==mSignalNum){
                         type=2;
                     }
+                    notifyDataSetChanged();
                     mOnItemClickListener.onItemLongClick(viewHolder.itemView,i,type);
                     return false;
                 }
@@ -348,23 +349,23 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         {
             if (mData.size()==mSceneNum){
                 viewHolder.mImg.setImageResource(ImgScenePressed[i]);
-                viewHolder.mTxt.setTextColor(Color.parseColor("#500000"));
+                viewHolder.mTxt.setTextColor(Color.parseColor("#ff0000"));
             }else if (mData.size()==mPowerNum && bIsSystemData==false  && true==bIsPowerOnOff){
                 viewHolder.mImg.setImageResource(ImgPowerPressed[i]);
-                viewHolder.mTxt.setTextColor(Color.parseColor("#500000"));
+                viewHolder.mTxt.setTextColor(Color.parseColor("#ff0000"));
             }else if (mData.size()== mSystemInfoNum && bIsSystemData==true){
                 viewHolder.mImg.setImageResource(ImgSystemInfoPressed[i]);
-                viewHolder.mTxt.setTextColor(Color.parseColor("#500000"));
+                viewHolder.mTxt.setTextColor(Color.parseColor("#ff0000"));
             }else if (mData.size()== mModelInfoNum && bIsSystemData==false){
                 viewHolder.mImg.setImageResource(ImgModelInfoPressed[i]);
-                viewHolder.mTxt.setTextColor(Color.parseColor("#500000"));
+                viewHolder.mTxt.setTextColor(Color.parseColor("#ff0000"));
             }else if (mData.size()== mColorModeNum  && false==bIsPowerOnOff){
                 viewHolder.mImg.setImageResource(ImgColorModePressed[i]);
-                viewHolder.mTxt.setTextColor(Color.parseColor("#500000"));
+                viewHolder.mTxt.setTextColor(Color.parseColor("#ff0000"));
             }else /*if (mData.size()==mSignalNum)*/{
                 if (sharedAppData.getSignalFlag(i)==1|| i==(mSignalNum-1)) {
                     viewHolder.mImg.setImageResource(ImgSignalPressed[i]);
-                    viewHolder.mTxt.setTextColor(Color.parseColor("#500000"));
+                    viewHolder.mTxt.setTextColor(Color.parseColor("#ff0000"));
                 }else {
                 }
             }
@@ -372,23 +373,23 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         else {
             if (mData.size()==mSceneNum){
                 viewHolder.mImg.setImageResource(ImgSceneNormal[i]);
-                viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
+                viewHolder.mTxt.setTextColor(Color.parseColor("#ffffff"));
             }else if (mData.size()==mPowerNum && bIsSystemData==false  && true==bIsPowerOnOff){
                 viewHolder.mImg.setImageResource(ImgPowerNormal[i]);
-                viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
+                viewHolder.mTxt.setTextColor(Color.parseColor("#ffffff"));
             }else if (mData.size()== mSystemInfoNum && bIsSystemData==true){
                 viewHolder.mImg.setImageResource(ImgSystemInfoNormal[i]);
-                viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
+                viewHolder.mTxt.setTextColor(Color.parseColor("#ffffff"));
             }else if (mData.size()== mModelInfoNum && bIsSystemData==false){
                 viewHolder.mImg.setImageResource(ImgModelInfoNormal[i]);
-                viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
+                viewHolder.mTxt.setTextColor(Color.parseColor("#ffffff"));
             }else if (mData.size()== mColorModeNum  && false==bIsPowerOnOff){
                 viewHolder.mImg.setImageResource(ImgColorModeNormal[i]);
-                viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
+                viewHolder.mTxt.setTextColor(Color.parseColor("#ffffff"));
             }else /*if (mData.size()==mSignalNum)*/{
                 if (sharedAppData.getSignalFlag(i)==1|| i==(mSignalNum-1)) {
                     viewHolder.mImg.setImageResource(ImgSignalPressed[i]);
-                    viewHolder.mTxt.setTextColor(Color.parseColor("#000000"));
+                    viewHolder.mTxt.setTextColor(Color.parseColor("#ffffff"));
                 }else {
                 }
             }

@@ -139,7 +139,11 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
             }
             public void onItemLongClick(View view, int position,int type){
                 DialogRename dialogRename=new DialogRename(getContext(),type);
-                dialogRename.Rename(type,position);
+                dialogRename.Rename(view,type,position);
+
+                //mOnSourceSelectedListener.onSourceSelected(position);
+                //mAdapter.notifyDataSetChanged();
+                onShow(position);
             }
         });
 

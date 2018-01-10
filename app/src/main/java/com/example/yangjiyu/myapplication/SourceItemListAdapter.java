@@ -66,10 +66,12 @@ class SourceItemListAdapter extends RecyclerView.Adapter<SourceItemListAdapter.S
         {
             holder.mTextViewSourceList.setTextColor(Color.parseColor("#500000"));
             holder.mImageViewSourceList.setImageResource(ImageClicked[position]);
+            holder.itemView.setBackgroundResource(R.drawable.item_pressed);
         }
         else {
-            holder.mTextViewSourceList.setTextColor(Color.parseColor("#000000"));
+            holder.mTextViewSourceList.setTextColor(Color.parseColor("#ffffff"));
             holder.mImageViewSourceList.setImageResource(ImageSourceId[position]);
+            holder.itemView.setBackgroundResource(R.drawable.item_normal);
         }
 
         if( mOnSourceListClick != null){
