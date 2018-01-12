@@ -102,11 +102,11 @@ public class VCLComm extends AsyncTask<Byte,Void,Vector<Byte>> {
             bRet = mVcl3CommProcess.GetEngineStatusInfo(usDeviceID,vecResponse) ;
         }else if (FuncName[0]==11){
             //// TODO: 2017/12/19 close all signal windows
-            bRet = mVcl3CommProcess.CloseSignalWindow((byte)0,(byte)0) ;
+            bRet = mVcl3CommProcess.CloseSignalWindow((byte)0,(byte)0,(byte)0) ;
 
         }else if (FuncName[0]==12){
             //// TODO: 2017/12/19 open signal window ,then close first
-            bRet = mVcl3CommProcess.CloseSignalWindow(FuncName[1],(byte)0) ;
+            bRet = mVcl3CommProcess.CloseSignalWindow(FuncName[1],(byte)0,(byte)0) ;
             try {
                 sleep(1000);
             } catch (InterruptedException e) {
@@ -114,7 +114,7 @@ public class VCLComm extends AsyncTask<Byte,Void,Vector<Byte>> {
             }
             bRet |= mVcl3CommProcess.OpenSignalWindow(FuncName[1],FuncName[2],FuncName[3],
                     FuncName[4],FuncName[5],FuncName[6],FuncName[7],
-                    FuncName[8],FuncName[9],FuncName[10],FuncName[11]);
+                    FuncName[8],FuncName[9],FuncName[10],FuncName[11],(byte)0);
         }else if (FuncName[0]>=13 && FuncName[0]<=14){
             byte type = (byte)(FuncName[0] - 4);
             short cubeId;

@@ -159,6 +159,11 @@ public class MainActivity extends AppCompatActivity implements SourceItemListFra
                 startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
             }
         }
+        if( id == R.id.menu_item_system_info ){
+            DialogList dialogList = new DialogList(this);
+            dialogList.AllInfo();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -168,5 +173,6 @@ public class MainActivity extends AppCompatActivity implements SourceItemListFra
         //Stop polling service
         PollingUtils.stopPollingService(this, PollingService.class, PollingService.ACTION);
     }
+
 }
 

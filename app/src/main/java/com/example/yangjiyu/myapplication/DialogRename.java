@@ -23,10 +23,10 @@ public class DialogRename {
     }
     public void Rename(View view, int type, int position){
         switch (type){
-            case 2:
+            case 3:
                 SignalRename(view,position);
                 break;
-            case 3:
+            case 1:
                 SignalModelRename(view,position);
                 break;
             case 4:

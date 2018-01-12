@@ -1,9 +1,11 @@
 package com.example.yangjiyu.myapplication;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -239,7 +241,7 @@ public class DialogList {
         mSharedAppData =sharedAppData;
         mLastSceneIndex=LastSceneIndex;
         mFlag=flag;
-        String [] strings = {"自定义模式1","自定义模式2"};
+        String [] strings = {"自定义模式1","自定义模式2","自定义模式3"};
         final AlertDialog.Builder builder = new AlertDialog.Builder(mContext,1);
         builder.setTitle(mContext.getString(R.string.getSystemInfo));
         builder.setIcon(R.mipmap.ic_launcher);
@@ -273,5 +275,131 @@ public class DialogList {
     }
     public int getIndex(){
         return this.index;
+    }
+
+
+    private SharedAppData sharedAppData=null;
+    private MyProgressDialog mProgressDialog;
+    public void AllInfo(){
+        sharedAppData=SharedAppData.newInstance(mContext);
+        mProgressDialog = MyProgressDialog.createProgressDialog(mContext, 5000, new MyProgressDialog.OnTimeOutListener() {
+            @Override
+            public void onTimeOut(ProgressDialog dialog) {
+                Toast.makeText(mContext, "TimeOut", Toast.LENGTH_SHORT).show();
+            }
+        });
+        mProgressDialog.setTitle(mContext.getString(R.string.app_name));
+        String messageInfo = mContext.getString(R.string.progress_check_system);
+        mProgressDialog.setMessage(messageInfo);
+        mProgressDialog.setCancelable(true);
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        final VCLComm vclcom=new VCLComm(sharedAppData.getVCLordIP(),VclordActivity.PORT,sharedAppData.getSystemInfo(1),sharedAppData.getSystemInfo(2),mProgressDialog,mContext);
+        final int row =sharedAppData.getSystemInfo(1);
+        final int col = sharedAppData.getSystemInfo(2);
+        //final byte type =3;//3,4,5
+        int iSysCount = row*col;
+        String [] strings = new String[iSysCount+2];
+        int index=0;
+        strings[index++]="控制盒版本";
+        strings[index++]="控制盒状态";
+        for (int i=0;i<row;i++){
+            for (int j=0;j<col;j++){
+                strings[index++]="单元 "+i+"-"+j;
+            }
+        }
+        final AlertDialog.Builder builder = new AlertDialog.Builder(mContext,1);
+        builder.setTitle(mContext.getString(R.string.getSystemInfo));
+        builder.setIcon(R.mipmap.ic_launcher);
+        builder.setSingleChoiceItems(strings, 0, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                Vector<Byte> vecResponse = new Vector<>();
+                byte type=3;//3,4,5
+                CpComm.stuDlpQInterfaceStatus stInterfaceStatus = new CpComm.stuDlpQInterfaceStatus();
+                CpComm.stuDlpQInterfaceVersion stInterfaceVersion = new CpComm.stuDlpQInterfaceVersion();
+                CpComm.stuDlpQEngineStatusInfo stInfo = new CpComm.stuDlpQEngineStatusInfo();
+
+                AlertDialog.Builder inter_builder = new AlertDialog.Builder(mContext,1);
+                inter_builder.setTitle(mContext.getString(R.string.getSystemInfo));
+                inter_builder.setIcon(R.mipmap.ic_launcher);
+                try {
+                    //sleep(500);
+                    if(which==0){
+                        type=3;
+                        vecResponse = vclcom.execute(type).get();
+                        stInterfaceVersion = ExchangeStuct.ExchangeInterfaceVersion(vecResponse);
+                        InterfaceInfo(stInterfaceVersion);
+                    }else if (which==1){
+                        type=4;
+                        vecResponse = vclcom.execute(type).get();
+                        stInterfaceStatus =ExchangeStuct.ExchangeInterfaceStatus(vecResponse);
+                        InterfaceInfo(stInterfaceStatus);
+                    }else {
+                        type=5;
+                        int ii=which-2;
+                        vecResponse = vclcom.execute(type,(byte)(ii/col),(byte)(ii%col)).get();
+                        stInfo = ExchangeStuct.ExchangeEngineStatusInfo(vecResponse);
+                        //// TODO: 2017/12/21  add info to view
+                        String power1 = EnginePowerStatus(stInfo.ucPower1);
+                        String power2 = EnginePowerStatus(stInfo.ucPower2);
+                        String power3 = EnginePowerStatus(stInfo.ucPower3);
+                        String power4 = EnginePowerStatus(stInfo.ucPower4);
+                        String Ledstatus = LedStatus(stInfo.LedSta);
+                        final String items[] = {"光源工作 "+stInfo.uiLampTime+"小时",
+                                "投影机工作 "+stInfo.uiEngineTime+"小时",
+                                "DMD温度 "+stInfo.ucDMDTemp+"℃",
+                                "灯泡R温度 "+stInfo.ucLedRTemp+"℃",
+                                "灯泡G温度 "+stInfo.ucLedGTemp+"℃",
+                                "灯泡B温度 "+stInfo.ucLedBTemp+"℃",
+                                "环境温度 "+stInfo.ucEnvTemp+"℃",
+                                "DMD风扇 "+stInfo.usDMDFan+"转/分",
+                                "RG间风扇 "+stInfo.usLedFan1+"转/分",
+                                "GB间风扇 "+stInfo.usLedFan2+"转/分",
+                                "过滤器风扇 "+stInfo.usFliterFan+"转/分",
+                                "Driver1风扇 "+stInfo.usDriverFan1+"转/分",
+                                "Driver2风扇 "+stInfo.usDriverFan2+"转/分",
+                                "电源风扇 "+stInfo.usPowerFan+"转/分",
+                                "电源1状态 "+power1,
+                                "电源2状态 "+power2,
+                                "电源3状态 "+power3,
+                                "电源4状态 "+power4,
+                                "光源状态 "+Ledstatus
+                        };
+
+                        inter_builder.setItems(items, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface inter_dialog, int which) {
+                                inter_dialog.dismiss();
+                            }
+                        });
+                        inter_builder.setPositiveButton(mContext.getString(R.string.Ok), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface inter_dialog, int which) {
+                                inter_dialog.dismiss();
+                            }
+                        });
+                        inter_builder.create().show();
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                //end // TODO: 2017/12/21
+                dialog.dismiss();
+            }
+        });
+        builder.setPositiveButton(mContext.getString(R.string.Cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
+
     }
 }

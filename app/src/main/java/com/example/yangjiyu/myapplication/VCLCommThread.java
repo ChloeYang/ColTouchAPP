@@ -132,7 +132,7 @@ public class VCLCommThread extends Thread {
                             openWindow.getHigh_startX()+","+openWindow.getLow_startX()+","+openWindow.getHigh_startY()+","+openWindow.getLow_startY()+","+
                             openWindow.getWidth_high_X()+","+openWindow.getWidth_low_X()+","+openWindow.getWidth_high_Y()+","+openWindow.getWidth_low_Y());
 
-                    bRet = mVcl3CommProcess.CloseSignalWindow(openWindow.getWinId(),(byte)0) ;
+                    bRet = mVcl3CommProcess.CloseSignalWindow(openWindow.getWinId(),(byte)0,(byte)0) ;
                     try {
                         sleep(1000);
                     } catch (InterruptedException e) {
@@ -140,7 +140,7 @@ public class VCLCommThread extends Thread {
                     }
                     bRet |= mVcl3CommProcess.OpenSignalWindow(openWindow.getWinId(),openWindow.getInputId(),openWindow.getSig(),
                             openWindow.getHigh_startX(),openWindow.getLow_startX(),openWindow.getHigh_startY(),openWindow.getLow_startY(),
-                            openWindow.getWidth_high_X(),openWindow.getWidth_low_X(),openWindow.getWidth_high_Y(),openWindow.getWidth_low_Y());
+                            openWindow.getWidth_high_X(),openWindow.getWidth_low_X(),openWindow.getWidth_high_Y(),openWindow.getWidth_low_Y(),(byte)0);
                     /*try {
                         sleep(1000);
                     } catch (InterruptedException e) {
@@ -149,7 +149,7 @@ public class VCLCommThread extends Thread {
                 }
                 else if(string=="closeWindow"){
                     Log.i(TAG,"closeWindow "+msg.getData().getByte(BYTE_ARG1)+","+msg.getData().getByte(BYTE_ARG2));
-                    bRet = mVcl3CommProcess.CloseSignalWindow(msg.getData().getByte(BYTE_ARG1),msg.getData().getByte(BYTE_ARG2)) ;
+                    bRet = mVcl3CommProcess.CloseSignalWindow(msg.getData().getByte(BYTE_ARG1),msg.getData().getByte(BYTE_ARG2),(byte)0) ;
                     //Log.i(TAG,"closeWindow ret ="+bRet);
                 }
                 else if(string=="power_on"){

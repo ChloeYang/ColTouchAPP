@@ -44,8 +44,8 @@ public class SettingPreference extends AppCompatPreferenceActivity {
         if( actionBar != null ){
             actionBar.setDisplayHomeAsUpEnabled( true );
         }
-        getWindow().requestFeature(Window.FEATURE_LEFT_ICON);
-        getWindow().setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.scene);
+        /*getWindow().requestFeature(Window.FEATURE_LEFT_ICON);
+        getWindow().setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.scene);*/
 
         SharedPreferences preferences = getSharedPreferences(getString(R.string.pref_setting),Context.MODE_PRIVATE);
         strIp=preferences.getString(getString(R.string.pref_data_vclordip),"");

@@ -103,7 +103,7 @@ public class VideoWallFragment extends Fragment {
             mSignalIndex=-1;
         }else if (mListIndex == 1){//scene and signal to model
             //// TODO: 2017/12/26 model scene+signal
-            if (pos == 2){
+            if (pos == 3){
                 //// TODO: 2017/12/26 save model
                 SetModelSave();
             }else {
@@ -115,7 +115,7 @@ public class VideoWallFragment extends Fragment {
             ComCommand(type);
         }
 
-        if (mListIndex ==2 && mLastIndex == 1){
+        if (mListIndex ==3 && mLastIndex == 2){
             m_bIsCloseAllWindows=true;
         }
         mLastIndex =mListIndex;

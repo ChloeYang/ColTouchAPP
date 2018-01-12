@@ -221,6 +221,12 @@ public class VclordActivity extends AppCompatActivity {
         protected Void doInBackground(String... phoneNumber) {
             vcl3CommProcess = new VCL3CommProcess(mVclordIp, PORT);
             ret = vcl3CommProcess.QueryAllSystem(vecSys);
+            try {
+                vcl3CommProcess.ProcessCancel();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            vcl3CommProcess =null;
             if (!ret) {
                 //Toast.makeText(getApplicationContext(),R.string.error_network,Toast.LENGTH_SHORT).show();
                 return null;

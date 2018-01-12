@@ -97,8 +97,8 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     int[] ImgSystemInfoNormal = {R.drawable.get_system_info_normal,R.drawable.get_system_info_normal,R.drawable.get_system_info_normal};
     int[] ImgSystemInfoPressed = {R.drawable.get_system_info_pressdown,R.drawable.get_system_info_pressdown,R.drawable.get_system_info_pressdown};
 
-    int[] ImgModelInfoNormal = {R.drawable.model_normal,R.drawable.model_normal,R.drawable.scene_confirm};
-    int[] ImgModelInfoPressed = {R.drawable.model_pressdown,R.drawable.model_pressdown,R.drawable.scene_confirm};
+    int[] ImgModelInfoNormal = {R.drawable.model_normal,R.drawable.model_normal,R.drawable.model_normal,R.drawable.scene_confirm};
+    int[] ImgModelInfoPressed = {R.drawable.model_pressdown,R.drawable.model_pressdown,R.drawable.model_pressdown,R.drawable.scene_confirm};
 
     int[] ImgColorModeNormal = {/*R.drawable.color_mode_normal,R.drawable.color_mode_normal,R.drawable.color_mode_normal,
             R.drawable.color_mode_normal,*/R.drawable.color_mode_normal,R.drawable.color_mode_normal};
@@ -116,7 +116,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     private int mSignalNum=17;
     private int mPowerNum=2;
     private int mSystemInfoNum =3;
-    private int mModelInfoNum=3;
+    private int mModelInfoNum=4;
     private int mColorModeNum=2;
 
     public ViewHolder mViewHolder;
@@ -328,11 +328,11 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
                 public boolean onLongClick(View v) {
                     int type=0;
                     if (mData.size() == mModelInfoNum) {
-                        type=3;//model scene+signal
+                        type=1;//model scene+signal
                     }else if (mData.size()==mColorModeNum){
                         type=4;//color mode
                     }else if (mData.size()==mSignalNum){
-                        type=2;
+                        type=3;
                     }
                     notifyDataSetChanged();
                     mOnItemClickListener.onItemLongClick(viewHolder.itemView,i,type);

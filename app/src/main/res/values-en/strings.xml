@@ -87,6 +87,7 @@
     <string name="pref_color_mode_name_">color_mode_name_</string>
     <string name="pref_model_scene_signal_name_">model_scene_signal_name_</string>
     <string name="pref_signal_name_">signal_name_</string>
+    <string name="pref_get_system_info">SystemInfo</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -146,6 +147,7 @@
     <string name="Cancel">Cancel</string>
     <string name="model_define1">Model_Define1</string>
     <string name="model_define2">Model_Define2</string>
+    <string name="model_define3">Model_Define3</string>
     <string name="model_save">SaveToModel</string>
     <string name="color_mode">ColorMode</string>
     <string name="model_define">Model_Define</string>

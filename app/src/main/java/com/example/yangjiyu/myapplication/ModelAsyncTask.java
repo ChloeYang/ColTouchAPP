@@ -47,7 +47,7 @@ public class ModelAsyncTask extends AsyncTask<Byte,Void,Vector<Byte>>  {
     protected Vector<Byte> doInBackground(Byte... FuncName) {
         mVcl3CommProcess = new VCL3CommProcess(mIp, mPort);
         sharedAppData=SharedAppData.newInstance(mContext);
-        mVcl3CommProcess.CloseSignalWindow((byte)0,(byte)0) ;
+        mVcl3CommProcess.CloseSignalWindow((byte)0,(byte)0,(byte)0) ;
         try {
             sleep(1000);
         } catch (InterruptedException e) {
@@ -61,6 +61,7 @@ public class ModelAsyncTask extends AsyncTask<Byte,Void,Vector<Byte>>  {
             //// TODO: 2017/12/26 send cmd
             ArrayList<Integer> cubePix =sharedAppData.getCubePix();
             ArrayList<SingleSceneCell> sceneCells = sharedAppData.getSceneCell(FuncName[1]);
+            byte flag=0;
             for (SingleSceneCell scene_cell :sceneCells) {
                 i++;
                 signal = sharedAppData.getModelSignal(FuncName[1],i);
@@ -84,9 +85,11 @@ public class ModelAsyncTask extends AsyncTask<Byte,Void,Vector<Byte>>  {
                 Width_low_X=(byte) (widthX & 0x00FF);
                 Width_high_Y=(byte) (heightY >> 8);
                 Width_low_Y=(byte) (heightY & 0x00FF);
+                if (i==1 && sceneCells.size()>1){ flag=1;}
+                if (i==sceneCells.size() && sceneCells.size()>1){ flag=2;}
                 mVcl3CommProcess.OpenSignalWindow(winId,inputId,sigNum,
                         High_startX,Low_startX,High_startY,Low_startY,
-                        Width_high_X,Width_low_X,Width_high_Y,Width_low_Y);
+                        Width_high_X,Width_low_X,Width_high_Y,Width_low_Y,flag);
             }
         }
         try {

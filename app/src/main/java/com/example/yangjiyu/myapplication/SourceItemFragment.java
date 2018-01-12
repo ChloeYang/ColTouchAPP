@@ -5,17 +5,20 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.yangjiyu.myapplication.utils.PagingScrollHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
-public class SourceItemFragment extends Fragment /*implements SourceItemListFragment.OnSourceListSelectedListener*/{
+public class SourceItemFragment extends Fragment implements PagingScrollHelper.onPageChangeListener /*implements SourceItemListFragment.OnSourceListSelectedListener*/{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
@@ -23,6 +26,7 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
     private GalleryAdapter mAdapter;
     public List<Integer> mData;
     private TextView textView;
+    private TextView pageText;
     private View view;
 
     public Vector<String> Scene=new Vector<>();
@@ -31,55 +35,107 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
     public Vector<String> SystemInfo= new Vector<>();
     public Vector<String> ModelInfo= new Vector<>();
     public Vector<String> ColorMode= new Vector<>();
-    int  nowIndex=0;
-
+    private int  lastIndex=0;
+    public static int last3PageIndex=0;
+    public static int lastPageIndex=0;
+    public static boolean bIs3ChangeTo2 =false;
+    public static boolean bIsChanged =false;
     //String[] StringSource = {"Whole","H-2Parts","V-2Parts", "Single"};
 
+    PagingScrollHelper scrollHelper = new PagingScrollHelper();
+    //private SourceItemFragment sourceItemFragment;
 
     public void onShow(int pos) {
-        nowIndex= pos;
+        //nowIndex= pos;
         //Toast.makeText(getActivity(),"pos="+pos,Toast.LENGTH_SHORT).show();
         getNewData(pos);
         mAdapter.initViewHolder();
         mAdapter.notifyDataSetChanged();
 
+        lastIndex=pos;
     }
     void getNewData(int pos){
+        bIs3ChangeTo2 =false;
+        bIsChanged =false;
+        if (pos==2&& lastIndex==3 && last3PageIndex>1) {
+            bIs3ChangeTo2 = true;
+        }
         if (pos==2){
             sceneData();
             textView.setText(getString(R.string.scene_list));
+            pageText.setText("共2页");
             mAdapter.bIsSystemData=false;
             mAdapter.bIsPowerOnOff=false;
+
+            if (lastPageIndex==0){
+                scrollHelper.setUpRecycleView(mRecyclerView);
+                scrollHelper.setOnPageChangeListener(this);
+            }
         }else if (pos==3){
             signalData();
             textView.setText(getString(R.string.signal_list));
+            pageText.setText("共5页");
             mAdapter.bIsSystemData=false;
             mAdapter.bIsPowerOnOff=false;
+
+            if (lastPageIndex==0){
+                scrollHelper.setUpRecycleView(mRecyclerView);
+                scrollHelper.setOnPageChangeListener(this);
+            }else if (lastIndex==2){
+                bIsChanged = true;
+            }
         }else if(pos==0){
             powerData();
             textView.setText(getString(R.string.power_list));
+            pageText.setText("共1页");
             mAdapter.bIsSystemData=false;
             mAdapter.bIsPowerOnOff=true;
+
+            scrollHelper.setUpRecycleView(mRecyclerView);
+            scrollHelper.setOnPageChangeListener(this);
         }else if(pos==5){
             checkSystemData();
             textView.setText(getString(R.string.getSystemInfo));
             mAdapter.bIsSystemData=true;
             mAdapter.bIsPowerOnOff=false;
+
+            scrollHelper.setUpRecycleView(mRecyclerView);
+            scrollHelper.setOnPageChangeListener(this);
         }else if(pos==1){
             checkModelData();
             textView.setText(getString(R.string.model_SceneAndSignal));
+            pageText.setText("共1页");
             mAdapter.bIsSystemData=false;
             mAdapter.bIsPowerOnOff=false;
+
+            scrollHelper.setUpRecycleView(mRecyclerView);
+            scrollHelper.setOnPageChangeListener(this);
         } else if(pos==4){
             checkColorModeData();
             textView.setText(getString(R.string.color_mode));
+            pageText.setText("共1页");
             mAdapter.bIsSystemData=false;
             mAdapter.bIsPowerOnOff=false;
+
+            scrollHelper.setUpRecycleView(mRecyclerView);
+            scrollHelper.setOnPageChangeListener(this);
         }
     }
 
     void setCurrentItem(int pos){
         mAdapter.onSetCurrent(mAdapter.mViewHolder,pos);
+    }
+
+    @Override
+    public void onPageChange(int index) {
+        //// TODO: 2018/1/10 add text content
+        pageText.setText("第" + (index + 1) + "页");
+        Log.d("current index",":"+(index));
+        if (!bIs3ChangeTo2) {
+            //Log.d("lastPageIndex",":"+lastPageIndex);
+            last3PageIndex = index;
+        }
+        lastPageIndex = index;
     }
 
     //private OnFragmentInteractionListener mListener;
@@ -111,6 +167,7 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initData();
+        //sourceItemFragment = this;
     }
 
     @Override
@@ -121,6 +178,7 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
         //得到控件
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_source_item);
         textView=(TextView)view.findViewById(R.id.source_item) ;
+        pageText=(TextView)view.findViewById(R.id.page_item);
         //设置布局管理器
         //--LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
         GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(),4);
@@ -140,10 +198,8 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
             public void onItemLongClick(View view, int position,int type){
                 DialogRename dialogRename=new DialogRename(getContext(),type);
                 dialogRename.Rename(view,type,position);
-
-                //mOnSourceSelectedListener.onSourceSelected(position);
-                //mAdapter.notifyDataSetChanged();
-                onShow(position);
+                /*RenameAsyncTask task = new RenameAsyncTask(sourceItemFragment,getContext(),view,type,position);
+                task.execute();*/
             }
         });
 
@@ -156,6 +212,8 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
                 mImg.setImageResource(mData.get(position));
             };
         });*/
+        scrollHelper.setUpRecycleView(mRecyclerView);
+        scrollHelper.setOnPageChangeListener(this);
         return view;
         //return inflater.inflate(R.layout.fragment_source_item, container, false);
     }
@@ -208,6 +266,7 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
 
         ModelInfo.add(getString(R.string.model_define1));
         ModelInfo.add(getString(R.string.model_define2));
+        ModelInfo.add(getString(R.string.model_define3));
         ModelInfo.add(getString(R.string.model_save));
 
         ColorMode.add(getString(R.string.color_mode)+1);
@@ -267,6 +326,7 @@ public class SourceItemFragment extends Fragment /*implements SourceItemListFrag
 
     private void checkModelData(){
         mAdapter.mData = new ArrayList<>(Arrays.asList(
+                R.drawable.model_normal,
                 R.drawable.model_normal,
                 R.drawable.model_normal,
                 R.drawable.scene_confirm));
