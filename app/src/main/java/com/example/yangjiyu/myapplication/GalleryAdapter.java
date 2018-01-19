@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -97,13 +98,13 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     int[] ImgSystemInfoNormal = {R.drawable.get_system_info_normal,R.drawable.get_system_info_normal,R.drawable.get_system_info_normal};
     int[] ImgSystemInfoPressed = {R.drawable.get_system_info_pressdown,R.drawable.get_system_info_pressdown,R.drawable.get_system_info_pressdown};
 
-    int[] ImgModelInfoNormal = {R.drawable.model_normal,R.drawable.model_normal,R.drawable.model_normal,R.drawable.scene_confirm};
-    int[] ImgModelInfoPressed = {R.drawable.model_pressdown,R.drawable.model_pressdown,R.drawable.model_pressdown,R.drawable.scene_confirm};
+    int[] ImgModelInfoNormal = {R.drawable.model_normal,R.drawable.model_normal,R.drawable.model_normal,R.drawable.guide};
+    int[] ImgModelInfoPressed = {R.drawable.model_pressdown,R.drawable.model_pressdown,R.drawable.model_pressdown,R.drawable.guide};
 
-    int[] ImgColorModeNormal = {/*R.drawable.color_mode_normal,R.drawable.color_mode_normal,R.drawable.color_mode_normal,
-            R.drawable.color_mode_normal,*/R.drawable.color_mode_normal,R.drawable.color_mode_normal};
-    int[] ImgColorModePressed = {/*R.drawable.color_mode_pressed,R.drawable.color_mode_pressed,R.drawable.color_mode_pressed,
-            R.drawable.color_mode_pressed,*/R.drawable.color_mode_pressed,R.drawable.color_mode_pressed};
+    int[] ImgColorModeNormal = {/*R.drawable.color_mode_normal,R.drawable.color_mode_normal,R.drawable.color_mode_normal,*/
+            R.drawable.color_mode_normal,R.drawable.color_mode_normal,R.drawable.color_mode_normal};
+    int[] ImgColorModePressed = {/*R.drawable.color_mode_pressed,R.drawable.color_mode_pressed,R.drawable.color_mode_pressed,*/
+            R.drawable.color_mode_pressed,R.drawable.color_mode_pressed,R.drawable.color_mode_pressed};
 
     public Vector<String> StringScene=new Vector<>();
     public Vector<String> StringSignal=new Vector<>();
@@ -117,7 +118,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     private int mPowerNum=2;
     private int mSystemInfoNum =3;
     private int mModelInfoNum=4;
-    private int mColorModeNum=2;
+    private int mColorModeNum=3;
 
     public ViewHolder mViewHolder;
     private List<Boolean> isClicks =new ArrayList<>();
@@ -179,7 +180,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             }else if (mData.size()== mModelInfoNum && bIsSystemData==false){
                 mImg.setImageResource(ImgModelInfoNormal[sourceId]);
                 mTxt.setText(sharedAppData.getSignalModelName((byte)sourceId));
-            }else if (mData.size()==mColorModeNum && false==bIsPowerOnOff) {
+            }else if (mData.size()==mColorModeNum && false==bIsSystemData) {
                 mImg.setImageResource(ImgColorModeNormal[sourceId]);
                 mTxt.setText(sharedAppData.getColorModeName((byte)sourceId));
             }else/*if(mData.size()==mSignalNum)*/{
@@ -232,7 +233,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             {
                 isClicks.add(false);
             }
-        }else if (mData.size()==mColorModeNum  && false==bIsPowerOnOff) {
+        }else if (mData.size()==mColorModeNum  && false==bIsSystemData) {
             for (int ii = 0;ii<StringColorMode.size();ii++)
             {
                 isClicks.add(false);
@@ -271,7 +272,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             }else if (mData.size()== mModelInfoNum && bIsSystemData==false){
                 viewHolder.mImg.setImageResource(ImgModelInfoPressed[i]);
                 viewHolder.mTxt.setTextColor(Color.parseColor("#ff0000"));
-            }else if (mData.size()== mColorModeNum && false==bIsPowerOnOff){
+            }else if (mData.size()== mColorModeNum && false==bIsSystemData){
                 viewHolder.mImg.setImageResource(ImgColorModePressed[i]);
                 viewHolder.mTxt.setTextColor(Color.parseColor("#ff0000"));
             }else /*if (mData.size()==mSignalNum)*/{
@@ -295,7 +296,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             }else if (mData.size()== mModelInfoNum && bIsSystemData==false){
                 viewHolder.mImg.setImageResource(ImgModelInfoNormal[i]);
                 viewHolder.mTxt.setTextColor(Color.parseColor("#ffffff"));
-            }else if (mData.size()== mColorModeNum  && false==bIsPowerOnOff){
+            }else if (mData.size()== mColorModeNum  && false==bIsSystemData){
                 viewHolder.mImg.setImageResource(ImgColorModeNormal[i]);
                 viewHolder.mTxt.setTextColor(Color.parseColor("#ffffff"));
             }else/* if (mData.size()==mSignalNum)*/{
@@ -339,6 +340,23 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
                     return false;
                 }
             });
+            viewHolder.itemView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_MOVE:
+                            for (int i=0;i<isClicks.size();i++)
+                            {
+                                isClicks.set(i,false);
+                            }
+                            isClicks.set(i, true);
+                            notifyDataSetChanged();
+                            mOnItemClickListener.onItemClick(viewHolder.itemView,i);
+                            break;
+                    }
+                    return false;
+                }
+            });
         }
     }
 
@@ -359,7 +377,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             }else if (mData.size()== mModelInfoNum && bIsSystemData==false){
                 viewHolder.mImg.setImageResource(ImgModelInfoPressed[i]);
                 viewHolder.mTxt.setTextColor(Color.parseColor("#ff0000"));
-            }else if (mData.size()== mColorModeNum  && false==bIsPowerOnOff){
+            }else if (mData.size()== mColorModeNum  && false==bIsSystemData){
                 viewHolder.mImg.setImageResource(ImgColorModePressed[i]);
                 viewHolder.mTxt.setTextColor(Color.parseColor("#ff0000"));
             }else /*if (mData.size()==mSignalNum)*/{
@@ -383,7 +401,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             }else if (mData.size()== mModelInfoNum && bIsSystemData==false){
                 viewHolder.mImg.setImageResource(ImgModelInfoNormal[i]);
                 viewHolder.mTxt.setTextColor(Color.parseColor("#ffffff"));
-            }else if (mData.size()== mColorModeNum  && false==bIsPowerOnOff){
+            }else if (mData.size()== mColorModeNum  && false==bIsSystemData){
                 viewHolder.mImg.setImageResource(ImgColorModeNormal[i]);
                 viewHolder.mTxt.setTextColor(Color.parseColor("#ffffff"));
             }else /*if (mData.size()==mSignalNum)*/{
@@ -430,7 +448,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             {
                 isClicks.add(false);
             }
-        }else if (mData.size()==mColorModeNum  && false==bIsPowerOnOff) {
+        }else if (mData.size()==mColorModeNum  && false==bIsSystemData) {
             for (int ii = 0;ii<StringColorMode.size();ii++)
             {
                 isClicks.add(false);

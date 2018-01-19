@@ -64,8 +64,8 @@ public class ModelAsyncTask extends AsyncTask<Byte,Void,Vector<Byte>>  {
             byte flag=0;
             for (SingleSceneCell scene_cell :sceneCells) {
                 i++;
-                signal = sharedAppData.getModelSignal(FuncName[1],i);
-                Log.d("ModelAsyncTask ","= "+scene_cell.getM_signal());
+                signal = sharedAppData.getModelSignal(FuncName[1],i,FuncName[2]);
+                //Log.d("ModelAsyncTask ","= "+scene_cell.getM_signal());
                 //// TODO: 2017/12/4 save signal to sharedpreferences && send cmd to engine
                 //byte winId=(byte)((mSignalWindowCount+1)&0xff);
                 winId=(byte) (FuncName[1] * VideoWallFragment.WIN_INTER + i);

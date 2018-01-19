@@ -108,6 +108,7 @@ public class VideoWallFragment extends Fragment {
                 SetModelSave();
             }else {
                 //// TODO: 2017/12/26 Exchange
+                Log.d("ExchangeSceneAndSignal","pos:"+pos);
                 ExchangeSceneAndSignal(pos);
             }
         }else if (mListIndex == 4){//color mode
@@ -371,7 +372,8 @@ public class VideoWallFragment extends Fragment {
         }else {
             int sceneIndex = sharedAppData.getSaveModelInfo_Scene(pos);
             ModelAsyncTask model=new ModelAsyncTask(sharedAppData.getVCLordIP(),VclordActivity.PORT,mVideoWallView.m_cellWidth,mVideoWallView.m_cellHeight,mProgressDialog,getContext());
-            model.execute((byte)1,(byte)sceneIndex);
+            Log.d("ExchangeSceneAndSignal","sceneIndex:"+sceneIndex);
+            model.execute((byte)1,(byte)sceneIndex,(byte)pos);
 
             mVideoWallView.drawCanvasBase();
             int i=0;
@@ -380,7 +382,7 @@ public class VideoWallFragment extends Fragment {
                 i++;
                 mVideoWallView.drawCanvasRect(scene_cell.getM_startX(), scene_cell.getM_startY(),scene_cell.getM_endX(), scene_cell.getM_endY());
                 //Log.d("ExchangeSceneAndSignal ","= "+sharedAppData.getModelSignal(sceneIndex,i));
-                mVideoWallView.drawCanvasText(sharedAppData.getSignalName(sharedAppData.getModelSignal(sceneIndex,i)),scene_cell.getM_startX(),scene_cell.getM_startY(),scene_cell.getM_endX(),scene_cell.getM_endY());
+                mVideoWallView.drawCanvasText(sharedAppData.getSignalName(sharedAppData.getModelSignal(sceneIndex,i,pos)),scene_cell.getM_startX(),scene_cell.getM_startY(),scene_cell.getM_endX(),scene_cell.getM_endY());
             }
 
             Toast.makeText(getContext(), R.string.operation_finished, Toast.LENGTH_SHORT).show();

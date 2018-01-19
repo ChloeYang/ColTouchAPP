@@ -152,5 +152,6 @@
     <string name="color_mode">ColorMode</string>
     <string name="model_define">Model_Define</string>
     <string name="rename_dialog">Rename</string>
+    <string name="guide">Guide</string>
 
 </resources>

@@ -72,12 +72,16 @@ public class MainActivity extends AppCompatActivity implements SourceItemListFra
 
         //PollingUtils.startPollingService(this, 5, PollingService.class, PollingService.ACTION);
         SharedAppData sharedAppData = SharedAppData.newInstance(this);
-        boolean bIsStarted=false;
         MonitorThread monitorThread = MonitorThread.newInstance( sharedAppData.getVCLordIP(),VclordActivity.PORT, this);
-        bIsStarted = monitorThread.getIsStarted();
+        boolean bIsStarted = monitorThread.getIsStarted();
         if (!bIsStarted) {
             monitorThread.start();
         }
+        /*ReceiveAlarmThread receiveAlarmThread= ReceiveAlarmThread.newInstance(sharedAppData.getVCLordIP(),this);
+        bIsStarted = receiveAlarmThread.getIsStarted();
+        if (!bIsStarted) {
+            receiveAlarmThread.start();
+        }*/
     }
 /*    //// TODO: 2017/12/18 disable HOME_KEY
 

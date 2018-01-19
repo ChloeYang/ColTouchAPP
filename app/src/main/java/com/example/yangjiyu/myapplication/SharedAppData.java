@@ -48,6 +48,8 @@ public class SharedAppData {
             case 4:
                 value=preferences.getInt(mContext.getString(R.string.pref_height),1);//m_cellHeight
                 break;
+            case 5:
+                value=preferences.getInt(mContext.getString(R.string.pref_data_sid),-1);
             default:
                 break;
         }
@@ -396,16 +398,16 @@ public class SharedAppData {
         int scene = preferences.getInt(mContext.getString(R.string.pref_defined_model_scene_)+num,0);
         return scene;
     }
-    public static void saveModelSignal(int definedNum,int index){
+    public static void saveModelSignal(int definedNum,int index,int which){
         SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.pref_define_scene), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         int num = index-1;
         int signal=getSceneSignal(definedNum,index);
         //Log.d("getSceneSignal ","signal =  "+signal);
         if (definedNum ==4 ) {
-            editor.putInt(mContext.getString(R.string.pref_define1_model_signal_) + num, signal);
+            editor.putInt(mContext.getString(R.string.pref_define1_model_signal_) + num + which, signal);
         }else if (definedNum == 5){
-            editor.putInt(mContext.getString(R.string.pref_define2_model_signal_) + num, signal);
+            editor.putInt(mContext.getString(R.string.pref_define2_model_signal_) + num + which, signal);
         }else {
             String str="";
             switch (definedNum){
@@ -425,18 +427,18 @@ public class SharedAppData {
                     break;
             }
             //Log.d("saveModelSignal ","signal =  "+signal);
-            editor.putInt(mContext.getString(R.string.pref_default_model_signal_) +str+"_"+num, signal);
+            editor.putInt(mContext.getString(R.string.pref_default_model_signal_) +str+"_"+num + which, signal);
         }
         editor.commit();
     }
-    public static int getModelSignal(int definedNum,int index){
+    public static int getModelSignal(int definedNum,int index ,int which){
         SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.pref_define_scene), Context.MODE_PRIVATE);
         int num = index-1;
         int signal=0;
         if (definedNum ==4 ) {
-            signal = sharedPref.getInt(mContext.getString(R.string.pref_define1_model_signal_) + num, 0);
+            signal = sharedPref.getInt(mContext.getString(R.string.pref_define1_model_signal_) + num + which, 0);
         }else if (definedNum == 5){
-            signal = sharedPref.getInt(mContext.getString(R.string.pref_define2_model_signal_) + num, 0);
+            signal = sharedPref.getInt(mContext.getString(R.string.pref_define2_model_signal_) + num + which, 0);
         }else {
             String str="";
             switch (definedNum){
@@ -455,7 +457,7 @@ public class SharedAppData {
                 default:
                     break;
             }
-            signal = sharedPref.getInt(mContext.getString(R.string.pref_default_model_signal_) +str+"_"+num, 0);
+            signal = sharedPref.getInt(mContext.getString(R.string.pref_default_model_signal_) +str+"_"+num + which, 0);
             //Log.d("getModelSignal ","signal =  "+signal);
         }
         return signal;
@@ -481,10 +483,10 @@ public class SharedAppData {
     public static String getSignalModelName(byte mode){
         String string;
         SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.pref_setting), Context.MODE_PRIVATE);
-        if (mode<2) {
+        if (mode<3) {
             string = sharedPref.getString(mContext.getString(R.string.pref_model_scene_signal_name_) + mode, mContext.getString(R.string.model_define) + mode);
         }else {
-            string = sharedPref.getString(mContext.getString(R.string.pref_model_scene_signal_name_) + mode, mContext.getString(R.string.confirm));
+            string = sharedPref.getString(mContext.getString(R.string.pref_model_scene_signal_name_) + mode, mContext.getString(R.string.guide));
         }
         return string;
     }

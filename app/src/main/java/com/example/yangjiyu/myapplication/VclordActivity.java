@@ -56,6 +56,7 @@ public class VclordActivity extends AppCompatActivity {
     private SharedAppData sharedAppData;
 
     private boolean ret = false;
+    private boolean colormode_ret=false;
 
     public static VCL3CommProcess vcl3CommProcess;
     /**
@@ -334,16 +335,17 @@ public class VclordActivity extends AppCompatActivity {
                 saveSignalInfo(signalInfo);
                 //// TODO: 2017/12/28 get color mode name 6 num
                 String modeName;
-                for (byte mode=0;mode<2;mode++){
+
+                for (byte mode=0;mode<3;mode++){
                     Vector<Byte> res=new Vector<>();
                     try {
                         Log.d("mode",":"+mode);
-                        ret = vcl3CommProcess.ColorModeGetName((short)0,(byte)(mode+9),res);
+                        colormode_ret = vcl3CommProcess.ColorModeGetName((short)0,(byte)(mode+8),res);
                     } catch (Exception e) {
                         e.printStackTrace();
                         sharedAppData.saveColorModeName(mode,getString(R.string.color_mode)+mode);
                     }
-                    if (ret){
+                    if (colormode_ret){
                         //modeName= ExchangeStuct.ExchangeModelName(res);
                         modeName = getModelName(res);
                         Log.d("mode-name",":"+modeName);

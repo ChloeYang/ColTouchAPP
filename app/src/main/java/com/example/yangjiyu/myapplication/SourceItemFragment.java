@@ -271,8 +271,8 @@ public class SourceItemFragment extends Fragment implements PagingScrollHelper.o
 
         ColorMode.add(getString(R.string.color_mode)+1);
         ColorMode.add(getString(R.string.color_mode)+2);
-        /*ColorMode.add(getString(R.string.color_mode)+3);
-        ColorMode.add(getString(R.string.color_mode)+4);
+        ColorMode.add(getString(R.string.color_mode)+3);
+        /*ColorMode.add(getString(R.string.color_mode)+4);
         ColorMode.add(getString(R.string.color_mode)+5);
         ColorMode.add(getString(R.string.color_mode)+6);*/
     }
@@ -329,14 +329,14 @@ public class SourceItemFragment extends Fragment implements PagingScrollHelper.o
                 R.drawable.model_normal,
                 R.drawable.model_normal,
                 R.drawable.model_normal,
-                R.drawable.scene_confirm));
+                R.drawable.guide));
     }
     private void checkColorModeData(){
         mAdapter.mData = new ArrayList<>(Arrays.asList(
                 /*R.drawable.color_mode_normal,
                 R.drawable.color_mode_normal,
-                R.drawable.color_mode_normal,
                 R.drawable.color_mode_normal,*/
+                R.drawable.color_mode_normal,
                 R.drawable.color_mode_normal,
                 R.drawable.color_mode_normal));
     }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -21,7 +22,7 @@ class SourceItemListAdapter extends RecyclerView.Adapter<SourceItemListAdapter.S
 
     int[] ImageSourceId = {R.drawable.poweron_normal,R.drawable.model_normal,R.drawable.scene, R.drawable.signal,R.drawable.color_mode_normal,R.drawable.get_system_info_normal};
 
-    int[] ImageClicked={R.drawable.poweron_pressdown,R.drawable.model_pressdown,R.drawable.scene_press,R.drawable.signal_press,R.drawable.model_pressdown,R.drawable.color_mode_pressed,R.drawable.get_system_info_pressdown};
+    int[] ImageClicked={R.drawable.poweron_pressdown,R.drawable.model_pressdown,R.drawable.scene_press,R.drawable.signal_press,R.drawable.color_mode_pressed,R.drawable.get_system_info_pressdown};
 
     //public String[] StringSource = {"场景布局列表", "信号源列表"};//R.string.scene_list   R.string.signal_list
     public Vector<String> StringSource=new Vector<>();
@@ -91,6 +92,24 @@ class SourceItemListAdapter extends RecyclerView.Adapter<SourceItemListAdapter.S
                 @Override
                 public boolean onLongClick(View v) {
                     mOnSourceListClick.onSourceListLongClick(holder.itemView, position);
+                    return false;
+                }
+            });
+            holder.itemView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_DOWN:
+                        case MotionEvent.ACTION_MOVE:
+                            for (int i=0;i<isClicks.size();i++)
+                            {
+                                isClicks.set(i,false);
+                            }
+                            isClicks.set(position, true);
+                            notifyDataSetChanged();
+                            mOnSourceListClick.onSourceListClick(holder.itemView, position);
+                            break;
+                    }
                     return false;
                 }
             });

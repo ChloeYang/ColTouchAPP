@@ -264,7 +264,7 @@ public class DialogList {
                 for (SingleSceneCell scene_cell :sceneCells) {
                     i++;
                     Log.d("SetModelSave onClick","i =  "+i);
-                    mSharedAppData.saveModelSignal(mLastSceneIndex,i);
+                    mSharedAppData.saveModelSignal(mLastSceneIndex,i,index);
                 }
                 dialog.dismiss();
             }

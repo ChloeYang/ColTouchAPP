@@ -24,7 +24,7 @@
     <string name="error_not_save_model_yet">还未保存该模式信息</string>
     <string name="about">关于APP</string>
     <string name="CopyRightDescribe"></string>
-    <string name="ColTouchVersion">VTRON显控一体化系统管理软件 V0.4</string>
+    <string name="ColTouchVersion">VTRON显控一体化系统管理软件 V0.5</string>
     <string name="prf_generation">通用信息</string>
     <string name="prf_data">系统信息</string>
     <string name="pref_gen_default_display_name">admin@vtron.com</string>
@@ -153,5 +153,6 @@
     <string name="color_mode">亮度模式</string>
     <string name="model_define">自定义模式</string>
     <string name="rename_dialog">重命名</string>
+    <string name="guide">模式设置向导</string>
 
 </resources>
