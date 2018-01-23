@@ -484,7 +484,7 @@ public class SharedAppData {
         String string;
         SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.pref_setting), Context.MODE_PRIVATE);
         if (mode<3) {
-            string = sharedPref.getString(mContext.getString(R.string.pref_model_scene_signal_name_) + mode, mContext.getString(R.string.model_define) + mode);
+            string = sharedPref.getString(mContext.getString(R.string.pref_model_scene_signal_name_) + mode, mContext.getString(R.string.model_define) + (mode+1));
         }else {
             string = sharedPref.getString(mContext.getString(R.string.pref_model_scene_signal_name_) + mode, mContext.getString(R.string.guide));
         }
@@ -553,5 +553,38 @@ public class SharedAppData {
                 break;
         }
         return string;
+    }
+    public static void saveModelGuideFlag(int flag){
+        SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.pref_setting), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(mContext.getString(R.string.pref_model_guide_flag), flag);
+        editor.commit();
+    }
+    public static int getModelGuideFlag(){
+        SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.pref_setting), Context.MODE_PRIVATE);
+        int flag = sharedPref.getInt(mContext.getString(R.string.pref_model_guide_flag), 0);
+        return flag;
+    }
+    public static void saveModelGuideStep(int step){
+        SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.pref_setting), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(mContext.getString(R.string.pref_model_guide_step), step);
+        editor.commit();
+    }
+    public static int getModelGuideStep(){
+        SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.pref_setting), Context.MODE_PRIVATE);
+        int step = sharedPref.getInt(mContext.getString(R.string.pref_model_guide_step), 0);
+        return step;
+    }
+    public static void saveLastSceneIndex(int index){
+        SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.pref_setting), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(mContext.getString(R.string.pref_LastSceneIndex), index);
+        editor.commit();
+    }
+    public static int getLastSceneIndex(){
+        SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.pref_setting), Context.MODE_PRIVATE);
+        int index = sharedPref.getInt(mContext.getString(R.string.pref_LastSceneIndex), 0);
+        return index;
     }
 }

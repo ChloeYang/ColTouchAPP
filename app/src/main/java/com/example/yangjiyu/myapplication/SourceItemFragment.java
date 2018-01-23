@@ -2,6 +2,7 @@ package com.example.yangjiyu.myapplication;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.yangjiyu.myapplication.utils.PagingScrollHelper;
 
@@ -40,11 +42,15 @@ public class SourceItemFragment extends Fragment implements PagingScrollHelper.o
     public static int lastPageIndex=0;
     public static boolean bIs3ChangeTo2 =false;
     public static boolean bIsChanged =false;
+    private SharedAppData sharedAppData=null;
     //String[] StringSource = {"Whole","H-2Parts","V-2Parts", "Single"};
 
     PagingScrollHelper scrollHelper = new PagingScrollHelper();
     //private SourceItemFragment sourceItemFragment;
-
+    public interface onSetNextItemClickListener {
+        void onSetNextItem(int item);
+    }
+    public onSetNextItemClickListener mSetNextItem;
     public void onShow(int pos) {
         //nowIndex= pos;
         //Toast.makeText(getActivity(),"pos="+pos,Toast.LENGTH_SHORT).show();
@@ -52,7 +58,15 @@ public class SourceItemFragment extends Fragment implements PagingScrollHelper.o
         mAdapter.initViewHolder();
         mAdapter.notifyDataSetChanged();
 
+        if (sharedAppData.getModelGuideFlag() < 1) {
+            mFloatBtn.setVisibility(View.GONE);
+            Log.d("FloatButton","Gone");
+        }else {
+            mFloatBtn.setVisibility(View.VISIBLE);
+            Log.d("FloatButton","VISIBLE");
+        }
         lastIndex=pos;
+        view.invalidate();
     }
     void getNewData(int pos){
         bIs3ChangeTo2 =false;
@@ -167,9 +181,32 @@ public class SourceItemFragment extends Fragment implements PagingScrollHelper.o
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initData();
+        sharedAppData=SharedAppData.newInstance(getContext());
         //sourceItemFragment = this;
     }
 
+    private FloatingActionButton mFloatBtn;
+    public void onClickFab(View v){
+        Log.d("FloatButton","sharedAppData.getModelGuideStep() = "+sharedAppData.getModelGuideStep());
+        if (sharedAppData.getModelGuideStep() == 2){
+            mSetNextItem.onSetNextItem(3);
+            sharedAppData.saveModelGuideStep(3);
+            Log.d("FloatButton","step2,onShow(3),step3");
+        }else if (sharedAppData.getModelGuideStep()==3){
+            Log.d("FloatButton","step3");
+            DialogList dialogList = new DialogList(getContext());
+            dialogList.SetModelSave(sharedAppData,sharedAppData.getLastSceneIndex(),1);
+            mSetNextItem.onSetNextItem(1);
+            Log.d("FloatButton","onShow(1)");
+            sharedAppData.saveModelGuideFlag(0);
+            sharedAppData.saveModelGuideStep(0);
+            mFloatBtn.setVisibility(View.GONE);
+            Log.d("FloatButton","GONE");
+            //Toast.makeText(v.getContext(),"提示：场景模式保存完成",Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(v.getContext(),"提示：用于场景模式中的场景设置向导",Toast.LENGTH_SHORT).show();
+        }
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -179,6 +216,22 @@ public class SourceItemFragment extends Fragment implements PagingScrollHelper.o
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_source_item);
         textView=(TextView)view.findViewById(R.id.source_item) ;
         pageText=(TextView)view.findViewById(R.id.page_item);
+
+        mFloatBtn = (FloatingActionButton) view.findViewById(R.id.floating_btn);
+        mFloatBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //listView返回到顶部
+                onClickFab(view);
+
+            }
+        });
+        if (sharedAppData.getModelGuideFlag() < 1) {
+            mFloatBtn.setVisibility(View.GONE);
+        }else {
+            mFloatBtn.setVisibility(View.VISIBLE);
+        }
+        mSetNextItem = (onSetNextItemClickListener) getContext();
         //设置布局管理器
         //--LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
         GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(),4);

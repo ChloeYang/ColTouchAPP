@@ -20,7 +20,11 @@ import android.view.WindowManager;
 import com.example.yangjiyu.myapplication.utils.PollingUtils;
 
 
-public class MainActivity extends AppCompatActivity implements SourceItemListFragment.OnSourceListSelectedListener ,SourceItemFragment.OnSourceSelectedListener,VideoWallView.onCleanDefineSceneClickListener {
+public class MainActivity extends AppCompatActivity implements SourceItemListFragment.OnSourceListSelectedListener ,
+        SourceItemFragment.OnSourceSelectedListener,
+        VideoWallView.onCleanDefineSceneClickListener,
+        VideoWallFragment.onSetNextItemListClickListener,
+        SourceItemFragment.onSetNextItemClickListener{
 
     private Fragment sourceList;
     private Fragment sourceItem;
@@ -30,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements SourceItemListFra
     private SourceItemFragment sf;
     private VideoWallFragment vf;
 
+    private SharedAppData sharedAppData=null;
     public final static int MAX_SUPPORT_CELL = 12;
 
     @Override
@@ -49,6 +54,10 @@ public class MainActivity extends AppCompatActivity implements SourceItemListFra
             initDefine2Scene();
         }
 
+
+        sharedAppData=SharedAppData.newInstance(this);
+        sharedAppData.saveModelGuideFlag(0);
+        sharedAppData.saveModelGuideStep(0);
 
         mFragmentManager=getSupportFragmentManager();
 
@@ -178,5 +187,16 @@ public class MainActivity extends AppCompatActivity implements SourceItemListFra
         PollingUtils.stopPollingService(this, PollingService.class, PollingService.ACTION);
     }
 
+    @Override
+    public void onSetNextItemList(int itemList) {
+        sf.onShow(itemList);
+        vf.upDataList(itemList);
+    }
+
+    @Override
+    public void onSetNextItem(int item) {
+        sf.onShow(item);
+        vf.upDataList(item);
+    }
 }
 

@@ -3,11 +3,10 @@ package com.example.yangjiyu.myapplication;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Bundle;
+//import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.Display;
@@ -39,6 +38,8 @@ public class VideoWallFragment extends Fragment {
 
     private int start_x=0;
     private int start_y=0;
+    private int temp_x=0;
+    private int temp_y=0;
     private int end_x=0;
     private int end_y=0;
     private int flag1=0;
@@ -66,6 +67,9 @@ public class VideoWallFragment extends Fragment {
             "3-DVI_1","3-DVI_2","3-HDMI","3-DP",
             "4-DVI_1","4-DVI_2","4-HDMI","4-DP",
             "清除"};
+
+
+    private FloatingActionButton mFloatBtn;
     public void upDataList(int pos)
     {
         mListIndex=pos;
@@ -76,6 +80,7 @@ public class VideoWallFragment extends Fragment {
         if (mListIndex==2 || mListIndex==-1){
             mSceneIndex=pos;
             mVideoWallView.mSceneIndex = mSceneIndex;
+            if (mSceneIndex==6){initPosXY();}
             mVideoWallView = new VideoWallView(getContext(), windowsWidth, windowsHeight, mListIndex, mSceneIndex, mSignalIndex);
             mRelativeLayout = (RelativeLayout) v.findViewById(R.id.fragment_video_wall_view);
             mRelativeLayout.addView(mVideoWallView, new ViewGroup.LayoutParams(
@@ -105,7 +110,9 @@ public class VideoWallFragment extends Fragment {
             //// TODO: 2017/12/26 model scene+signal
             if (pos == 3){
                 //// TODO: 2017/12/26 save model
-                SetModelSave();
+                //SetModelSave();
+                //// TODO: 2018/1/19 guide
+                SetModelGuide();
             }else {
                 //// TODO: 2017/12/26 Exchange
                 Log.d("ExchangeSceneAndSignal","pos:"+pos);
@@ -143,6 +150,29 @@ public class VideoWallFragment extends Fragment {
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
     }
 
+    /*public void onClickFab(View v){
+        Toast.makeText(v.getContext(),"提示：用于场景模式中的场景设置向导",Toast.LENGTH_SHORT).show();
+    }*/
+    private void initPosXY(){
+        /*start_x=0;
+        start_y=0;*/
+        end_x=0;
+        end_y=0;
+        Log.d("initPosXY","true");
+    }
+    private void compareXY(){
+        int temp=0;
+        if (start_x>end_x){
+            temp = start_x;
+            start_x=end_x;
+            end_x=temp;
+        }
+        if (start_y>end_y){
+            temp=start_y;
+            start_y=end_y;
+            end_y=temp;
+        }
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -155,6 +185,18 @@ public class VideoWallFragment extends Fragment {
 
         Log.i("Checkout","display: width = " + display.getWidth() + ", height = " + display.getHeight());
         Log.i("Checkout","inflater: width = " + v.getMeasuredWidth() + ", height = " + v.getHeight());
+
+        /*mFloatBtn = (FloatingActionButton) v.findViewById(R.id.floating_btn_main);
+
+        mFloatBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //listView返回到顶部
+                onClickFab(v);
+
+            }
+        });*/
+        mSetNextItemList = (onSetNextItemListClickListener) getContext();
 
         openwin=new ComStruc.Stu_Open_Window();
         sharedAppData=SharedAppData.newInstance(mActivity);
@@ -172,7 +214,7 @@ public class VideoWallFragment extends Fragment {
                     case MotionEvent.ACTION_DOWN:
                         start_x = (int) Math.floor((int)event.getX()/mVideoWallView.m_cellWidth) * (mVideoWallView.m_cellWidth + VideoWall.sVideoCellGap);
                         start_y = (int) Math.floor((int)event.getY()/mVideoWallView.m_cellHeight) * (mVideoWallView.m_cellHeight+ VideoWall.sVideoCellGap);
-                        Log.i("TouchEvent","ACTION_DOWN start_x="+start_x+" start_y="+start_y);
+                        Log.i("MotionEvent_Down"," start_x="+start_x+" start_y="+start_y);
 
                         if (3!= mListIndex){
                             return true;
@@ -246,10 +288,26 @@ public class VideoWallFragment extends Fragment {
                         //mSignalIndex=-1;//touch once
                         v.invalidate();
                         return true;
+                    case MotionEvent.ACTION_MOVE:
+                        temp_x=(int) Math.floor((int)event.getX()/mVideoWallView.m_cellWidth) * (mVideoWallView.m_cellWidth + VideoWall.sVideoCellGap);
+                        temp_y = (int) Math.floor((int)event.getY()/mVideoWallView.m_cellHeight) * (mVideoWallView.m_cellHeight+ VideoWall.sVideoCellGap);
+                        if (temp_x>end_x){
+                            end_x = temp_x;
+                        }
+                        if (temp_y>end_y){
+                            end_y = temp_y;
+                        }
+                        Log.d("MotionEvent_Move"," temp_x="+temp_x+",temp_y="+temp_y+",end_="+end_x+",end_y="+end_y);
+                        v.invalidate();
+                        return true;
                     case MotionEvent.ACTION_UP:
                         //Log.i("TouchEvent","mDefine1Num="+mDefine1Num+" mDefine2Num="+mDefine2Num);
-                        end_x=(int) Math.floor((int)event.getX()/mVideoWallView.m_cellWidth) * (mVideoWallView.m_cellWidth + VideoWall.sVideoCellGap)+mVideoWallView.m_cellWidth;
-                        end_y=(int) Math.floor((int)event.getY()/mVideoWallView.m_cellHeight) * (mVideoWallView.m_cellHeight+ VideoWall.sVideoCellGap)+mVideoWallView.m_cellHeight;
+                        /*end_x=(int) Math.floor((int)event.getX()/mVideoWallView.m_cellWidth) * (mVideoWallView.m_cellWidth + VideoWall.sVideoCellGap)+mVideoWallView.m_cellWidth;
+                        end_y=(int) Math.floor((int)event.getY()/mVideoWallView.m_cellHeight) * (mVideoWallView.m_cellHeight+ VideoWall.sVideoCellGap)+mVideoWallView.m_cellHeight;*/
+                        end_x=end_x+mVideoWallView.m_cellWidth;
+                        end_y=end_y+mVideoWallView.m_cellHeight;
+                        compareXY();
+                        Log.d("MotionEvent_Up"," start_x="+start_x+" start_y="+start_y+" end_x="+end_x+",end_y="+end_y);
                         //Log.i("TouchEvent","ACTION_UP endx="+end_x+" endy="+end_y);
                         if(mSceneIndex==4 ) {
                             ArrayList<SingleSceneCell> cells=sharedAppData.getDefine1Scene();
@@ -289,13 +347,14 @@ public class VideoWallFragment extends Fragment {
                             break;
                         }
 
+                        initPosXY();
                         v.invalidate();
                         return true;
 
                     default:
                         break;
                 }
-
+                initPosXY();
                 v.invalidate();
                 return true;
             }
@@ -387,5 +446,16 @@ public class VideoWallFragment extends Fragment {
 
             Toast.makeText(getContext(), R.string.operation_finished, Toast.LENGTH_SHORT).show();
         }
+    }
+    public interface onSetNextItemListClickListener {
+        void onSetNextItemList(int itemList);
+    }
+    public onSetNextItemListClickListener mSetNextItemList;
+    private void SetModelGuide(){
+        sharedAppData.saveModelGuideStep(0);
+        sharedAppData.saveModelGuideFlag(1);
+        mSetNextItemList.onSetNextItemList(2);
+        upDataList(2);
+        sharedAppData.saveModelGuideStep(2);
     }
 }

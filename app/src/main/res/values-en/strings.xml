@@ -88,6 +88,9 @@
     <string name="pref_model_scene_signal_name_">model_scene_signal_name_</string>
     <string name="pref_signal_name_">signal_name_</string>
     <string name="pref_get_system_info">SystemInfo</string>
+    <string name="pref_model_guide_flag">model_guide_flag</string>
+    <string name="pref_model_guide_step">model_guide_step</string>
+    <string name="pref_model_guide_last_scene_index">model_guide_last_scene_index</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

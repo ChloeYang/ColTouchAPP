@@ -269,6 +269,12 @@ public class DialogList {
                 dialog.dismiss();
             }
         });
+        builder.setNegativeButton(mContext.getString(R.string.Cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
         builder.create().show();
         Log.d("SetModelSave return","index =  "+index);
         return index;
